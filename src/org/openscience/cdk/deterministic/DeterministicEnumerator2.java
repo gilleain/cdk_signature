@@ -1,0 +1,96 @@
+package org.openscience.cdk.deterministic;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+
+public class DeterministicEnumerator2 {
+    
+    /**
+     * Convenience instance of a builder
+     */
+    private IChemObjectBuilder builder = 
+        NoNotificationChemObjectBuilder.getInstance();
+    
+    public void generate(Map<String, Integer> fragmentCounts) {
+        FragmentGraph initialGraph = new FragmentGraph(fragmentCounts, builder);
+        enumerate(initialGraph);
+    }
+    
+    private void enumerate(FragmentGraph graph) {
+//        System.out.println("enumerating " + graph);
+        if (graph.isFullySaturated() && graph.allUsed()) {
+//            if (CanonicalChecker.isCanonical(graph)) {
+            if (CanonicalChecker.edgesInOrder(graph.getAtomContainer())) {
+                System.out.println("Solution " + graph);
+//            }
+            }
+        } else {
+            String label = graph.getNextUnsaturatedLabel();
+            if (label == null) return;
+            
+            for (FragmentGraph child : saturateLabel(label, graph)) {
+                enumerate(child);
+            }
+        }
+    }
+    
+    private List<FragmentGraph> saturateLabel(String label, FragmentGraph graph) {
+        List<FragmentGraph> labelSolutions = new ArrayList<FragmentGraph>();
+        saturateLabel(label, graph, labelSolutions);
+        return labelSolutions;
+    }
+    
+    private void saturateLabel(
+            String label, FragmentGraph graph, List<FragmentGraph> graphs) {
+        int atomIndex = graph.getAtomIndexForLabel(label);
+        if (atomIndex == -1) {    // no atoms with this label?
+            graphs.add(graph);
+        } else {
+            for (FragmentGraph child : saturateAtom(atomIndex, graph)) {
+                saturateLabel(label, child, graphs);
+            }
+        }
+    }
+    
+    private List<FragmentGraph> saturateAtom(int atomIndex, FragmentGraph graph) {
+        List<FragmentGraph> atomSolutions = new ArrayList<FragmentGraph>();
+        saturateAtom(atomIndex, graph, atomSolutions);
+        return atomSolutions;
+    }
+    
+    private void saturateAtom(
+            int atomIndex, FragmentGraph graph, List<FragmentGraph> graphs) {
+        System.out.println("saturating atom " + atomIndex + " in graph " + graph);
+        if (graph.isSaturated(atomIndex)) {
+            graphs.add(graph);
+            return;
+        } else {
+            // fragments that still have unused instances
+            List<String> unusedLabels = graph.unusedLabels();
+            for (String label : unusedLabels) {
+                FragmentGraph child = new FragmentGraph(graph);
+                child.bond(label, atomIndex, builder);
+                if (CanonicalChecker.isCanonicalByRefinement(graph)) {
+                    saturateAtom(atomIndex, child, graphs);
+                }
+            }
+            
+            // atoms that can still be attached to
+            List<Integer> unsaturatedAtoms = graph.unsaturatedAtoms();
+            for (int otherAtomIndex : unsaturatedAtoms) {
+                if (otherAtomIndex == atomIndex) continue;
+                if (graph.canIncreaseBondOrder(atomIndex, otherAtomIndex)) {
+                    FragmentGraph child = new FragmentGraph(graph);
+                    child.bond(atomIndex, otherAtomIndex, builder);
+                    if (CanonicalChecker.isCanonicalByRefinement(graph)) {
+                        saturateAtom(atomIndex, child, graphs);
+                    }
+                }
+            }
+        }
+    }
+}
