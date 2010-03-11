@@ -14,7 +14,7 @@ public class CDKEquitablePartitionRefinerTest {
     private IChemObjectBuilder builder = NoNotificationChemObjectBuilder.getInstance();
     
     @Test
-    public void testBug() {
+    public void testInvariants() {
        IAtomContainer ac = builder.newAtomContainer();
        ac.addAtom(builder.newAtom("C"));
        ac.addAtom(builder.newAtom("C"));

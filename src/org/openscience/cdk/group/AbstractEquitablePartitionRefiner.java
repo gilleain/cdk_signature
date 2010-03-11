@@ -3,7 +3,6 @@ package org.openscience.cdk.group;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -45,14 +44,14 @@ public abstract class AbstractEquitablePartitionRefiner {
     public abstract int getNumberOfVertices();
     
     /**
-     * Determines the vertex indices (eg atom numbers) of the vertices
-     * connected to the vertex with vertex index <code>vertexIndex</code>.
-     *   
-     * @param vertexIndex the index of the vertex to use
-     * @return a Set of vertex indices
+     * Find |a &cap; b| - that is, the size of the intersection between a and b.
+     * 
+     * @param block a set of numbers
+     * @param vertexIndex the element to compare
+     * @return the size of the intersection
      */
-    public abstract Set<Integer> getConnected(int vertexIndex); 
-    
+    public abstract int neighboursInBlock(Set<Integer> block, int vertexIndex);
+
     /**
      * Refines the coarse partition <code>a</code> into a finer one.
      *  
@@ -107,7 +106,6 @@ public abstract class AbstractEquitablePartitionRefiner {
             Partition partition, Set<Integer> targetBlock) {
         Map<Integer, SortedSet> setList = new HashMap<Integer, SortedSet>();
         for (int u : partition.getCell(currentBlockIndex)) {
-//            int h = intersectionSize(targetBlock, getConnected(u));
             int h = neighboursInBlock(targetBlock, u);
             if (setList.containsKey(h)) {
                 setList.get(h).add(u);
@@ -145,21 +143,6 @@ public abstract class AbstractEquitablePartitionRefiner {
                 currentBlockIndex += nonEmptyInvariants - 1;
             }
         }
-    }
-    
-    public abstract int neighboursInBlock(Set<Integer> block, int vertexIndex);
-    
-    /**
-     * Find |a &cap; b| - that is, the size of the intersection between a and b.
-     * 
-     * @param a a set of numbers
-     * @param b a set of numbers
-     * @return the size of the intersection
-     */
-    private int intersectionSize(Set<Integer> a, Set<Integer> b) {
-        Set intersection = new HashSet(a);
-        intersection.retainAll(b);
-        return intersection.size();
     }
 
 }

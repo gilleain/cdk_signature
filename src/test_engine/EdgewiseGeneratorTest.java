@@ -61,6 +61,20 @@ public class EdgewiseGeneratorTest {
     }
     
     @Test
+    public void sevenRunUnique() {
+        EdgewiseGenerator gen = new EdgewiseGenerator(8, 4);
+        gen.generate();
+        testForUniqueness(gen.graphs);
+    }
+    
+    @Test
+    public void sixRunUnique() {
+        EdgewiseGenerator gen = new EdgewiseGenerator(7, 3);
+        gen.generate();
+        testForUniqueness(gen.graphs);
+    }
+    
+    @Test
     public void fourRunUnique() {
         EdgewiseGenerator gen = new EdgewiseGenerator(5, 4);
         gen.generate();

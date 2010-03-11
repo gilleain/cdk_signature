@@ -1,6 +1,5 @@
 package org.openscience.cdk.group;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,24 +22,35 @@ public class CDKEquitablePartitionRefiner extends
      */
     private List<Map<Integer, Integer>> connectionTable;
     
+    private boolean useBondOrder = true;
+    
+    private boolean useAtomSymbol = true;
+    
     public CDKEquitablePartitionRefiner(List<Map<Integer, Integer>> connectionTable) {
         this.connectionTable = connectionTable;
-    }
-
-    @Override
-    public Set<Integer> getConnected(int vertexIndex) {
-        return new HashSet(this.connectionTable.get(vertexIndex).keySet());
     }
 
     public int neighboursInBlock(Set<Integer> block, int vertexIndex) {
         int neighbours = 0;
         Map<Integer, Integer> connectedOrders = connectionTable.get(vertexIndex); 
         for (int connected : connectedOrders.keySet()) {
-            if (block.contains(connected)) {
-                neighbours += connectedOrders.get(connected);
+            if (block.contains(connected) && (atomSymbolOk(vertexIndex, connected))) {
+                if (useBondOrder) {
+                    neighbours += connectedOrders.get(connected);
+                } else {
+                    neighbours += 1;
+                }
             }
         }
         return neighbours;
+    }
+    
+    private boolean atomSymbolOk(int vertexIndex, int connected) {
+        if (useAtomSymbol) {
+            return true;   // TODO
+        } else {
+            return true;
+        }
     }
     
     @Override

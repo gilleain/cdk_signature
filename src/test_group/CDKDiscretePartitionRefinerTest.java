@@ -1,14 +1,22 @@
 package test_group;
 
+import java.util.Arrays;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openscience.cdk.deterministic.CanonicalChecker;
+import org.openscience.cdk.graph.AtomContainerAtomPermutor;
+import org.openscience.cdk.graph.Permutor;
 import org.openscience.cdk.group.CDKDiscretePartitionRefiner;
+import org.openscience.cdk.group.Permutation;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+
+import cages.PermutationGenerator;
 
 public class CDKDiscretePartitionRefinerTest {
     
@@ -249,7 +257,88 @@ public class CDKDiscretePartitionRefinerTest {
         sixgon.addBond(4, 5, IBond.Order.SINGLE);
         halfMatrix(sixgon);
 
-
     }
-
+    
+    @Test
+    public void fourgonPermutation() {
+        IAtomContainer fourgon = builder.newAtomContainer();
+        for (int i = 0; i < 4; i++) { fourgon.addAtom(builder.newAtom("C")); }
+        fourgon.addBond(0, 1, IBond.Order.DOUBLE);
+        fourgon.addBond(0, 2, IBond.Order.SINGLE);
+        fourgon.addBond(1, 3, IBond.Order.SINGLE);
+        fourgon.addBond(2, 3, IBond.Order.DOUBLE);
+        permutationTest(fourgon);
+    }
+    
+    @Test
+    public void fivegonPermutation() {
+        IAtomContainer fivegon = builder.newAtomContainer();
+        for (int i = 0; i < 5; i++) { fivegon.addAtom(builder.newAtom("C")); }
+        fivegon.addBond(0, 1, IBond.Order.SINGLE);
+        fivegon.addBond(0, 2, IBond.Order.DOUBLE);
+        fivegon.addBond(1, 3, IBond.Order.DOUBLE);
+        fivegon.addBond(2, 4, IBond.Order.SINGLE);
+        fivegon.addBond(3, 4, IBond.Order.SINGLE);
+        
+        int [] p = new int[] {2, 0, 4, 1, 3};
+        
+        // this is a hack - fix permutor!
+        Permutor rawPermutor = new Permutor(5);
+        int rank = 0;
+        while (rawPermutor.hasNext()) {
+            int[] next = rawPermutor.getNextPermutation();
+            if (Arrays.equals(p, next)) {
+                break;
+            }
+            rank++;
+        }
+        
+        AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(fivegon);
+        Permutation permutation = new Permutation(p);
+//        permutor.setPermutation(p);
+        permutor.setRank(rank);
+        String s1 = CanonicalChecker.edgeString(fivegon, permutation);
+        IAtomContainer permuted = permutor.next();
+        String s2 = CanonicalChecker.edgeString(permuted, new Permutation(5));
+        System.out.println(s1);
+        System.out.println(s2);
+//        permutationTest(fivegon);
+    }
+    
+    @Test
+    public void sixgonPermutation() {
+        IAtomContainer sixgon = builder.newAtomContainer();
+        for (int i = 0; i < 6; i++) { sixgon.addAtom(builder.newAtom("C")); }
+        sixgon.addBond(0, 1, IBond.Order.DOUBLE);
+        sixgon.addBond(0, 2, IBond.Order.SINGLE);
+        sixgon.addBond(1, 3, IBond.Order.SINGLE);
+        sixgon.addBond(2, 4, IBond.Order.DOUBLE);
+        sixgon.addBond(3, 5, IBond.Order.DOUBLE);
+        sixgon.addBond(4, 5, IBond.Order.SINGLE);
+        permutationTest(sixgon);
+    }
+    
+    public void permutationTest(IAtomContainer container) {
+        AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(container);
+//        System.out.println("original is canonical? " + isCanonical(container));
+        Assert.assertTrue("Initial structure is not canonical", isCanonical(container));
+        while (permutor.hasNext()) {
+            IAtomContainer permutation = permutor.next();
+            boolean canon = isCanonical(permutation);
+//            if (!canon) continue;
+            boolean aut = isAutomorphic(container, permutation);
+            System.out.println("permutation is canonical? " 
+                    +  ((canon)? "CANON" : "")
+                    + " under " + Arrays.toString(permutor.getCurrentPermutation())
+                    + " is aut " + ((aut)? "TRUE" : ""));
+        }
+    }
+    
+    public boolean isAutomorphic(IAtomContainer original, IAtomContainer permutation) {
+        Permutation identity = new Permutation(original.getAtomCount());
+        String originalString = CanonicalChecker.edgeString(original, identity);
+        String permutedString = CanonicalChecker.edgeString(permutation, identity);
+        System.out.println(originalString + " vs " + permutedString);
+        return originalString.equals(permutedString);
+    }
 }

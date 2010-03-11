@@ -17,6 +17,11 @@ public class Permutation  {
 
     private int[] values;
 
+    /**
+     * Constructs an identity permutation with <code>size</code> elements.
+     * 
+     * @param size the number of elements in the permutation
+     */
     public Permutation(int size) {
         this.values = new int[size];
         for (int i = 0; i < size; i++) {

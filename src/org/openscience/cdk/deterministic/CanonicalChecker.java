@@ -47,7 +47,7 @@ public class CanonicalChecker {
             int a2N = p.get(container.getAtomNumber(a2));
             String s1 = a1.getSymbol();
             String s2 = a2.getSymbol();
-            bonds.add(new Bond(a1N, a2N, s1, s2));
+            bonds.add(new Bond(a1N, a2N, s1, s2, bond.getOrder().ordinal()));
             
         }
         Collections.sort(bonds);

@@ -1,6 +1,5 @@
 package test_group;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.openscience.cdk.group.AbstractEquitablePartitionRefiner;
@@ -22,16 +21,6 @@ public class TestEquitablePartitionRefiner extends AbstractEquitablePartitionRef
     public TestEquitablePartitionRefiner(Graph graph) {
         this.graph = graph;
     }
-       
-    /* (non-Javadoc)
-     * @see org.openscience.cdk.group.AbstractEquitablePartitionRefiner#getConnected(int)
-     */
-    public Set<Integer> getConnected(int vertexIndex) {
-        Set<Integer> connected = new HashSet<Integer>();
-        for (int i : graph.getConnected(vertexIndex)) { connected.add(i); }
-//        for (int i : graph.getSameColorConnected(vertexIndex)) { connected.add(i); }
-        return connected;
-    }
 
     /* (non-Javadoc)
      * @see org.openscience.cdk.group.AbstractEquitablePartitionRefiner#getNumberOfVertices()
@@ -42,8 +31,13 @@ public class TestEquitablePartitionRefiner extends AbstractEquitablePartitionRef
 
     @Override
     public int neighboursInBlock(Set<Integer> block, int vertexIndex) {
-        // TODO Auto-generated method stub
-        return 0;
+        int n = 0;
+        for (int i : graph.getConnected(vertexIndex)) {
+            if (block.contains(i)) {
+                n++;
+            }
+        }
+        return n;
     }
 
 }

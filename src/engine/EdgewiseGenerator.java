@@ -33,6 +33,7 @@ public class EdgewiseGenerator {
     
     public void generate(Graph g) {
         if (g.getVertexCount() >= this.maxLength) return;
+        if (!CanonicalChecker.isCanonical3(g)) return;
         
         if (g.getVertexCount() < 2 || CanonicalChecker.isCanonical3(g)) {
             System.out.println("CANON\t" + g);
