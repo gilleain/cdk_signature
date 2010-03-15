@@ -62,6 +62,14 @@ public class DeterministicEnumerator2Test {
     }
     
     @Test
+    public void testC5H10() {
+       Map<String, Integer> counts = new HashMap<String, Integer>();
+       counts.put("C", 5);
+       counts.put("H", 10);
+       run(counts);
+    }
+    
+    @Test
     public void testC5H12() {
        Map<String, Integer> counts = new HashMap<String, Integer>();
        counts.put("C", 5);
@@ -74,6 +82,14 @@ public class DeterministicEnumerator2Test {
        Map<String, Integer> counts = new HashMap<String, Integer>();
        counts.put("C", 6);
        counts.put("H", 14);
+       run(counts);
+    }
+    
+    @Test
+    public void testC8H18() {
+       Map<String, Integer> counts = new HashMap<String, Integer>();
+       counts.put("C", 8);
+       counts.put("H", 18);
        run(counts);
     }
     

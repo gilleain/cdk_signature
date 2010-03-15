@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.openscience.cdk.group.Graph;
+import org.openscience.cdk.group.GraphPermutor;
 import org.openscience.cdk.group.Partition;
 import org.openscience.cdk.group.Permutation;
 import org.openscience.cdk.group.SSPermutationGroup;
@@ -16,6 +19,16 @@ import org.openscience.cdk.group.SSPermutationGroup;
 import cages.PermutationGenerator;
 
 public class DiscretePartitionRefinerTest {
+    
+    public void automorphicCheck(Graph graph) {
+        TestDiscretePartitionRefiner refiner = new TestDiscretePartitionRefiner();
+        boolean isCanonical = refiner.isCanonical(graph);
+        if (isCanonical) {
+            System.out.println(graph + " is canonical");
+        } else {
+            System.out.println(graph + " not canonical " + refiner.getBest());
+        }
+    }
     
     @Test
     public void testAutGroup() {
@@ -65,20 +78,198 @@ public class DiscretePartitionRefinerTest {
         }
     }
     
+    // TODO : this is a bit lazy - if colors are not in order (from 0), may fail
+    public Partition partitionFromColors(Graph graph) {
+        Partition partition = new Partition();
+        for (int i = 0; i < graph.getVertexCount(); i++) {
+            int color = graph.getColor(i);
+            if (color < partition.size()) {
+                partition.getCell(color).add(i);
+            } else {
+                partition.addSingletonCell(i);
+            }
+        }
+        return partition;
+    }
+    
+    public void bruteForceColorAutomorphism(Graph graph) {
+        System.out.println("testing color automorphisms for " + graph 
+                         + " with colors " + graph.colors);
+        
+        // full aut group from graph without regard to color
+        TestDiscretePartitionRefiner colorBlindRefiner = 
+            new TestDiscretePartitionRefiner(false);
+        SSPermutationGroup autF = colorBlindRefiner.getAutomorphismGroup(graph);
+        
+        // partial aut group with regard to color
+        TestDiscretePartitionRefiner colorfulRefiner = 
+            new TestDiscretePartitionRefiner(true);
+        Partition initial = partitionFromColors(graph);
+        SSPermutationGroup aut = 
+            colorfulRefiner.getAutomorphismGroup(graph, initial);
+
+        System.out.println("AutG size " + autF.order() + " Aut size " + aut.order());
+        
+        // now filter the permutations by those that are color-automorphic
+        String original = graph.getSortedColoredEdgeString();
+        
+        List<Permutation> autFPermutations = 
+            filterColorAutPermutations(original, autF, graph);
+        List<Permutation> autPermutations = aut.all();
+//            filterColorAutPermutations(original, aut, graph);
+
+        System.out.println("Full = " + autFPermutations.size() 
+                       + " Color = " + autPermutations.size());
+        for (Permutation p : autFPermutations) {
+            if (autPermutations.contains(p)) {
+                System.out.println(p + " contained in both");
+            } else {
+                System.out.println(p + " only in autF");
+            }
+        }
+        System.out.println(autFPermutations);
+        System.out.println(autPermutations);
+        
+    }
+    
+    public List<Permutation> filterColorAutPermutations(
+            String original, SSPermutationGroup group, Graph graph) {
+        List<Permutation> colorAut = new ArrayList<Permutation>();
+        for (Permutation p : group.all()) {
+            String permuted = 
+                graph.getSortedPermutedColoredEdgeString(p.getValues());
+            if (original.equals(permuted)) {
+                colorAut.add(p);
+            }
+        }
+        return colorAut;
+    }
+    
+    public void testColoredAutFromInitialPartition(Graph graph) {
+        Partition initial = partitionFromColors(graph);
+        TestDiscretePartitionRefiner refiner = new TestDiscretePartitionRefiner();
+//        SSPermutationGroup aut = refiner.getAutomorphismGroup(graph, initial);
+        SSPermutationGroup aut = refiner.getAutomorphismGroup(graph);
+        String original = graph.getSortedColoredEdgeString();
+        System.out.println("original = " + original + " initial " + initial);
+        for (Permutation p : aut.all()) {
+            String permuted = graph.getSortedPermutedColoredEdgeString(p.getValues());
+            System.out.println(permuted + " " + original.equals(permuted) + " " + p);
+        }
+    }
+    
+    @Test
+    public void testPermutations() {
+        Graph graph = new Graph("0:1,0:3,1:2,2:3");
+        GraphPermutor permutor = new GraphPermutor(graph);
+        TestDiscretePartitionRefiner refiner = new TestDiscretePartitionRefiner();
+        boolean isCanonical = refiner.isCanonical(graph);
+        System.out.println("Initial graph " 
+                + graph.getSortedEdgeString() + " " 
+                + refiner.getHalfMatrixString());
+        while (permutor.hasNext()) {
+            Graph permutation = permutor.next();
+            refiner = new TestDiscretePartitionRefiner();
+            isCanonical = refiner.isCanonical(permutation);
+            if (isCanonical) {
+                System.out.println("CANON " + permutation.getSortedEdgeString());
+            } else {
+                System.out.println("BEST " + permutation.getSortedEdgeString() 
+                        + " = " + refiner.getBest());
+            }
+        }
+    }
+    
+    @Test
+    public void testTwistane() {
+        String graphString = "0:1,0:2,0:3,1:4,1:5,2:6,3:7,4:8,5:9,6:8,6:9,7:9";
+        Graph coloredA = new Graph(graphString);
+        automorphicCheck(coloredA);
+    }
+    
+    @Test
+    public void testColoredCubane() {
+        String graphString = "0:1,0:2,0:3,1:4,1:5,2:4,2:6,3:5,3:6,4:7,5:7,6:7";
+        Graph coloredA = new Graph(graphString);
+        coloredA.setColors(0, 1, 1, 1, 0, 0, 0, 1);
+        bruteForceColorAutomorphism(coloredA);
+        Graph coloredB = new Graph(graphString);
+        coloredB.setColors(0, 1, 1, 1, 2, 2, 2, 0);
+        bruteForceColorAutomorphism(coloredB);
+    }
+    
+    @Test
+    public void testColoredOctagon() {
+        String graphString = "0:1,0:2,1:3,2:4,3:5,4:6,5:7,6:7";
+        Graph coloredA = new Graph(graphString);
+        coloredA.setColors(0, 1, 1, 0, 0, 1, 1, 0);
+//        testColoredAutFromInitialPartition(coloredA);
+        bruteForceColorAutomorphism(coloredA);
+        Graph coloredB = new Graph(graphString);
+        coloredB.setColors(0, 0, 0, 0, 1, 1, 1, 1);
+//        testColoredAutFromInitialPartition(coloredB);
+        bruteForceColorAutomorphism(coloredB);
+    }
+    
+    @Test
+    public void testColoredHexagon() {
+        String graphString = "0:1,0:2,1:3,2:4,3:5,4:5";
+        Graph coloredA = new Graph(graphString);
+        automorphicCheck(coloredA);
+        coloredA.setColors(0, 1, 1, 0, 0, 1);
+//        testColoredAutFromInitialPartition(coloredA);
+//        bruteForceColorAutomorphism(coloredA);
+        Graph coloredB = new Graph(graphString);
+        coloredB.setColors(0, 0, 0, 1, 1, 1);
+//        testColoredAutFromInitialPartition(coloredB);
+//        bruteForceColorAutomorphism(coloredB);
+    }
+    
+    @Test
+    public void testColoredPentagon() {
+        String graphString = "0:1,0:2,1:3,2:4,3:4";
+        Graph coloredA = new Graph(graphString);
+        automorphicCheck(coloredA);
+        coloredA.setColors(0, 1, 1, 1, 0);
+//        testColoredAutFromInitialPartition(coloredA);
+//        bruteForceColorAutomorphism(coloredA);
+        Graph coloredB = new Graph(graphString);
+        coloredB.setColors(0, 1, 0, 1, 0);
+//        testColoredAutFromInitialPartition(coloredB);
+//        bruteForceColorAutomorphism(coloredB);
+    }
+    
+    @Test
+    public void testColoredSquare() {
+        String graphString = "0:1,0:2,1:3,2:3";
+        Graph coloredA = new Graph(graphString);
+        coloredA.setColors(0, 1, 0, 1);
+//        testColoredAutFromInitialPartition(coloredA);
+        bruteForceColorAutomorphism(coloredA);
+        Graph coloredB = new Graph(graphString);
+        coloredB.setColors(0, 1, 1, 0);
+//        testColoredAutFromInitialPartition(coloredB);
+        bruteForceColorAutomorphism(coloredB);
+    }
+    
     @Test
     public void testColoredGraphs() {
-//        String graphString = "0:1,0:2,1:3,2:3";
-        String graphString = "0:1,0:3,1:2,2:3";
+        String graphString = "0:1,0:2,1:3,2:3";
+//        String graphString = "0:1,0:3,1:2,2:3";
         Graph blanked = new Graph(graphString);
         Graph colored = new Graph(graphString);
-        colored.setColors(0, 1, 1, 0);
+//        colored.setColors(0, 1, 1, 0);
+        colored.setColors(1, 0, 1, 0);
         TestDiscretePartitionRefiner canonizer = new TestDiscretePartitionRefiner();
         SSPermutationGroup groupBlank = canonizer.getAutomorphismGroup(blanked);
         TestDiscretePartitionRefiner canonizerB = new TestDiscretePartitionRefiner();
         Partition partition = new Partition();
-        partition.addCell(0, 3);
-        partition.addCell(1, 2);
+//        partition.addCell(0, 3);
+//        partition.addCell(1, 2);
+        partition.addCell(0, 2);
+        partition.addCell(1, 3);
         SSPermutationGroup groupColor = canonizerB.getAutomorphismGroup(colored, partition);
+//        SSPermutationGroup groupColor = canonizerB.getAutomorphismGroup(colored);
         System.out.println("blank");
         int i = 0;
         for (Permutation p : groupBlank.all()) {
@@ -86,10 +277,26 @@ public class DiscretePartitionRefinerTest {
             i++;
         }
         System.out.println("colored");
-        int k = 0;
+        int j = 0;
         for (Permutation p : groupColor.all()) {
-            System.out.println(k + " " + p);
+            System.out.println(j + " " + p);
+            j++;
+        }
+        SSPermutationGroup symN = SSPermutationGroup.makeSymN(blanked.getVertexCount());
+        int k = 0;
+        HashMap<String, Integer> counts = new HashMap<String, Integer>(); 
+        for (Permutation p : symN.transversal(groupColor)) {
+            String spces = colored.getSortedPermutedColoredEdgeString(p.getValues());
+            System.out.println(k + " " + spces);
+            if (counts.containsKey(spces)) {
+                counts.put(spces, counts.get(spces) + 1);
+            } else {
+                counts.put(spces, 1);
+            }
             k++;
+        }
+        for (String spces : counts.keySet()) {
+            System.out.println(spces + " " + counts.get(spces));
         }
     }
     

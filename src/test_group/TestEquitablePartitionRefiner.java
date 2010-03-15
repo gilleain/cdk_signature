@@ -1,5 +1,6 @@
 package test_group;
 
+import java.util.List;
 import java.util.Set;
 
 import org.openscience.cdk.group.AbstractEquitablePartitionRefiner;
@@ -18,8 +19,15 @@ public class TestEquitablePartitionRefiner extends AbstractEquitablePartitionRef
     
     private Graph graph;
     
+    private boolean useColors;
+    
     public TestEquitablePartitionRefiner(Graph graph) {
+        this(graph, false);
+    }
+    
+    public TestEquitablePartitionRefiner(Graph graph, boolean useColors) {
         this.graph = graph;
+        this.useColors = useColors;
     }
 
     /* (non-Javadoc)
@@ -32,7 +40,14 @@ public class TestEquitablePartitionRefiner extends AbstractEquitablePartitionRef
     @Override
     public int neighboursInBlock(Set<Integer> block, int vertexIndex) {
         int n = 0;
-        for (int i : graph.getConnected(vertexIndex)) {
+        List<Integer> connected;
+        if (useColors) {
+            connected = graph.getSameColorConnected(vertexIndex);
+        } else {
+            connected = graph.getConnected(vertexIndex);
+        }
+        
+        for (int i : connected) {
             if (block.contains(i)) {
                 n++;
             }

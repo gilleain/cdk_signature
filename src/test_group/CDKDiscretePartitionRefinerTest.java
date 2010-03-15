@@ -63,6 +63,7 @@ public class CDKDiscretePartitionRefinerTest {
         atomContainer.addBond(0, 4, IBond.Order.SINGLE);
         atomContainer.addBond(0, 5, IBond.Order.SINGLE);
         atomContainer.addBond(1, 3, IBond.Order.SINGLE);
+//        CanonicalChecker.isMinimalTest(atomContainer);
         CanonicalChecker.isCanonicalTest(atomContainer);
 //        Assert.assertTrue(isCanonical(atomContainer));
     }
@@ -87,17 +88,14 @@ public class CDKDiscretePartitionRefinerTest {
         atomContainer.addAtom(builder.newAtom("H"));    // 10
         atomContainer.addAtom(builder.newAtom("H"));    // 11
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 12
-        atomContainer.addAtom(builder.newAtom("H"));    // 13
-
-        atomContainer.addBond(0, 1, IBond.Order.SINGLE);
-        atomContainer.addBond(0, 2, IBond.Order.DOUBLE);
-        atomContainer.addBond(0, 4, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 1, IBond.Order.DOUBLE);
+        atomContainer.addBond(0, 2, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 5, IBond.Order.SINGLE);
         
         atomContainer.addBond(1, 3, IBond.Order.SINGLE);
-        atomContainer.addBond(1, 5, IBond.Order.SINGLE);
-        atomContainer.addBond(1, 6, IBond.Order.SINGLE);
+        atomContainer.addBond(1, 4, IBond.Order.SINGLE);
         
+        atomContainer.addBond(2, 6, IBond.Order.SINGLE);
         atomContainer.addBond(2, 7, IBond.Order.SINGLE);
         atomContainer.addBond(2, 8, IBond.Order.SINGLE);
         
@@ -105,12 +103,12 @@ public class CDKDiscretePartitionRefinerTest {
         atomContainer.addBond(3, 10, IBond.Order.SINGLE);
         atomContainer.addBond(3, 11, IBond.Order.SINGLE);
 //        CanonicalChecker.isCanonicalTest(atomContainer);
-        System.out.println(CanonicalChecker.getBest(atomContainer));
-//        Assert.assertTrue(isCanonical(atomContainer));
+//        System.out.println(CanonicalChecker.getBest(atomContainer));
+        Assert.assertTrue(isCanonical(atomContainer));
     }
     
     @Test
-    public void testButaneLabelling() {
+    public void testButane() {
         IAtomContainer atomContainer = builder.newAtomContainer();
         atomContainer.addAtom(builder.newAtom("C"));    // 0
         atomContainer.addAtom(builder.newAtom("C"));    // 1
@@ -131,12 +129,12 @@ public class CDKDiscretePartitionRefinerTest {
         
         atomContainer.addBond(0, 1, IBond.Order.SINGLE);
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
-        atomContainer.addBond(0, 6, IBond.Order.SINGLE);
-        atomContainer.addBond(0, 7, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 4, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 5, IBond.Order.SINGLE);
         
         atomContainer.addBond(1, 3, IBond.Order.SINGLE);
-        atomContainer.addBond(1, 4, IBond.Order.SINGLE);
-        atomContainer.addBond(1, 5, IBond.Order.SINGLE);
+        atomContainer.addBond(1, 6, IBond.Order.SINGLE);
+        atomContainer.addBond(1, 7, IBond.Order.SINGLE);
         
         atomContainer.addBond(2, 8, IBond.Order.SINGLE);
         atomContainer.addBond(2, 9, IBond.Order.SINGLE);

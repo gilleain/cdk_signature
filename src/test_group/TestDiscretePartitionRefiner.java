@@ -18,16 +18,28 @@ public class TestDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     
     private Graph graph;
     
+    private boolean useColors;
+    
+    public TestDiscretePartitionRefiner() {
+        this(false);
+    }
+    
+    public TestDiscretePartitionRefiner(boolean useColors) {
+        this.useColors = useColors;
+    }
+    
     private void setup(Graph graph) {
         int n = graph.getVertexCount();
         this.graph = graph;
         SSPermutationGroup group = new SSPermutationGroup(new Permutation(n));
-        IEquitablePartitionRefiner refiner = new TestEquitablePartitionRefiner(graph);
+        IEquitablePartitionRefiner refiner = 
+            new TestEquitablePartitionRefiner(graph, useColors);
         setup(group, refiner);
     }
     
     private void setup(Graph graph, SSPermutationGroup group) {
-        IEquitablePartitionRefiner refiner = new TestEquitablePartitionRefiner(graph);
+        IEquitablePartitionRefiner refiner = 
+            new TestEquitablePartitionRefiner(graph, useColors);
         setup(group, refiner);
     }
 
