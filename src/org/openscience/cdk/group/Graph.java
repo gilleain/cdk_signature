@@ -53,9 +53,11 @@ public class Graph {
             int pa = p[this.a];
             int pb = p[this.b];
             if (pa < pb) {
-                return pa + "(" + colors.get(pa) + "):" + pb + "(" + colors.get(pb) + ")";
+//                return pa + "(" + colors.get(pa) + "):" + pb + "(" + colors.get(pb) + ")";
+                return pa + "(" + colors.get(a) + "):" + pb + "(" + colors.get(b) + ")";
             } else {
-                return pb + "(" + colors.get(pb) + "):" + pa + "(" + colors.get(pa) + ")";
+//                return pb + "(" + colors.get(pb) + "):" + pa + "(" + colors.get(pa) + ")";
+                return pb + "(" + colors.get(b) + "):" + pa + "(" + colors.get(a) + ")";
             }
         }
         
