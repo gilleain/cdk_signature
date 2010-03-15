@@ -37,6 +37,14 @@ public class Permutation  {
         this.values = other.values.clone();
     }
     
+    public boolean equals(Object other) {
+        if (other instanceof Permutation) {
+            return Arrays.equals(values, ((Permutation)other).values);
+        } else {
+            return false;
+        }
+    }
+    
     public boolean isIdentity() {
         for (int i = 0; i < this.values.length; i++) {
             if (this.values[i] != i) {
@@ -52,22 +60,6 @@ public class Permutation  {
     
     public int get(int i) {
         return this.values[i];
-    }
-    
-    public void set(int index, int value) {
-        this.values[index] = value;
-    }
-    
-    public void set(Permutation indices, Permutation newValues) {
-        this.set(indices.values, newValues.values);
-    }
-    
-    public void set(int[] indices, int[] newValues) {
-        // if this is 'p' and indices is 'q' and newValues is 'r':
-        // { p[q[i]] = r[i] : i in N }
-        for (int i = 0; i < this.values.length; i++) {
-            this.values[indices[i]] = newValues[i];
-        }
     }
     
     public int[] getValues() {
@@ -101,9 +93,27 @@ public class Permutation  {
         return r;
     }
     
+    public void set(int index, int value) {
+        this.values[index] = value;
+    }
+
     public void setTo(Permutation other) {
         for (int i = 0; i < this.values.length; i++) {
             this.values[i] = other.values[i];
+        }
+    }
+
+    // TODO : this is the same as "this = indices.multiply(newValues.invert());"
+    // XXX could just delete it (and the other set method, below)
+    public void set(Permutation indices, Permutation newValues) {
+        this.set(indices.values, newValues.values);
+    }
+
+    public void set(int[] indices, int[] newValues) {
+        // if this is 'p' and indices is 'q' and newValues is 'r':
+        // { p[q[i]] = r[i] : i in N }
+        for (int i = 0; i < this.values.length; i++) {
+            this.values[indices[i]] = newValues[i];
         }
     }
 
