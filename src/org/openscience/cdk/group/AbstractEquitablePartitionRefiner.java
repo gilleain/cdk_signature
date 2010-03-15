@@ -71,8 +71,7 @@ public abstract class AbstractEquitablePartitionRefiner {
         while (!blocksToRefine.isEmpty()) {
             Set<Integer> t = blocksToRefine.remove();
             currentBlockIndex = 0;
-            int l = b.size();
-            while (currentBlockIndex < l && l < numberOfVertices) {
+            while (currentBlockIndex < b.size() && b.size() < numberOfVertices) {
                 if (!b.isDiscreteCell(currentBlockIndex)) {
 
                     // get the neighbor invariants for this block
@@ -140,8 +139,10 @@ public abstract class AbstractEquitablePartitionRefiner {
                 partition.insertCell(k, setH);
                 blocksToRefine.add(setH);
                 k++;
-                currentBlockIndex += nonEmptyInvariants - 1;
+                
             }
+            // skip over the newly added blocks
+            currentBlockIndex += nonEmptyInvariants - 1;
         }
     }
 
