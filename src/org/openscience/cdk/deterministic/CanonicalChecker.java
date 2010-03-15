@@ -1,9 +1,11 @@
 package org.openscience.cdk.deterministic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.openscience.cdk.graph.AtomContainerAtomPermutor;
 import org.openscience.cdk.group.CDKDiscretePartitionRefiner;
 import org.openscience.cdk.group.Permutation;
 import org.openscience.cdk.group.SSPermutationGroup;
@@ -14,7 +16,7 @@ import org.openscience.cdk.interfaces.IBond;
 public class CanonicalChecker {
     
     private static CDKDiscretePartitionRefiner discreteRefiner = 
-        new CDKDiscretePartitionRefiner(false);
+        new CDKDiscretePartitionRefiner(true);
     
     public static boolean isCanonicalBroken(IAtomContainer atomContainer) {
 //        // clear any previous labels
@@ -64,8 +66,23 @@ public class CanonicalChecker {
         return edgeString(atomContainer, refiner.getBest());
     }
     
-    public static boolean isCanonicalTest(final IAtomContainer atomContainer) {
+    public static void isCanonicalTest(IAtomContainer atomContainer) {
+        int n = atomContainer.getAtomCount();
         CDKDiscretePartitionRefiner refiner = new CDKDiscretePartitionRefiner();
+        AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(atomContainer);
+        while (permutor.hasNext()) {
+            IAtomContainer permuted = permutor.next();
+            boolean canonical = refiner.isCanonical(permuted);
+            if (canonical) {
+                String p = Arrays.toString(permutor.getCurrentPermutation());
+//                System.out.println(p + " is canonical? " + canonical);
+                System.out.println(p + " " + edgeString(permuted, new Permutation(n)));
+            }
+        }
+    }
+    
+    public static boolean isMinimalTest(final IAtomContainer atomContainer) {
+        final CDKDiscretePartitionRefiner refiner = new CDKDiscretePartitionRefiner(); 
         final int n = atomContainer.getAtomCount();
         System.out.println("N = " + n);
         if (n < 2) return true;
