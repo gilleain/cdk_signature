@@ -128,10 +128,10 @@ public abstract class AbstractDiscretePartitionRefiner {
             q.setAsPermutation(pi1, l);
 //            result = compareColumnwise(pi1);
             result = compareRowwise(pi1);
-            System.out.println("Compared pi1 = " + pi1 + " to best = " + best + " result " + result);
-            System.out.println("current " + getHalfMatrixString());
-            System.out.println("pi1 " + getHalfMatrixString(pi1));
-            System.out.println("best " + getBestHalfMatrixString());
+//            System.out.println("Compared pi1 = " + pi1 + " to best = " + best + " result " + result);
+//            System.out.println("current\t" + getHalfMatrixString());
+//            System.out.println("pi1\t" + getHalfMatrixString(pi1));
+//            System.out.println("best\t" + getBestHalfMatrixString());
         }
         
         if (q.size() == n) {    // partition is discrete
@@ -142,16 +142,16 @@ public abstract class AbstractDiscretePartitionRefiner {
                 bestExist = true;
             } else {
                 if (result == Result.BETTER) {
-                    System.out.println("BETTER " 
-                            + pi1 + " vs " 
-                            + best + " " + getHalfMatrixString(pi1) + " "
-                            + getBestHalfMatrixString());
+//                    System.out.println("BETTER " 
+//                            + pi1 + " vs " 
+//                            + best + " " + getHalfMatrixString(pi1) + " "
+//                            + getBestHalfMatrixString());
                     best = new Permutation(pi1);
                 } else if (result == Result.EQUAL) {
                     // { pi2[pi1[i]] = best[i] for i in n }
 //                    pi2.set(pi1, best);   // XXX remove
                     pi2 = pi1.multiply(best.invert());
-                    System.out.println("Entering " + pi2);
+//                    System.out.println("Entering " + pi2 + " " + pi2.toCycleString());
                     group.enter(pi2);
                 }
             }

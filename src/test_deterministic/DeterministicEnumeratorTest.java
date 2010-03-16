@@ -121,6 +121,11 @@ public class DeterministicEnumeratorTest {
         DeterministicEnumeratorTest.testFormula("C5H12", 1);
     }
     
+    @Test
+    public void testHexane() {
+        DeterministicEnumeratorTest.testFormula("C6H14", 1);
+    }
+    
     public static void main(String[] args) {
         new DeterministicEnumeratorTest().testButane();
     }

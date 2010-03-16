@@ -149,7 +149,7 @@ public class Graph {
     public Graph getPermutedGraph(int[] permutation) {
         Graph graph = new Graph();
         for (Edge e : this.edges) {
-            graph.makeEdge(permutation[e.a], permutation[e.b]);
+            graph.makeEdge(permutation[e.a], permutation[e.b], e.o);
         }
         return graph;
     }

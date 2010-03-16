@@ -14,19 +14,9 @@ public class GraphPermutor extends Permutor implements Iterator<Graph> {
     }
 
     public Graph next() {
-        return fromPermutation(getNextPermutation());
+        return graph.getPermutedGraph(getNextPermutation());
     }
     
-    public Graph fromPermutation(int[] p) {
-        Graph permutation = new Graph();
-        for (Graph.Edge edge : graph.edges) {
-            int pa = p[edge.a];
-            int pb = p[edge.b];
-            permutation.makeEdge(pa, pb, edge.o);
-        }
-        return permutation;
-    }
-
     public void remove() {
         //
     }

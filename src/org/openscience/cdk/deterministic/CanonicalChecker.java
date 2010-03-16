@@ -3,10 +3,15 @@ package org.openscience.cdk.deterministic;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.openscience.cdk.graph.AtomContainerAtomPermutor;
 import org.openscience.cdk.group.CDKDiscretePartitionRefiner;
+import org.openscience.cdk.group.Partition;
 import org.openscience.cdk.group.Permutation;
 import org.openscience.cdk.group.SSPermutationGroup;
 import org.openscience.cdk.interfaces.IAtom;
@@ -197,6 +202,42 @@ public class CanonicalChecker {
     
     public static boolean isCanonicalWithGaps(IAtomContainer atomContainer) {
         return new CDKDiscretePartitionRefiner(true).isCanonical(atomContainer);
+    }
+
+    public static boolean isCanonicalWithColorPartition(
+            IAtomContainer atomContainer) {
+        Map<Integer, SortedSet<Integer>> colorBlocks = 
+            new HashMap<Integer, SortedSet<Integer>>();
+        Map<String, Integer> stringColorMap = new HashMap<String, Integer>();
+        int maxColor = 0;
+        int compactIndex = 0;
+        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+            IAtom atom = atomContainer.getAtom(i);
+            int atomCount = atomContainer.getConnectedAtomsCount(atom);
+            if (atomCount == 0) continue;
+            String symbol = atom.getSymbol();
+            if (stringColorMap.containsKey(symbol)) {
+                int color = stringColorMap.get(symbol);
+                colorBlocks.get(color).add(compactIndex);
+            } else {
+                int color = maxColor;
+                stringColorMap.put(symbol, color);
+                SortedSet<Integer> block = new TreeSet<Integer>();
+                block.add(compactIndex);
+                colorBlocks.put(color, block);
+                maxColor++;
+            }
+            compactIndex++;
+        }
+        Partition initial = new Partition();
+        for (int color : colorBlocks.keySet()) {
+            initial.addCell(colorBlocks.get(color));
+        }
+        
+        CDKDiscretePartitionRefiner refiner = 
+            new CDKDiscretePartitionRefiner(true);
+        refiner.refine(initial, atomContainer);
+        return refiner.firstIsIdentity();
     }
 
 }

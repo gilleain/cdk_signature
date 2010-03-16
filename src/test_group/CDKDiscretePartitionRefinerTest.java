@@ -50,6 +50,17 @@ public class CDKDiscretePartitionRefinerTest {
     }
     
     @Test
+    public void testPartialButaneA() {
+        IAtomContainer atomContainer = builder.newAtomContainer();
+        atomContainer.addAtom(builder.newAtom("C"));
+        atomContainer.addAtom(builder.newAtom("H"));
+        atomContainer.addBond(0, 1, IBond.Order.SINGLE);
+        boolean isCanonical = 
+            CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+        System.out.println("Is canonical " + isCanonical);
+    }
+    
+    @Test
     public void testPartialButane() {
         IAtomContainer atomContainer = builder.newAtomContainer();
         atomContainer.addAtom(builder.newAtom("C"));
@@ -64,8 +75,11 @@ public class CDKDiscretePartitionRefinerTest {
         atomContainer.addBond(0, 5, IBond.Order.SINGLE);
         atomContainer.addBond(1, 3, IBond.Order.SINGLE);
 //        CanonicalChecker.isMinimalTest(atomContainer);
-        CanonicalChecker.isCanonicalTest(atomContainer);
+//        CanonicalChecker.isCanonicalTest(atomContainer);
 //        Assert.assertTrue(isCanonical(atomContainer));
+        boolean isCanonical = 
+            CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+        System.out.println("Is canonical " + isCanonical);
     }
     
     @Test

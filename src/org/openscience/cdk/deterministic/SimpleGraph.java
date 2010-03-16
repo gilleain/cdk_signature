@@ -124,14 +124,14 @@ public class SimpleGraph {
             return false;
         }
         
-        boolean isCanonical = CanonicalChecker.isCanonicalWithGaps(atomContainer);
+        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
         System.out.println(this + " is canonical?" + isCanonical);
         return isCanonical;
 //        return true;
     }
     
     public boolean isCanonical() {
-        boolean isCanonical = CanonicalChecker.isCanonical(atomContainer);
+        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
         System.out.println(this + " is canonical?" + isCanonical);
         return isCanonical;
     }

@@ -20,13 +20,15 @@ import cages.PermutationGenerator;
 
 public class DiscretePartitionRefinerTest {
     
-    public void automorphicCheck(Graph graph) {
+    public Permutation automorphicCheck(Graph graph) {
         TestDiscretePartitionRefiner refiner = new TestDiscretePartitionRefiner();
         boolean isCanonical = refiner.isCanonical(graph);
         if (isCanonical) {
             System.out.println(graph + " is canonical");
+            return new Permutation(graph.getVertexCount());
         } else {
             System.out.println(graph + " not canonical " + refiner.getBest());
+            return refiner.getBest();
         }
     }
     
@@ -184,7 +186,9 @@ public class DiscretePartitionRefinerTest {
     public void testTwistane() {
         String graphString = "0:1,0:2,0:3,1:4,1:5,2:6,3:7,4:8,5:9,6:8,6:9,7:9";
         Graph coloredA = new Graph(graphString);
-        automorphicCheck(coloredA);
+        Permutation transform = automorphicCheck(coloredA);
+        Graph permuted = coloredA.getPermutedGraph(transform.getValues());
+        System.out.println(permuted.getSortedEdgeString());
     }
     
     @Test
@@ -213,7 +217,8 @@ public class DiscretePartitionRefinerTest {
     
     @Test
     public void testColoredHexagon() {
-        String graphString = "0:1,0:2,1:3,2:4,3:5,4:5";
+//        String graphString = "0:1,0:2,1:3,2:4,3:5,4:5";
+        String graphString = "0:1,0:5,1:2,2:3,3:4,4:5";
         Graph coloredA = new Graph(graphString);
         automorphicCheck(coloredA);
         coloredA.setColors(0, 1, 1, 0, 0, 1);
@@ -227,7 +232,8 @@ public class DiscretePartitionRefinerTest {
     
     @Test
     public void testColoredPentagon() {
-        String graphString = "0:1,0:2,1:3,2:4,3:4";
+//        String graphString = "0:1,0:2,1:3,2:4,3:4";
+        String graphString = "0:1,0:4,1:2,2:3,3:4";
         Graph coloredA = new Graph(graphString);
         automorphicCheck(coloredA);
         coloredA.setColors(0, 1, 1, 1, 0);
@@ -241,15 +247,17 @@ public class DiscretePartitionRefinerTest {
     
     @Test
     public void testColoredSquare() {
-        String graphString = "0:1,0:2,1:3,2:3";
+//        String graphString = "0:1,0:2,1:3,2:3";
+        String graphString = "0:1,0:3,1:2,2:3";
         Graph coloredA = new Graph(graphString);
+        automorphicCheck(coloredA);
         coloredA.setColors(0, 1, 0, 1);
 //        testColoredAutFromInitialPartition(coloredA);
-        bruteForceColorAutomorphism(coloredA);
+//        bruteForceColorAutomorphism(coloredA);
         Graph coloredB = new Graph(graphString);
         coloredB.setColors(0, 1, 1, 0);
 //        testColoredAutFromInitialPartition(coloredB);
-        bruteForceColorAutomorphism(coloredB);
+//        bruteForceColorAutomorphism(coloredB);
     }
     
     @Test
