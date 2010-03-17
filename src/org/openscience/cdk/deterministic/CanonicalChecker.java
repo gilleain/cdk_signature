@@ -213,8 +213,7 @@ public class CanonicalChecker {
         int compactIndex = 0;
         for (int i = 0; i < atomContainer.getAtomCount(); i++) {
             IAtom atom = atomContainer.getAtom(i);
-            int atomCount = atomContainer.getConnectedAtomsCount(atom);
-            if (atomCount == 0) continue;
+            if (atomContainer.getConnectedAtomsCount(atom) == 0) continue;
             String symbol = atom.getSymbol();
             if (stringColorMap.containsKey(symbol)) {
                 int color = stringColorMap.get(symbol);

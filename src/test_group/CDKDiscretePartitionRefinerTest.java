@@ -231,6 +231,53 @@ public class CDKDiscretePartitionRefinerTest {
 //        CanonicalChecker.isCanonicalTest(atomContainer);
     }
     
+    @Test
+    public void testNeoPentane() {
+        IAtomContainer atomContainer = builder.newAtomContainer();
+        atomContainer.addAtom(builder.newAtom("C"));    // 0
+        atomContainer.addAtom(builder.newAtom("C"));    // 1
+        atomContainer.addAtom(builder.newAtom("C"));    // 2
+        atomContainer.addAtom(builder.newAtom("C"));    // 3
+        atomContainer.addAtom(builder.newAtom("C"));    // 4
+        atomContainer.addAtom(builder.newAtom("H"));    // 5
+        atomContainer.addAtom(builder.newAtom("H"));    // 6
+        atomContainer.addAtom(builder.newAtom("H"));    // 7
+        atomContainer.addAtom(builder.newAtom("H"));    // 8
+        atomContainer.addAtom(builder.newAtom("H"));    // 9
+        atomContainer.addAtom(builder.newAtom("H"));    // 10
+        atomContainer.addAtom(builder.newAtom("H"));    // 11
+        atomContainer.addAtom(builder.newAtom("H"));    // 12
+        atomContainer.addAtom(builder.newAtom("H"));    // 13
+        atomContainer.addAtom(builder.newAtom("H"));    // 14
+        atomContainer.addAtom(builder.newAtom("H"));    // 15
+        atomContainer.addAtom(builder.newAtom("H"));    // 16
+        
+        atomContainer.addBond(0, 1, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 2, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 3, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 4, IBond.Order.SINGLE);
+        
+        atomContainer.addBond(1, 5, IBond.Order.SINGLE);
+        atomContainer.addBond(1, 6, IBond.Order.SINGLE);
+        atomContainer.addBond(1, 7, IBond.Order.SINGLE);
+        
+        atomContainer.addBond(2, 8, IBond.Order.SINGLE);
+        atomContainer.addBond(2, 9, IBond.Order.SINGLE);
+        atomContainer.addBond(2, 10, IBond.Order.SINGLE);
+        
+        atomContainer.addBond(3, 11, IBond.Order.SINGLE);
+        atomContainer.addBond(3, 12, IBond.Order.SINGLE);
+        atomContainer.addBond(3, 13, IBond.Order.SINGLE);
+        
+        atomContainer.addBond(4, 14, IBond.Order.SINGLE);
+        atomContainer.addBond(4, 15, IBond.Order.SINGLE);
+        atomContainer.addBond(4, 16, IBond.Order.SINGLE);
+        
+//        isCanonical(atomContainer);
+        boolean c=CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+        System.out.println(c);
+    }
+    
     public void halfMatrix(IAtomContainer container) {
         CDKDiscretePartitionRefiner refiner = new CDKDiscretePartitionRefiner();
         System.out.println(refiner.isCanonical(container) 

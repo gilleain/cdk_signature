@@ -125,14 +125,14 @@ public class SimpleGraph {
         }
         
         boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
-        System.out.println(this + " is canonical?" + isCanonical);
+        System.out.println(isCanonical + "\t" + this);
         return isCanonical;
 //        return true;
     }
     
     public boolean isCanonical() {
         boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
-        System.out.println(this + " is canonical?" + isCanonical);
+        System.out.println(isCanonical + "\t" + this);
         return isCanonical;
     }
     
@@ -172,7 +172,7 @@ public class SimpleGraph {
      * 
      * @return a list of atom indices
      */
-    public List<Integer> unsaturatedAtoms() {
+    public List<Integer> unsaturatedAtoms(int indexOfSaturatingAtom) {
         CDKMoleculeSignature signature = 
             new CDKMoleculeSignature(this.atomContainer);
         List<Orbit> orbits = signature.calculateOrbits();
@@ -185,12 +185,33 @@ public class SimpleGraph {
         List<Integer> unsaturated = new ArrayList<Integer>();
         for (Orbit o : orbits) {
             if (o.isEmpty() || isSaturated(o)) continue;
-            unsaturated.add(o.getFirstAtom());
+            List<Integer> atomIndices = o.getAtomIndices();
+            int indexIndex = 0;
+            int atomIndex = 0;
+            while (indexIndex < atomIndices.size()) {
+                atomIndex = atomIndices.get(indexIndex); 
+                if (atomIndex == indexOfSaturatingAtom ||
+                        maximumAttachment(indexOfSaturatingAtom, atomIndex)) {
+                      indexIndex++;
+                } else {
+                    unsaturated.add(atomIndex);
+                    break;
+                }
+            }
         }
         return unsaturated;
     }
     
-
+    public boolean maximumAttachment(int atomIndexA, int atomIndexB) {
+        IAtom a = atomContainer.getAtom(atomIndexA);
+        IAtom b = atomContainer.getAtom(atomIndexB);
+        IBond bond = atomContainer.getBond(a, b);
+        if (bond == null) {
+            return false;
+        } else {
+            return bond.getOrder() == IBond.Order.TRIPLE;
+        }
+    }
     
     public boolean isFullySaturated() {
         for (int i = 0; i < this.atomContainer.getAtomCount(); i++) {
