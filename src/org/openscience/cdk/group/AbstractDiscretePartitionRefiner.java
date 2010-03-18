@@ -105,6 +105,29 @@ public abstract class AbstractDiscretePartitionRefiner {
         return this.first;
     }
     
+    /**
+     * Check for a canonical graph, without generating the whole 
+     * automorphism group.
+     * 
+     * @return true if the graph is canonical
+     */
+    public boolean isCanonical() {
+        return isCanonical(Partition.unit(getVertexCount()));
+    }
+    
+    public boolean isCanonical(Partition partition) {
+        int n = getVertexCount();
+        if (partition.size() == n) {
+            return partition.toPermutation().isIdentity();
+        } else {
+            int l = partition.getIndexOfFirstNonDiscreteCell();
+            int first = partition.getFirstInCell(l);
+            Partition finerPartition = 
+                refiner.refine(partition.splitBefore(l, first));
+            return isCanonical(finerPartition);
+        }
+    }
+    
     public void refine(Partition p) {
         refine(this.group, p);
     }

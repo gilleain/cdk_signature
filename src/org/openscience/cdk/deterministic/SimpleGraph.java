@@ -200,6 +200,7 @@ public class SimpleGraph {
                     unsaturated.add(atomIndex);
                     break;
                 }
+//                indexIndex++;
             }
         }
         return unsaturated;

@@ -133,8 +133,9 @@ public class CDKDiscretePartitionRefiner extends
      */
     public boolean isCanonical(IAtomContainer atomContainer) {
         setup(atomContainer);
-        refine(Partition.unit(getVertexCount()));
-        return firstIsIdentity();
+//        refine(Partition.unit(getVertexCount()));
+//        return firstIsIdentity();
+        return isCanonical();
     }
     
     /**

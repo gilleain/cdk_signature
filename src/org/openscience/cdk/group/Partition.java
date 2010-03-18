@@ -62,6 +62,23 @@ public class Partition {
     }
     
     /**
+     * Checks that all the cells are singletons - that is, they only have one
+     * element. A discrete partition is equivalent to a permutation.
+     * 
+     * @return true if all the cells are discrete
+     */
+    public boolean isDiscrete() {
+        for (SortedSet<Integer> cell : cells) {
+            if (cell.size() == 1) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
      * Converts the whole partition into a permutation.
      * 
      * @return the partition as a permutation
