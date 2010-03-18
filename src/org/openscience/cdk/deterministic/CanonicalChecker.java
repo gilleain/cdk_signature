@@ -237,6 +237,45 @@ public class CanonicalChecker {
 //        System.out.println(partition);
         return partition;
     }
+    
+    public static Partition compactSignaturePartition(IAtomContainer atomContainer) {
+      CDKMoleculeSignature signature = new CDKMoleculeSignature(atomContainer);
+      int compactIndex = 0;
+  
+      Map<String, Integer> signatureBlockMap = new HashMap<String, Integer>();
+      int maxBlock = 0;
+      Partition partition = new Partition();
+      for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+          IAtom atom = atomContainer.getAtom(i);
+          if (atomContainer.getConnectedAtomsCount(atom) > 0) {
+              String signatureStringForAtom = 
+                  signature.signatureStringForVertex(i);
+              if (signatureBlockMap.containsKey(signatureStringForAtom)) {
+                  int blockIndex = signatureBlockMap.get(signatureStringForAtom);
+                  partition.addToCell(blockIndex, compactIndex);
+              } else {
+                  SortedSet<Integer> block = new TreeSet<Integer>();
+                  block.add(compactIndex);
+                  partition.addCell(block);
+                  signatureBlockMap.put(signatureStringForAtom, maxBlock);
+                  maxBlock++;
+              }
+              compactIndex++;
+          }
+      }
+      return partition;
+  }
+    
+    public static boolean isCanonicalWithSignaturePartition(
+            IAtomContainer atomContainer) {
+        Partition initial = 
+            CanonicalChecker.compactSignaturePartition(atomContainer);
+        System.out.println("signature partition " + initial);
+        CDKDiscretePartitionRefiner refiner = 
+            new CDKDiscretePartitionRefiner(true);
+        refiner.refine(initial, atomContainer);
+        return refiner.firstIsIdentity();
+    }
 
     public static boolean isCanonicalWithColorPartition(
             IAtomContainer atomContainer) {

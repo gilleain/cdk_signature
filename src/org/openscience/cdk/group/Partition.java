@@ -250,10 +250,19 @@ public class Partition {
         this.cells.add(cell);
     }
     
+    /**
+     * Add a cell as a list of elements.
+     * 
+     * @param cellElements the cell elements to add
+     */
     public void addCell(List<Integer> cellElements) {
         SortedSet<Integer> cell = new TreeSet();
         cell.addAll(cellElements);
         this.cells.add(cell);
+    }
+    
+    public void addToCell(int index, int element) {
+        cells.get(index).add(element);
     }
     
     /**

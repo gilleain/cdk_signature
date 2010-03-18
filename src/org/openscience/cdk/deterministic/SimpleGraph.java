@@ -124,14 +124,16 @@ public class SimpleGraph {
             return false;
         }
         
-        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+//        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+        boolean isCanonical = CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
         System.out.println(isCanonical + "\t" + this);
         return isCanonical;
 //        return true;
     }
     
     public boolean isCanonical() {
-        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+//        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+        boolean isCanonical = CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
         System.out.println(isCanonical + "\t" + this);
         return isCanonical;
     }
@@ -192,7 +194,8 @@ public class SimpleGraph {
                 atomIndex = atomIndices.get(indexIndex); 
                 if (atomIndex == indexOfSaturatingAtom ||
                         maximumAttachment(indexOfSaturatingAtom, atomIndex)) {
-                      indexIndex++;
+//                    continue;
+                    indexIndex++;
                 } else {
                     unsaturated.add(atomIndex);
                     break;
