@@ -31,6 +31,58 @@ public class CDKDiscretePartitionRefinerTest {
     }
     
     @Test
+    public void testPartialC4H4() {
+        IAtomContainer atomContainer = builder.newAtomContainer();
+        atomContainer.addAtom(builder.newAtom("C"));
+        atomContainer.addAtom(builder.newAtom("C"));
+        atomContainer.addAtom(builder.newAtom("C"));
+        atomContainer.addAtom(builder.newAtom("C"));
+        atomContainer.addAtom(builder.newAtom("H"));
+        atomContainer.addAtom(builder.newAtom("H"));
+        atomContainer.addAtom(builder.newAtom("H"));
+        atomContainer.addAtom(builder.newAtom("H"));
+        atomContainer.addBond(0, 1, IBond.Order.DOUBLE);
+        atomContainer.addBond(0, 3, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 4, IBond.Order.SINGLE);
+        atomContainer.addBond(1, 3, IBond.Order.SINGLE);
+        atomContainer.addBond(1, 5, IBond.Order.SINGLE);
+        atomContainer.addBond(2, 3, IBond.Order.DOUBLE);
+        atomContainer.addBond(2, 6, IBond.Order.SINGLE);
+        atomContainer.addBond(2, 7, IBond.Order.SINGLE);
+//        CanonicalChecker.isCanonicalTest(atomContainer);
+        boolean b=CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+//        boolean b=CanonicalChecker.isCanonical(atomContainer);
+        System.out.println(b);
+//        CanonicalChecker.signaturePartition(atomContainer);
+        CanonicalChecker.searchForSignaturePartition(atomContainer);
+    }
+    
+    @Test
+    public void testC4H4Isomer() {
+        IAtomContainer atomContainer = builder.newAtomContainer();
+        atomContainer.addAtom(builder.newAtom("C"));
+        atomContainer.addAtom(builder.newAtom("C"));
+        atomContainer.addAtom(builder.newAtom("C"));
+        atomContainer.addAtom(builder.newAtom("C"));
+        atomContainer.addAtom(builder.newAtom("H"));
+        atomContainer.addAtom(builder.newAtom("H"));
+        atomContainer.addAtom(builder.newAtom("H"));
+        atomContainer.addAtom(builder.newAtom("H"));
+        atomContainer.addBond(0, 1, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 2, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 3, IBond.Order.DOUBLE);
+        atomContainer.addBond(1, 2, IBond.Order.DOUBLE);
+        atomContainer.addBond(1, 4, IBond.Order.SINGLE);
+        atomContainer.addBond(2, 5, IBond.Order.SINGLE);
+        atomContainer.addBond(3, 6, IBond.Order.SINGLE);
+        atomContainer.addBond(3, 7, IBond.Order.SINGLE);
+        boolean b=CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+//        CanonicalChecker.isCanonicalTest(atomContainer);
+        System.out.println(b);
+        CanonicalChecker.signaturePartition(atomContainer);
+    }
+    
+    @Test
     public void testMinimalCanonicalExample() {
         IAtomContainer atomContainer = builder.newAtomContainer();
         atomContainer.addAtom(builder.newAtom("C"));

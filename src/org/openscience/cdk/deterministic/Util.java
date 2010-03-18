@@ -86,6 +86,14 @@ public class Util {
             return true;
         }
         
+        if (atom.getSymbol().equals("O") && totalOrder >= 2) {
+            return true;
+        }
+        
+        if (atom.getSymbol().equals("N") && totalOrder >= 3) {
+            return true;
+        }
+        
         return false;
     }
     

@@ -192,7 +192,7 @@ public class DeterministicEnumerator {
             return;
         } else {
             List<Integer> unsaturatedAtoms = g.unsaturatedAtoms(x);
-            System.out.println("trying all of " + unsaturatedAtoms);
+//            System.out.println("trying all of " + unsaturatedAtoms);
             for (int y : unsaturatedAtoms) {
                 if (x == y) continue;
                 SimpleGraph copy = new SimpleGraph(g);

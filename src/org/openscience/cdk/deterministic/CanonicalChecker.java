@@ -17,6 +17,8 @@ import org.openscience.cdk.group.SSPermutationGroup;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.signature.CDKMoleculeSignature;
+import org.openscience.cdk.signature.Orbit;
 
 public class CanonicalChecker {
     
@@ -202,6 +204,38 @@ public class CanonicalChecker {
     
     public static boolean isCanonicalWithGaps(IAtomContainer atomContainer) {
         return new CDKDiscretePartitionRefiner(true).isCanonical(atomContainer);
+    }
+    
+    public static void searchForSignaturePartition(IAtomContainer atomContainer) {
+        AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(atomContainer);
+        while (permutor.hasNext()) {
+            IAtomContainer permuted = permutor.next();
+            Partition partition = CanonicalChecker.signaturePartition(permuted);
+            if (partition.inOrder()) {
+                String pstr = Arrays.toString(permutor.getCurrentPermutation());
+                System.out.println(pstr + " " + partition);
+            }
+        }
+    }
+    
+    public static Partition signaturePartition(IAtomContainer atomContainer) {
+        CDKMoleculeSignature signature = new CDKMoleculeSignature(atomContainer);
+        List<Orbit> orbits = signature.calculateOrbits();
+        Map<String, Orbit> orbitMap = new HashMap<String, Orbit>();
+        for (Orbit o : orbits) {
+            orbitMap.put(o.getLabel(), o);
+        }
+        List<String> keys = new ArrayList<String>();
+        keys.addAll(orbitMap.keySet());
+        Collections.sort(keys);
+        Partition partition = new Partition();
+        for (String key : keys) {
+            Orbit o = orbitMap.get(key);
+//            System.out.println(o.getAtomIndices() + "\t" + key);
+            partition.addCell(o.getAtomIndices());
+        }
+//        System.out.println(partition);
+        return partition;
     }
 
     public static boolean isCanonicalWithColorPartition(

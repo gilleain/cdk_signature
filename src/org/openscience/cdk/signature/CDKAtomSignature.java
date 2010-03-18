@@ -64,7 +64,7 @@ public class CDKAtomSignature extends AbstractVertexSignature {
         IBond bond = this.molecule.getBond(atomA, atomB);
         if (bond != null) {
             switch (bond.getOrder()) {
-                case SINGLE: return "";
+                case SINGLE: return "-";
                 case DOUBLE: return "=";
                 case TRIPLE: return "#";
                 case QUADRUPLE: return "$";

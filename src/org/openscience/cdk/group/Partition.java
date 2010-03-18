@@ -74,6 +74,24 @@ public class Partition {
         return p;
     }
     
+    public boolean inOrder() {
+        SortedSet<Integer> prev = null;
+        for (SortedSet<Integer> cell : cells) {
+            if (prev == null) {
+                prev = cell;
+            } else {
+                int first = cell.first();
+                int last = cell.last();
+                if (first > prev.first() && last > prev.last()) {
+                    prev = cell;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     /**
      * Gets the first element in the specified cell.
      * 
@@ -229,6 +247,12 @@ public class Partition {
      * @param cell the cell to add
      */
     public void addCell(SortedSet<Integer> cell) {
+        this.cells.add(cell);
+    }
+    
+    public void addCell(List<Integer> cellElements) {
+        SortedSet<Integer> cell = new TreeSet();
+        cell.addAll(cellElements);
         this.cells.add(cell);
     }
     
