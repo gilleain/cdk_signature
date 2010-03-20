@@ -76,11 +76,6 @@ public class CDKAtomSignature extends AbstractVertexSignature {
     }
 
     @Override
-    public int getVertexCount() {
-        return this.molecule.getAtomCount();
-    }
-
-    @Override
     public String getVertexSymbol(int vertexIndex) {
         return this.molecule.getAtom(vertexIndex).getSymbol();
     }
