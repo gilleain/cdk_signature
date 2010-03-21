@@ -197,9 +197,9 @@ public class CDKMoleculeSignatureTest {
         IMolecule cage = AbstractSignatureTest.makeCage();
         CDKMoleculeSignature molSig;
         molSig = new CDKMoleculeSignature(cage, 2);
-        System.out.println(molSig.toCanonicalString());
+        System.out.println(molSig.signatureStringForVertex(0, 2));
         molSig = new CDKMoleculeSignature(cage, 3);
-        System.out.println(molSig.toCanonicalString());
+        System.out.println(molSig.signatureStringForVertex(0, 3));
     }
 
     @Test
@@ -215,17 +215,30 @@ public class CDKMoleculeSignatureTest {
         Assert.assertEquals(expected, actual);
     }
     
-    @Test
-    public void testCDKMolecule() {
-        String cuneaneSmiles = "C1C2C3CC4C1C4C23";
+    public void testSmiles(String smiles) {
         try {
-            IMolecule molecule = this.parser.parseSmiles(cuneaneSmiles);
+            IMolecule molecule = this.parser.parseSmiles(smiles);
             CDKMoleculeSignature sig = new CDKMoleculeSignature(molecule);
             System.out.println(sig.toFullString());
             System.out.println(sig.toCanonicalString());
         } catch (Exception e) {
             
         }
-        
+    }
+    
+    @Test
+    public void testCuneane() {
+        String cuneaneSmiles = "C1C2C3CC4C1C4C23";
+        testSmiles(cuneaneSmiles);
+    }
+    
+    @Test
+    public void testPolyPhenylMolecule() {
+        // NOTE : currently doesn't work due (possibly) to CDK atom typing
+        String smiles = "C1=CC=C(C=C1)P(C2=CC=CC=C2)(C3=CC=CC=C3)[RhH]" +
+        		"(P(C4=CC=CC=C4)(C5=CC=CC=C5)C6=CC=CC=C6)(P(C7=CC=CC=C7)" +
+        		"(C8=CC=CC=C8)C9=CC=CC=C9)P(C%10=CC=CC=C%10)" +
+        		"(C%11=CC=CC=C%11)C%12=CC=CC=C%12";
+        testSmiles(smiles);
     }
 }
