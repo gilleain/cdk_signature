@@ -1,16 +1,30 @@
 package test_deterministic;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 import org.openscience.cdk.deterministic.DeterministicEnumerator2;
+import org.openscience.cdk.deterministic.FragmentGraph;
 
 public class DeterministicEnumerator2Test {
     
     public void run(Map<String, Integer> counts) {
         DeterministicEnumerator2 detEn = new DeterministicEnumerator2();
-        detEn.generate(counts);
+        List<FragmentGraph> solutions = detEn.generate(counts);
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        for (FragmentGraph graph : solutions) {
+            String stringForm = graph.toString();
+            if (map.containsKey(stringForm)) {
+                map.put(stringForm, map.get(stringForm) + 1);
+            } else {
+                map.put(stringForm, 1);
+            }
+        }
+        for (String key : map.keySet()) {
+            System.out.println(key + " " + map.get(key));
+        }
     }
     
     @Test
@@ -42,6 +56,14 @@ public class DeterministicEnumerator2Test {
        Map<String, Integer> counts = new HashMap<String, Integer>();
        counts.put("C", 3);
        counts.put("H", 8);
+       run(counts);
+    }
+    
+    @Test
+    public void testC4H6() {
+       Map<String, Integer> counts = new HashMap<String, Integer>();
+       counts.put("C", 4);
+       counts.put("H", 6);
        run(counts);
     }
     
