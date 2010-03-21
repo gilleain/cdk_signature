@@ -263,14 +263,16 @@ public class CanonicalChecker {
               compactIndex++;
           }
       }
+//      System.out.println("signature partition " + partition + " " + signatureBlockMap.keySet());
+      System.out.println("signature partition " + partition);
       return partition;
-  }
+    }
     
     public static boolean isCanonicalWithSignaturePartition(
             IAtomContainer atomContainer) {
         Partition initial = 
             CanonicalChecker.compactSignaturePartition(atomContainer);
-        System.out.println("signature partition " + initial);
+        
         CDKDiscretePartitionRefiner refiner = 
             new CDKDiscretePartitionRefiner(true);
         refiner.refine(initial, atomContainer);
