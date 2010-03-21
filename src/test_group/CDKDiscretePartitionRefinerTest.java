@@ -31,6 +31,51 @@ public class CDKDiscretePartitionRefinerTest {
     }
     
     @Test
+    public void testBridgedCycloButane() {
+        IAtomContainer atomContainer = builder.newAtomContainer();
+        atomContainer.addAtom(builder.newAtom("C"));    // 0
+        atomContainer.addAtom(builder.newAtom("C"));    // 1
+        atomContainer.addAtom(builder.newAtom("C"));    // 2
+        atomContainer.addAtom(builder.newAtom("C"));    // 3
+        atomContainer.addAtom(builder.newAtom("C"));    // 4
+        
+        atomContainer.addAtom(builder.newAtom("H"));    // 5
+        atomContainer.addAtom(builder.newAtom("H"));    // 6
+        
+        atomContainer.addAtom(builder.newAtom("H"));    // 7
+        atomContainer.addAtom(builder.newAtom("H"));    // 8
+        
+        atomContainer.addAtom(builder.newAtom("H"));    // 9
+        atomContainer.addAtom(builder.newAtom("H"));    // 10
+        
+        atomContainer.addAtom(builder.newAtom("H"));    // 11
+        atomContainer.addAtom(builder.newAtom("H"));    // 12
+        
+        atomContainer.addBond(0, 2, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 3, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 4, IBond.Order.SINGLE);
+        atomContainer.addBond(0, 5, IBond.Order.SINGLE);
+        
+        atomContainer.addBond(1, 2, IBond.Order.SINGLE);
+        atomContainer.addBond(1, 3, IBond.Order.SINGLE);
+        atomContainer.addBond(1, 4, IBond.Order.SINGLE);
+        atomContainer.addBond(1, 6, IBond.Order.SINGLE);
+        
+        atomContainer.addBond(2, 7, IBond.Order.SINGLE);
+        atomContainer.addBond(2, 8, IBond.Order.SINGLE);
+        
+        atomContainer.addBond(3, 9, IBond.Order.SINGLE);
+        atomContainer.addBond(3, 10, IBond.Order.SINGLE);
+
+        atomContainer.addBond(4, 11, IBond.Order.SINGLE);
+        atomContainer.addBond(4, 12, IBond.Order.SINGLE);
+        
+//        boolean isCanon = isCanonical(atomContainer);
+        boolean isCanon = CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
+        System.out.println(isCanon);
+    }
+    
+    @Test
     public void testPartialC4H4() {
         IAtomContainer atomContainer = builder.newAtomContainer();
         atomContainer.addAtom(builder.newAtom("C"));
@@ -371,6 +416,20 @@ public class CDKDiscretePartitionRefinerTest {
     }
     
     @Test
+    public void cnopPermutation() {
+        IAtomContainer cnop = builder.newAtomContainer();
+        cnop.addAtom(builder.newAtom("C"));
+        cnop.addAtom(builder.newAtom("N"));
+        cnop.addAtom(builder.newAtom("O"));
+        cnop.addAtom(builder.newAtom("P"));
+        cnop.addBond(0, 1, IBond.Order.SINGLE);
+        cnop.addBond(0, 2, IBond.Order.SINGLE);
+        cnop.addBond(1, 3, IBond.Order.SINGLE);
+        cnop.addBond(2, 3, IBond.Order.SINGLE);
+        permutationTest(cnop);
+    }
+    
+    @Test
     public void fourgonPermutation() {
         IAtomContainer fourgon = builder.newAtomContainer();
         for (int i = 0; i < 4; i++) { fourgon.addAtom(builder.newAtom("C")); }
@@ -435,7 +494,8 @@ public class CDKDiscretePartitionRefinerTest {
         Assert.assertTrue("Initial structure is not canonical", isCanonical(container));
         while (permutor.hasNext()) {
             IAtomContainer permutation = permutor.next();
-            boolean canon = isCanonical(permutation);
+//            boolean canon = isCanonical(permutation);
+            boolean canon = CanonicalChecker.isCanonicalWithSignaturePartition(permutation);
 //            if (!canon) continue;
             boolean aut = isAutomorphic(container, permutation);
             System.out.println("permutation is canonical? " 
