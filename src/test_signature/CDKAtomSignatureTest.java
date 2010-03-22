@@ -19,7 +19,7 @@ public class CDKAtomSignatureTest extends AbstractSignatureTest {
     @Test
     public void allHeightsOfASymmetricGraphAreEqual() {
         IMolecule cubane = makeCubane();
-        int h = 1;
+        int h = 2;
         Map<String, Integer> sigfreq = new HashMap<String, Integer>();
         for (int i = 0; i < cubane.getAtomCount(); i++) {
             CDKAtomSignature atomSignature = new CDKAtomSignature(i, h, cubane);
@@ -34,6 +34,14 @@ public class CDKAtomSignatureTest extends AbstractSignatureTest {
         for (String key : sigfreq.keySet()) {
             System.out.println(key + " " + sigfreq.get(key));
         }
+    }
+    
+    @Test
+    public void testNonZeroRootForSubsignature() {
+        IMolecule cubane = makeCubane();
+        CDKAtomSignature atomSignature = new CDKAtomSignature(1, 2, cubane);
+        String canonicalSignature = atomSignature.toCanonicalString();
+        System.out.println(canonicalSignature);
     }
 
 }

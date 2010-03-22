@@ -16,9 +16,12 @@ public class DeterministicEnumerator2 {
         NoNotificationChemObjectBuilder.getInstance();
     
     public List<FragmentGraph> generate(Map<String, Integer> fragmentCounts) {
-        FragmentGraph initialGraph = new FragmentGraph(fragmentCounts, builder);
         List<FragmentGraph> solutions = new ArrayList<FragmentGraph>();
-        enumerate(initialGraph, solutions);
+        for (String label : fragmentCounts.keySet()) {
+            FragmentGraph initialGraph = 
+                new FragmentGraph(fragmentCounts, builder, label);
+            enumerate(initialGraph, solutions);
+        }
         return solutions;
     }
     
@@ -31,11 +34,12 @@ public class DeterministicEnumerator2 {
             }
 //            }
         } else {
-            String label = graph.getNextUnsaturatedLabel();
-            if (label == null) return;
-            
-            for (FragmentGraph child : saturateLabel(label, graph)) {
-                enumerate(child, solutions);
+//            String label = graph.getNextUnsaturatedLabel();
+//            if (label == null) return;
+            for (String label : graph.getUniqueLabels()) {
+                for (FragmentGraph child : saturateLabel(label, graph)) {
+                    enumerate(child, solutions);
+                }
             }
         }
     }
@@ -66,8 +70,8 @@ public class DeterministicEnumerator2 {
     
     private void saturateAtom(
             int atomIndex, FragmentGraph graph, List<FragmentGraph> graphs) {
-        System.out.println("saturating atom " + atomIndex + " in graph " + graph);
         if (graph.isSaturated(atomIndex)) {
+            System.out.println("saturating atom " + atomIndex + " in graph " + graph + " saturated");
             graphs.add(graph);
             return;
         } else {
@@ -78,7 +82,10 @@ public class DeterministicEnumerator2 {
                 child.bond(label, atomIndex, builder);
 //                if (CanonicalChecker.isCanonicalByRefinement(graph)) {
                 if (isCanonical(child)) {
+                    System.out.println("saturating atom " + atomIndex + " in graph " + graph + " canonical extension with " + label);
                     saturateAtom(atomIndex, child, graphs);
+                } else {
+                    System.out.println("saturating atom " + atomIndex + " in graph " + graph + " rejected extension with " + label);
                 }
             }
             
@@ -90,7 +97,10 @@ public class DeterministicEnumerator2 {
                     FragmentGraph child = new FragmentGraph(graph);
                     child.bond(atomIndex, otherAtomIndex, builder);
                     if (isCanonical(child)) {
+                        System.out.println("saturating atom " + atomIndex + " in graph " + graph + " canonical cyclisation to " + otherAtomIndex);
                         saturateAtom(atomIndex, child, graphs);
+                    } else {
+                        System.out.println("saturating atom " + atomIndex + " in graph " + graph + " rejected cyclisation to " + otherAtomIndex);
                     }
                 }
             }
@@ -98,8 +108,12 @@ public class DeterministicEnumerator2 {
     }
     
     private boolean isCanonical(FragmentGraph graph) {
-        return CanonicalChecker.isCanonicalWithSignaturePartition(
-                graph.getAtomContainer());
+        return CanonicalChecker.isCanonicalWithColorPartition(
+              graph.getAtomContainer());
+//        return CanonicalChecker.isCanonicalWithSignaturePartition(
+//                graph.getAtomContainer());
+//        return CanonicalChecker.isCanonicalByReconstruction(
+//              graph.getAtomContainer());
         
     }
 }

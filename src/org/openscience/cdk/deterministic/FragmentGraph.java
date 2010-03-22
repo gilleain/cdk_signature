@@ -42,7 +42,9 @@ public class FragmentGraph {
      * @param fragmentCounts
      */
     public FragmentGraph(
-            Map<String, Integer> fragmentCounts, IChemObjectBuilder builder) {
+            Map<String, Integer> fragmentCounts, 
+            IChemObjectBuilder builder,
+            String initialLabel) {
         this.atomContainer = builder.newAtomContainer();
         this.labels = new ArrayList<String>();
         
@@ -52,7 +54,7 @@ public class FragmentGraph {
             int count = fragmentCounts.get(label);
             
             // TODO : allow more than just element fragments...
-            if (firstLabel) {
+            if (firstLabel && label.equals(initialLabel)) {
                 this.fragments.put(label, new ElementFragment(count - 1, label));
                 this.atomContainer.addAtom(builder.newAtom(label));
                 this.labels.add(label);
@@ -160,6 +162,20 @@ public class FragmentGraph {
             }
         }
         return -1;
+    }
+    
+    public List<String> getUniqueLabels() {
+        // inefficient, and potentially broken - just testing something
+        List<String> uniqueLabels = new ArrayList<String>();
+        for (int i = 0; i < labels.size(); i++) {
+            String label = labels.get(i);
+            if (uniqueLabels.contains(label) || isSaturated(i)) {
+                continue;
+            } else {
+                uniqueLabels.add(label);
+            }
+        }
+        return uniqueLabels;
     }
 
     /**

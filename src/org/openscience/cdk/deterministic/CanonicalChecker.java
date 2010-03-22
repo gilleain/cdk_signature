@@ -17,6 +17,7 @@ import org.openscience.cdk.group.SSPermutationGroup;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.signature.CDKMoleculeFromSignatureBuilder;
 import org.openscience.cdk.signature.CDKMoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 
@@ -24,6 +25,42 @@ public class CanonicalChecker {
     
     private static CDKDiscretePartitionRefiner discreteRefiner = 
         new CDKDiscretePartitionRefiner(true);
+    
+    public static boolean isCanonicalByReconstruction(IAtomContainer atomContainer) {
+        CDKMoleculeSignature moleculeSignature = new CDKMoleculeSignature(atomContainer);
+        CDKMoleculeFromSignatureBuilder builder = new CDKMoleculeFromSignatureBuilder();
+        moleculeSignature.reconstructCanonicalGraph(
+                moleculeSignature.signatureForVertex(0), builder);
+        IAtomContainer reconstruction = builder.getAtomContainer();
+        return CanonicalChecker.identical(atomContainer, reconstruction);
+    }
+    
+    public static boolean identical(IAtomContainer a, IAtomContainer b) {
+        // assume that atom and bond counts are equal...
+        for (IBond bondA : a.bonds()) {
+            int atomZero = a.getAtomNumber(bondA.getAtom(0));
+            int atomOne = a.getAtomNumber(bondA.getAtom(1));
+            if (CanonicalChecker.containedIn(atomZero, atomOne, b)) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public static boolean containedIn(
+            int atomZero, int atomOne, IAtomContainer atomContainer) {
+        for (IBond bond : atomContainer.bonds()) {
+            int atomZeroPrime = atomContainer.getAtomNumber(bond.getAtom(0));
+            int atomOnePrime = atomContainer.getAtomNumber(bond.getAtom(1));
+            if (atomZero == atomZeroPrime && atomOne == atomOnePrime 
+                    ||atomOne == atomZeroPrime && atomZero == atomOnePrime) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     public static boolean isCanonicalBroken(IAtomContainer atomContainer) {
 //        // clear any previous labels
