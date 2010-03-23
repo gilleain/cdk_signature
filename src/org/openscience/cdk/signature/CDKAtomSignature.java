@@ -28,7 +28,7 @@ public class CDKAtomSignature extends AbstractVertexSignature {
     public CDKAtomSignature(int atomIndex, IAtomContainer molecule) {
         super("[", "]");
         this.molecule = molecule;
-        super.create(atomIndex);
+        super.createMaximumHeight(atomIndex, molecule.getAtomCount());
     }
     
     /**
@@ -42,7 +42,7 @@ public class CDKAtomSignature extends AbstractVertexSignature {
     public CDKAtomSignature(int atomIndex, int height, IAtomContainer molecule) {
         super("[", "]");
         this.molecule = molecule;
-        super.create(atomIndex, height);
+        super.create(atomIndex, molecule.getAtomCount(), height);
     }
 
     @Override

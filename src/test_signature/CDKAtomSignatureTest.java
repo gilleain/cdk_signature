@@ -19,7 +19,7 @@ public class CDKAtomSignatureTest extends AbstractSignatureTest {
     @Test
     public void allHeightsOfASymmetricGraphAreEqual() {
         IMolecule cubane = makeCubane();
-        int h = 2;
+        int h = 1;
         Map<String, Integer> sigfreq = new HashMap<String, Integer>();
         for (int i = 0; i < cubane.getAtomCount(); i++) {
             CDKAtomSignature atomSignature = new CDKAtomSignature(i, h, cubane);
