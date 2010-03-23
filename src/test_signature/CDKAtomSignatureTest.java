@@ -3,6 +3,8 @@ package test_signature;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.signature.CDKAtomSignature;
@@ -17,23 +19,28 @@ public class CDKAtomSignatureTest extends AbstractSignatureTest {
     }
     
     @Test
-    public void allHeightsOfASymmetricGraphAreEqual() {
+    public void allHeightsOfASymmetricGraphAreEqualTest() {
         IMolecule cubane = makeCubane();
-        int h = 1;
+        int diameter = 3;
+        for (int height = 1; height <= diameter; height++) {
+            allEqualAtHeightTest(cubane, height);
+        }
+    }
+    
+    public void allEqualAtHeightTest(IMolecule molecule, int height) {
         Map<String, Integer> sigfreq = new HashMap<String, Integer>();
-        for (int i = 0; i < cubane.getAtomCount(); i++) {
-            CDKAtomSignature atomSignature = new CDKAtomSignature(i, h, cubane);
+        for (int i = 0; i < molecule.getAtomCount(); i++) {
+            CDKAtomSignature atomSignature = new CDKAtomSignature(i, height, molecule);
             String canonicalSignature = atomSignature.toCanonicalString();
             if (sigfreq.containsKey(canonicalSignature)) {
                 sigfreq.put(canonicalSignature, sigfreq.get(canonicalSignature) + 1);
             } else {
                 sigfreq.put(canonicalSignature, 1);
             }
-            System.out.println(i + " " + canonicalSignature);
+//            System.out.println(i + " " + canonicalSignature);
         }
-        for (String key : sigfreq.keySet()) {
-            System.out.println(key + " " + sigfreq.get(key));
-        }
+//        for (String key : sigfreq.keySet()) { System.out.println(key + " " + sigfreq.get(key));}
+        Assert.assertEquals(1, sigfreq.keySet().size());
     }
     
     @Test
