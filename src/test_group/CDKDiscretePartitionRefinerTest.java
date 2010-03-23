@@ -10,13 +10,12 @@ import org.openscience.cdk.graph.AtomContainerAtomPermutor;
 import org.openscience.cdk.graph.Permutor;
 import org.openscience.cdk.group.CDKDiscretePartitionRefiner;
 import org.openscience.cdk.group.Permutation;
-import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.group.SSPermutationGroup;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
-import cages.PermutationGenerator;
 
 public class CDKDiscretePartitionRefinerTest {
     
@@ -28,6 +27,39 @@ public class CDKDiscretePartitionRefinerTest {
     
     public boolean isCanonicalWithDisconnectedAtoms(IAtomContainer container) {
         return new CDKDiscretePartitionRefiner(true).isCanonical(container);
+    }
+    
+    @Test
+    public void testAutGroupForCamphor() {
+        IAtomContainer camphor = builder.newAtomContainer();
+        camphor.addAtom(builder.newAtom("C"));
+        camphor.addAtom(builder.newAtom("C"));
+        camphor.addAtom(builder.newAtom("C"));
+        camphor.addAtom(builder.newAtom("C"));
+        camphor.addAtom(builder.newAtom("C"));
+        camphor.addAtom(builder.newAtom("C"));
+        camphor.addAtom(builder.newAtom("C"));
+        camphor.addAtom(builder.newAtom("C"));
+        camphor.addAtom(builder.newAtom("C"));
+        camphor.addAtom(builder.newAtom("C"));
+        camphor.addAtom(builder.newAtom("O"));
+        
+        camphor.addBond(0, 2, IBond.Order.SINGLE);
+        camphor.addBond(1, 2, IBond.Order.SINGLE);
+        camphor.addBond(2, 3, IBond.Order.SINGLE);
+        camphor.addBond(2, 4, IBond.Order.SINGLE);
+        camphor.addBond(3, 5, IBond.Order.SINGLE);
+        camphor.addBond(3, 6, IBond.Order.SINGLE);
+        camphor.addBond(3, 7, IBond.Order.SINGLE);
+        camphor.addBond(4, 8, IBond.Order.SINGLE);
+        camphor.addBond(4, 9, IBond.Order.SINGLE);
+        camphor.addBond(6, 8, IBond.Order.SINGLE);
+        camphor.addBond(7, 9, IBond.Order.SINGLE);
+        camphor.addBond(7, 10, IBond.Order.DOUBLE);
+        
+        CDKDiscretePartitionRefiner refiner = new CDKDiscretePartitionRefiner();
+        SSPermutationGroup aut = refiner.getAutomorphismGroup(camphor);
+        Assert.assertEquals(2, aut.order());
     }
     
     @Test
