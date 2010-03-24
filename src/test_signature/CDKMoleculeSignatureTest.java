@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLWriter;
+import org.openscience.cdk.signature.CDKAtomSignature;
 import org.openscience.cdk.signature.CDKMoleculeSignature;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
@@ -240,5 +241,18 @@ public class CDKMoleculeSignatureTest {
         		"(C8=CC=CC=C8)C9=CC=CC=C9)P(C%10=CC=CC=C%10)" +
         		"(C%11=CC=CC=C%11)C%12=CC=CC=C%12";
         testSmiles(smiles);
+    }
+    
+    @Test
+    public void cuneaneCubaneHeightTest() {
+        IMolecule cuneane = AbstractSignatureTest.makeCuneane();
+        IMolecule cubane = AbstractSignatureTest.makeCubane();
+        CDKAtomSignature cuneaneSignature = new CDKAtomSignature(0, 2, cuneane);
+        CDKAtomSignature cubaneSignature = new CDKAtomSignature(0, 2, cubane);
+        String cuneaneSigString = cuneaneSignature.toCanonicalString();
+        String cubaneSigString = cubaneSignature.toCanonicalString();
+        System.out.println(cuneaneSigString);
+        System.out.println(cubaneSigString);
+        Assert.assertEquals(cuneaneSigString, cubaneSigString);
     }
 }

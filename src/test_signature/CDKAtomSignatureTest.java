@@ -19,6 +19,15 @@ public class CDKAtomSignatureTest extends AbstractSignatureTest {
     }
     
     @Test
+    public void cubaneHeightTest() {
+        IMolecule cubane = AbstractSignatureTest.makeCubane();
+        int height = 2;
+        CDKAtomSignature atomSignature = new CDKAtomSignature(0, height, cubane);
+        String canonicalString = atomSignature.toCanonicalString();
+        System.out.println(canonicalString);
+    }
+    
+    @Test
     public void allHeightsOfASymmetricGraphAreEqualTest() {
         IMolecule cubane = makeCubane();
         int diameter = 3;
