@@ -102,7 +102,7 @@ public class CDKMoleculeSignature extends AbstractGraphSignature {
      * @return an atom container
      */
     public static IAtomContainer fromSignatureString(String signatureString) {
-        ColoredTree tree = new CDKAtomSignature(0, null).parse(signatureString);
+        ColoredTree tree = CDKAtomSignature.parse(signatureString);
         CDKMoleculeFromSignatureBuilder builder =
             new CDKMoleculeFromSignatureBuilder();
         builder.makeFromColoredTree(tree);

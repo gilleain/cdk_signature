@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 import signature.AbstractVertexSignature;
+import signature.ColoredTree;
 
 /**
  * The signature for a molecule rooted at a particular atom.
@@ -26,7 +27,7 @@ public class CDKAtomSignature extends AbstractVertexSignature {
      * @param molecule the molecule to create the signature from
      */
     public CDKAtomSignature(int atomIndex, IAtomContainer molecule) {
-        super("[", "]");
+        super('[', ']');
         this.molecule = molecule;
         super.createMaximumHeight(atomIndex, molecule.getAtomCount());
     }
@@ -40,7 +41,7 @@ public class CDKAtomSignature extends AbstractVertexSignature {
      * @param molecule the molecule to create the signature from
      */
     public CDKAtomSignature(int atomIndex, int height, IAtomContainer molecule) {
-        super("[", "]");
+        super('[', ']');
         this.molecule = molecule;
         super.create(atomIndex, molecule.getAtomCount(), height);
     }
@@ -79,6 +80,10 @@ public class CDKAtomSignature extends AbstractVertexSignature {
     @Override
     public String getVertexSymbol(int vertexIndex) {
         return this.molecule.getAtom(vertexIndex).getSymbol();
+    }
+
+    public static ColoredTree parse(String signatureString) {
+        return AbstractVertexSignature.parseWithNodeSymbols(signatureString, '[', ']');
     }
 
 }
