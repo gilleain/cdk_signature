@@ -1,7 +1,6 @@
 package org.openscience.cdk.signature;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -85,9 +84,8 @@ public class CDKMoleculeSignature extends AbstractGraphSignature {
         List<SymmetryClass> symmetryClasses = super.getSymmetryClasses();
         for (SymmetryClass symmetryClass : symmetryClasses) {
             Orbit orbit = new Orbit(symmetryClass.getSignatureString(), -1);
-            Iterator<Integer> itr = symmetryClass.getVertexIndices(); 
-            while (itr.hasNext()) {
-                orbit.addAtom(itr.next());
+            for (int atomIndex : symmetryClass) {
+                orbit.addAtom(atomIndex);
             }
             orbits.add(orbit);
         }
