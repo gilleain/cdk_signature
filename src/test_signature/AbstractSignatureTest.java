@@ -12,6 +12,45 @@ public class AbstractSignatureTest {
     public static NoNotificationChemObjectBuilder builder =
         NoNotificationChemObjectBuilder.getInstance();
     
+    public static IMolecule makeDodecahedrane() {
+        IMolecule dodec = builder.newMolecule();
+        for (int i = 0; i < 20; i++) {
+            dodec.addAtom(builder.newAtom("C"));
+        }
+        dodec.addBond(0, 1, IBond.Order.SINGLE);
+        dodec.addBond(0, 4, IBond.Order.SINGLE);
+        dodec.addBond(0, 5, IBond.Order.SINGLE);
+        dodec.addBond(1, 2, IBond.Order.SINGLE);
+        dodec.addBond(1, 6, IBond.Order.SINGLE);
+        dodec.addBond(2, 3, IBond.Order.SINGLE);
+        dodec.addBond(2, 7, IBond.Order.SINGLE);
+        dodec.addBond(3, 4, IBond.Order.SINGLE);
+        dodec.addBond(3, 8, IBond.Order.SINGLE);
+        dodec.addBond(4, 9, IBond.Order.SINGLE);
+        dodec.addBond(5, 10, IBond.Order.SINGLE);
+        dodec.addBond(5, 14, IBond.Order.SINGLE);
+        dodec.addBond(6, 10, IBond.Order.SINGLE);
+        dodec.addBond(6, 11, IBond.Order.SINGLE);
+        dodec.addBond(7, 11, IBond.Order.SINGLE);
+        dodec.addBond(7, 12, IBond.Order.SINGLE);
+        dodec.addBond(8, 12, IBond.Order.SINGLE);
+        dodec.addBond(8, 13, IBond.Order.SINGLE);
+        dodec.addBond(9, 13, IBond.Order.SINGLE);
+        dodec.addBond(9, 14, IBond.Order.SINGLE);
+        dodec.addBond(10, 16, IBond.Order.SINGLE);
+        dodec.addBond(11, 17, IBond.Order.SINGLE);
+        dodec.addBond(12, 18, IBond.Order.SINGLE);
+        dodec.addBond(13, 19, IBond.Order.SINGLE);
+        dodec.addBond(14, 15, IBond.Order.SINGLE);
+        dodec.addBond(15, 16, IBond.Order.SINGLE);
+        dodec.addBond(15, 19, IBond.Order.SINGLE);
+        dodec.addBond(16, 17, IBond.Order.SINGLE);
+        dodec.addBond(17, 18, IBond.Order.SINGLE);
+        dodec.addBond(18, 19, IBond.Order.SINGLE);
+        
+        return dodec;
+    }
+    
     public static IMolecule makeCage() {
         /*
          * This 'molecule' is the example used to illustrate the
