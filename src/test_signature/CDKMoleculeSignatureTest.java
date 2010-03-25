@@ -1,6 +1,8 @@
 package test_signature;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -8,10 +10,12 @@ import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.signature.CDKMoleculeSignature;
+import org.openscience.cdk.signature.Orbit;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 
@@ -240,5 +244,43 @@ public class CDKMoleculeSignatureTest {
         		"(C8=CC=CC=C8)C9=CC=CC=C9)P(C%10=CC=CC=C%10)" +
         		"(C%11=CC=CC=C%11)C%12=CC=CC=C%12";
         testSmiles(smiles);
+    }
+    
+    @Test
+    public void napthaleneSkeletonHeightTest() {
+        IMolecule napthalene = builder.newMolecule();
+        for (int i = 0; i < 10; i++) { 
+            napthalene.addAtom(builder.newAtom("C")); 
+        }
+        napthalene.addBond(0, 1, IBond.Order.SINGLE);
+        napthalene.addBond(0, 5, IBond.Order.SINGLE);
+        napthalene.addBond(1, 2, IBond.Order.SINGLE);
+        napthalene.addBond(1, 6, IBond.Order.SINGLE);
+        napthalene.addBond(2, 3, IBond.Order.SINGLE);
+        napthalene.addBond(2, 9, IBond.Order.SINGLE);
+        napthalene.addBond(3, 4, IBond.Order.SINGLE);
+        napthalene.addBond(4, 5, IBond.Order.SINGLE);
+        napthalene.addBond(6, 7, IBond.Order.SINGLE);
+        napthalene.addBond(7, 8, IBond.Order.SINGLE);
+        napthalene.addBond(8, 9, IBond.Order.SINGLE);
+        
+        CDKMoleculeSignature molSig = new CDKMoleculeSignature(napthalene);
+        int height = 2;
+        Map<String, Orbit> orbits = new HashMap<String, Orbit>();
+        for (int i = 0; i < napthalene.getAtomCount(); i++) {
+            String signatureString = molSig.signatureStringForVertex(i, height);
+            Orbit orbit;
+            if (orbits.containsKey(signatureString)) {
+                orbit = orbits.get(signatureString);
+            } else {
+                orbit = new Orbit(signatureString, height);
+                orbits.put(signatureString, orbit);
+            }
+            orbit.addAtom(i);
+        }
+//        for (String key : orbits.keySet()) {
+//            System.out.println(orbits.get(key));
+//        }
+        Assert.assertEquals(3, orbits.size());
     }
 }
