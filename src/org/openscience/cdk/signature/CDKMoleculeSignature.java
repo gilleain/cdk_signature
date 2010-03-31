@@ -106,4 +106,16 @@ public class CDKMoleculeSignature extends AbstractGraphSignature {
         builder.makeFromColoredTree(tree);
         return builder.getAtomContainer();
     }
+
+    public String toCanonicalSignatureString(int height) {
+        String canonicalSignature = null;
+        for (int i = 0; i < getVertexCount(); i++) {
+            String signatureForI = signatureStringForVertex(i, height);
+            if (canonicalSignature == null || 
+                    canonicalSignature.compareTo(signatureForI) < 0) {
+                canonicalSignature = signatureForI;
+            }
+        }
+        return canonicalSignature;
+    }
 }
