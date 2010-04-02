@@ -2,6 +2,7 @@ package org.openscience.cdk.deterministic;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
@@ -86,6 +87,27 @@ public class Graph {
         }
     }
     
+    public boolean check(int x, int y, TargetMolecularSignature hTau) {
+        boolean sSubgraphs = Util.saturatedSubgraph(x, atomContainer);
+        if (sSubgraphs) {
+            System.out.println("saturated subgraphs");
+            return false;
+        }
+        
+//        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+        boolean isCanonical = CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
+        
+        boolean isCompatible = true;
+        if (hTau != null) {
+            isCompatible = compatibleBond(x, y, hTau);
+            System.out.println("compatible " + isCompatible + " canonical " 
+                    + isCanonical + "\t" + this);
+        } else {
+            System.out.println("canonical " + isCanonical + "\t" + this);
+        }
+        return isCanonical && isCompatible;
+    }
+    
     /**
      * Check two atoms to see if a bond can be formed between them, according
      * to the target signatures.
@@ -159,6 +181,7 @@ public class Graph {
      * @param signature the target molecular signature
      */
     public void assignAtomsToTarget(TargetMolecularSignature signature) {
+        signature.sortSignatures();
         int currentTarget = 0;
         int currentCount = signature.getCount(0);
         for (int i = 0; i < this.atomContainer.getAtomCount(); i++) {
@@ -238,6 +261,17 @@ public class Graph {
     public List<Integer> getAtomTargetMap() {
         return this.targets;
     }
+    
+    public boolean isFullySaturated() {
+        for (int i = 0; i < this.atomContainer.getAtomCount(); i++) {
+            if (isSaturated(i)) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * Check this atom for saturation.
@@ -271,14 +305,66 @@ public class Graph {
      * 
      * @return a list of atom indices
      */
-    public List<Integer> unsaturatedAtoms() {
-//        return this.unsaturatedAtoms;
+    public List<Integer> unsaturatedAtoms(int indexOfSaturatingAtom) {
+//      public List<Integer> unsaturatedAtoms(int indexOfSaturatingAtom) {
+        CDKMoleculeSignature signature = 
+            new CDKMoleculeSignature(this.atomContainer);
+        List<Orbit> orbits = signature.calculateOrbits();
+
+        // XXX : fix this
+//        Collections.reverse(orbits);
+        sort(orbits);
+        
+//        System.out.println("Orbits : " + orbits);
         List<Integer> unsaturated = new ArrayList<Integer>();
-        for (Orbit o : this.orbits) {
-            if (o.isEmpty()) continue;
-            unsaturated.add(o.getFirstAtom());
+        for (Orbit o : orbits) {
+            if (o.isEmpty() || isSaturated(o)) continue;
+            List<Integer> atomIndices = o.getAtomIndices();
+            int indexIndex = 0;
+            int atomIndex = 0;
+            while (indexIndex < atomIndices.size()) {
+                atomIndex = atomIndices.get(indexIndex); 
+                if (atomIndex == indexOfSaturatingAtom ||
+                        maximumAttachment(indexOfSaturatingAtom, atomIndex)) {
+//                    continue;
+                    indexIndex++;
+                } else {
+                    unsaturated.add(atomIndex);
+                    break;
+                }
+//                indexIndex++;
+            }
         }
         return unsaturated;
+    }
+    
+    public boolean maximumAttachment(int atomIndexA, int atomIndexB) {
+        IAtom a = atomContainer.getAtom(atomIndexA);
+        IAtom b = atomContainer.getAtom(atomIndexB);
+        IBond bond = atomContainer.getBond(a, b);
+        if (bond == null) {
+            return false;
+        } else {
+            return bond.getOrder() == IBond.Order.TRIPLE;
+        }
+    }
+    
+    private void sort(List<Orbit> orbits) {
+        for (Orbit o : orbits) {
+            o.sort();
+        }
+        Collections.sort(orbits, new Comparator<Orbit>() {
+
+            public int compare(Orbit o1, Orbit o2) {
+                return new Integer(o1.getFirstAtom()).compareTo(
+                        new Integer(o2.getFirstAtom()));
+            }
+            
+        });
+    }
+    
+    private boolean isSaturated(Orbit o) {
+        return this.isSaturated(o.getFirstAtom());
     }
     
     /**
@@ -288,12 +374,22 @@ public class Graph {
      * @param y the second atom to be bonded
      */
     public void bond(int x, int y) {
+        IAtom a = atomContainer.getAtom(x);
+        IAtom b = atomContainer.getAtom(y);
         System.out.println(
                 String.format("bonding %d and %d (%s-%s)",
-                x, y, 
-                atomContainer.getAtom(x).getSymbol(),
-                atomContainer.getAtom(y).getSymbol()));
-        this.atomContainer.addBond(x, y, IBond.Order.SINGLE);
+                        x, y, a.getSymbol(),b.getSymbol()));
+        IBond existingBond = this.atomContainer.getBond(a, b);
+        if (existingBond != null) {
+            IBond.Order o = existingBond.getOrder(); 
+            if (o == IBond.Order.SINGLE) {
+                existingBond.setOrder(IBond.Order.DOUBLE);
+            } else if (o == IBond.Order.DOUBLE) {
+                existingBond.setOrder(IBond.Order.TRIPLE);
+            }
+        } else {
+            atomContainer.addBond(x, y, IBond.Order.SINGLE);
+        }
     }
 
     /**
@@ -321,8 +417,15 @@ public class Graph {
      * @return the orbit (list of atoms) to try and saturate
      */
     public Orbit getUnsaturatedOrbit() {
-        for (Orbit o : this.orbits) {
-            if (this.unsaturatedAtoms.contains(o.getFirstAtom())) {
+        CDKMoleculeSignature signature = 
+            new CDKMoleculeSignature(this.atomContainer);
+        List<Orbit> orbits = signature.calculateOrbits();
+        Collections.reverse(orbits);
+        sort(orbits);
+        for (Orbit o : orbits) {
+            if (isSaturated(o)) {
+                continue;
+            } else {
                 return o;
             }
         }
@@ -374,11 +477,6 @@ public class Graph {
         return CanonicalChecker.isCanonical(atomContainer);
     }
     
-    public boolean signatureMatches(TargetMolecularSignature tau) {
-        // TODO Auto-generated method stub
-        return true;
-    }
-    
     public String toString() {
         StringBuffer sb = new StringBuffer();
         int i = 0;
@@ -395,6 +493,8 @@ public class Graph {
             } else {
                 sb.append(r).append("-").append(l).append(" ");
             }
+            int o = bond.getOrder().ordinal() + 1;
+            sb.append("(").append(o).append(") ");
         }
         sb.append("] ");
         for (Orbit o : orbits) {

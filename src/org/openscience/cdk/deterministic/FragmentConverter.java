@@ -1,5 +1,6 @@
 package org.openscience.cdk.deterministic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,15 @@ import org.openscience.cdk.signature.CDKMoleculeSignature;
 import org.openscience.cdk.signature.TargetMolecularSignature;
 
 public class FragmentConverter {
+    
+    public static TargetMolecularSignature convert(
+            IAtomContainer fragment, int count) {
+        List<IAtomContainer> fragments = new ArrayList<IAtomContainer>();
+        fragments.add(fragment);
+        List<Integer> counts = new ArrayList<Integer>();
+        counts.add(count);
+        return FragmentConverter.convert(fragments, counts);
+    }
     
     public static TargetMolecularSignature convert(
             List<IAtomContainer> fragments, List<Integer> counts) {

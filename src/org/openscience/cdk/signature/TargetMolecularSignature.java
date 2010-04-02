@@ -1,9 +1,9 @@
 package org.openscience.cdk.signature;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IMolecularFormula;
@@ -25,9 +25,7 @@ import org.openscience.cdk.interfaces.IMolecule;
  */
 public class TargetMolecularSignature {
     
-    private ArrayList<TargetAtomicSignature> signatures;
-    
-    private ArrayList<Integer> counts;
+    private List<TargetAtomicSignature> signatures;
     
     private int height;
     
@@ -41,7 +39,6 @@ public class TargetMolecularSignature {
     public TargetMolecularSignature(IMolecularFormula formula) {
         
         this.signatures = new ArrayList<TargetAtomicSignature>();
-        this.counts = new ArrayList<Integer>();
         
         ArrayList<String> symbols = new ArrayList<String>(); 
         HashMap<String, Integer> countMap = new HashMap<String, Integer>();
@@ -53,8 +50,8 @@ public class TargetMolecularSignature {
         Collections.sort(symbols);
         for (String symbol : symbols) {
             String signatureString = "[" + symbol + "]";
-            this.signatures.add(new TargetAtomicSignature(signatureString));
-            this.counts.add(countMap.get(symbol));
+            int count = countMap.get(symbol);
+            this.signatures.add(new TargetAtomicSignature(signatureString, count));
         }
         this.lookupTable = createLookupTable();
         this.height = 0;
@@ -72,11 +69,12 @@ public class TargetMolecularSignature {
                                     ArrayList<Integer> counts,
                                     int height) {
         this.signatures = new ArrayList<TargetAtomicSignature>();
-        for (String signatureString : signatureStrings) {
-            this.signatures.add(new TargetAtomicSignature(signatureString));
+        for (int i = 0; i < signatures.size(); i++) {
+            String signatureString = signatureStrings.get(i);
+            int count = counts.get(i);
+            this.signatures.add(new TargetAtomicSignature(signatureString, count));
         }
         this.lookupTable = createLookupTable();
-        this.counts = counts;
         this.height = height;
     }
     
@@ -88,12 +86,26 @@ public class TargetMolecularSignature {
      */
     public TargetMolecularSignature(int height) {
         this.signatures = new ArrayList<TargetAtomicSignature>();
-        this.counts = new ArrayList<Integer>();
         this.height = height;
     }
     
     public int size() {
         return this.signatures.size();
+    }
+    
+    public List<TargetAtomicSignature> getSignatures() {
+        return signatures;
+    }
+    
+    public void sortSignatures() {
+        Collections.sort(signatures);
+    }
+    
+    public int[][] getLookupTable() {
+        if (lookupTable == null) {
+            lookupTable = createLookupTable();
+        }
+        return lookupTable;
     }
     
     /**
@@ -135,7 +147,6 @@ public class TargetMolecularSignature {
                 table[j][i] = cBA;
             }
         }
-        System.out.println(Arrays.deepToString(table) + " " + signatures);
         return table;
     }
     
@@ -194,8 +205,14 @@ public class TargetMolecularSignature {
         return n12;
     }
     
+    /**
+     * Get the count for the signature <code>i</code> in the tms.
+     * 
+     * @param i
+     * @return
+     */
     public int getCount(int i) {
-        return this.counts.get(i);
+        return signatures.get(i).getCount();
     }
     
     public void add(String signatureString) {
@@ -203,13 +220,11 @@ public class TargetMolecularSignature {
     }
     
     public void add(String signatureString, int count) {
-        this.signatures.add(new TargetAtomicSignature(signatureString));
-        this.counts.add(count);
+        this.signatures.add(new TargetAtomicSignature(signatureString, count));
     }
     
     public void add(String signatureString, int count, String name) {
-        this.signatures.add(new TargetAtomicSignature(signatureString, name));
-        this.counts.add(count);
+        this.signatures.add(new TargetAtomicSignature(signatureString, name, count));
     }
 
     /**
@@ -240,12 +255,16 @@ public class TargetMolecularSignature {
         return this.signatures.get(i).getSubSignature(h);
     }
 
+    public String getTargetAtomicSubSignature(int x, int h) {
+        return this.signatures.get(x).getSignatureString(0, h);
+    }
+
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        int l = this.counts.size();
+        int l = signatures.size();
         for (int i = 0; i < l - 1; i++) {
-            int count = this.counts.get(i);
             TargetAtomicSignature signature = this.signatures.get(i);
+            int count = signature.getCount();
             if (count > 1) {
                 buffer.append(String.valueOf(count) + signature.toString());
             } else {
@@ -253,17 +272,13 @@ public class TargetMolecularSignature {
             }
             buffer.append(" + ");
         }
-        int count = this.counts.get(l - 1);
         TargetAtomicSignature signature = this.signatures.get(l - 1);
+        int count = signature.getCount();
         if (count > 1) {
             buffer.append(String.valueOf(count) + signature.toString());
         } else {
             buffer.append(signature.toString());
         }
         return buffer.toString();
-    }
-
-    public String getTargetAtomicSubSignature(int x, int h) {
-        return this.signatures.get(x).getSignatureString(0, h);
     }
 }

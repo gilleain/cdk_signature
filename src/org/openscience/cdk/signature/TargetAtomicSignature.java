@@ -20,7 +20,7 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
  * @author maclean
  *
  */
-public class TargetAtomicSignature {
+public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> {
     
     private class Node {
         
@@ -112,15 +112,36 @@ public class TargetAtomicSignature {
     
     private int height;
     
-    public TargetAtomicSignature(String signatureString, String name) {
+    private int count;
+    
+    public TargetAtomicSignature(String signatureString, String name, int count) {
         this(signatureString);
         this.name = name;
+        this.count = count;
+    }
+    
+    public TargetAtomicSignature(String signatureString, String name) {
+        this(signatureString, name, 1);
+    }
+    
+    public TargetAtomicSignature(String signatureString, int count) {
+        this.root = this.parse(signatureString);
+        this.count = count;
     }
     
     public TargetAtomicSignature(String signatureString) {
         this.root = this.parse(signatureString);
+        this.count = 1;
     }
     
+    public int compareTo(TargetAtomicSignature o) {
+        return this.toString().compareTo(o.toString());
+    }
+    
+    public int getCount() {
+        return count;
+    }
+
     public int getHeight() {
         return this.height;
     }

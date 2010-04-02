@@ -106,12 +106,17 @@ public class Util {
         && ConnectivityChecker.isConnected(atomContainer);
     }
     
-    public static IAtomContainer makeAtomContainerFromFormulaString(String f) {
-        IChemObjectBuilder builder = 
-            NoNotificationChemObjectBuilder.getInstance();
-        IAtomContainer atomContainer = builder.newAtomContainer();
+    public static IAtomContainer makeAtomContainerFromFormulaString(
+            String f,  IChemObjectBuilder builder) {
         IMolecularFormula formula = 
             MolecularFormulaManipulator.getMolecularFormula(f, builder);
+        return Util.makeAtomContainerFromFormula(formula, builder);
+    }
+    
+    public static IAtomContainer makeAtomContainerFromFormula(
+            IMolecularFormula formula,  IChemObjectBuilder builder) {
+        IAtomContainer atomContainer = builder.newAtomContainer();
+        
         ArrayList<IAtom> atoms = new ArrayList<IAtom>();
         for (IIsotope isotope : formula.isotopes()) {
             for (int i = 0; i < formula.getIsotopeCount(isotope); i++) {

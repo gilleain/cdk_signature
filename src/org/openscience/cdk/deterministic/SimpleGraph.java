@@ -258,6 +258,4 @@ public class SimpleGraph {
             return sb.toString();
         }
 
-
-
 }
