@@ -13,7 +13,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 
-public class DeterministicEnumeratorTest {
+public class DeterministicEnumeratorFormulaTest {
     
     public static IChemObjectBuilder builder = 
         NoNotificationChemObjectBuilder.getInstance();
@@ -22,8 +22,8 @@ public class DeterministicEnumeratorTest {
     
     public static String toSmiles(IAtomContainer container) {
         if (ConnectivityChecker.isConnected(container)) {
-            return DeterministicEnumeratorTest.smilesGenerator.createSMILES(
-                    DeterministicEnumeratorTest.builder.newMolecule(container));
+            return DeterministicEnumeratorFormulaTest.smilesGenerator.createSMILES(
+                    DeterministicEnumeratorFormulaTest.builder.newMolecule(container));
         } else {
             return "disconnected";
         }
@@ -31,7 +31,7 @@ public class DeterministicEnumeratorTest {
     
     public static void printResults(List<IAtomContainer> results) {
         for (IAtomContainer result : results) {
-            System.out.println(DeterministicEnumeratorTest.toSmiles(result));
+            System.out.println(DeterministicEnumeratorFormulaTest.toSmiles(result));
         }
     }
     
@@ -41,7 +41,7 @@ public class DeterministicEnumeratorTest {
         List<IAtomContainer> results = enumerator.generate();
         int actual = results.size();
         System.out.println(actual + " results");
-        DeterministicEnumeratorTest.printResults(results);
+        DeterministicEnumeratorFormulaTest.printResults(results);
 //        Assert.assertEquals(expected, actual);
     }
     
@@ -79,81 +79,81 @@ public class DeterministicEnumeratorTest {
     
     @Test
     public void testCH4() {
-        DeterministicEnumeratorTest.testFormula("CH4", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("CH4", 1);
     }
     
     @Test
     public void testC2H2() {
-        DeterministicEnumeratorTest.testFormula("C2H2", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C2H2", 1);
     }
     
     @Test
     public void testC2H4() {
-        DeterministicEnumeratorTest.testFormula("C2H4", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C2H4", 1);
     }
     
     @Test
     public void testC2H6() {
-        DeterministicEnumeratorTest.testFormula("C2H6", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C2H6", 1);
     }
     
     @Test
     public void testC3H4O() {
-        DeterministicEnumeratorTest.testFormula("C3H4O", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C3H4O", 1);
     }
     
     @Test
     public void testC3H6() {
-        DeterministicEnumeratorTest.testFormula("C3H6", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C3H6", 1);
     }
     
     @Test
     public void testC3H8() {
-        DeterministicEnumeratorTest.testFormula("C3H8", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C3H8", 1);
     }
     
     @Test
     public void testC4H4() {
-        DeterministicEnumeratorTest.testFormula("C4H4", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H4", 1);
     }
     
     @Test
     public void testC4H4O() {
-        DeterministicEnumeratorTest.testFormula("C4H4O", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H4O", 1);
     }
     
     @Test
     public void testC4H6() {
-        DeterministicEnumeratorTest.testFormula("C4H6", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H6", 1);
     }
     
     @Test
     public void testC4H8() {
-        DeterministicEnumeratorTest.testFormula("C4H8", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H8", 1);
     }
     
     @Test
     public void testC4H10() {
-        DeterministicEnumeratorTest.testFormula("C4H10", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H10", 1);
     }
     
     @Test
     public void testC5H8() {
-        DeterministicEnumeratorTest.testFormula("C5H8", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C5H8", 1);
     }
     
     @Test
     public void testC5H12() {
-        DeterministicEnumeratorTest.testFormula("C5H12", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C5H12", 1);
     }
     
     @Test
     public void testC6H14() {
-        DeterministicEnumeratorTest.testFormula("C6H14", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C6H14", 1);
     }
     
     public static void main(String[] args) {
-        new DeterministicEnumeratorTest().testC4H4();
+        new DeterministicEnumeratorFormulaTest().testC4H4();
     }
 
 }
