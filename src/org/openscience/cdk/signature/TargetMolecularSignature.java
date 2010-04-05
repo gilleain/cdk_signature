@@ -132,7 +132,7 @@ public class TargetMolecularSignature {
         for (int i = 0; i < n; i++) {
             TargetAtomicSignature signatureA = this.signatures.get(i);
             IMolecule moleculeA = molecules.get(i);
-            for (int j = 0; j < n; j++) {
+            for (int j = i; j < n; j++) {
                 TargetAtomicSignature signatureB = this.signatures.get(j);
                 IMolecule moleculeB = molecules.get(j);
 //                System.out.println("A, B:");

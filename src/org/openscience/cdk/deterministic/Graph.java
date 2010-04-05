@@ -95,11 +95,13 @@ public class Graph {
         }
         
 //        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
-        boolean isCanonical = CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
+        boolean isCanonical = 
+            CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
         
         boolean isCompatible = true;
         if (hTau != null) {
-            isCompatible = compatibleBond(x, y, hTau);
+            isCompatible = compatibleBond(x, y, hTau) 
+                        && compatibleBond(y, x, hTau);
             System.out.println("compatible " + isCompatible + " canonical " 
                     + isCanonical + "\t" + this);
         } else {
@@ -121,13 +123,15 @@ public class Graph {
         int h = hTau.getHeight();
         int targetX = targets.get(x);
         int targetY = targets.get(y);
-        String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h - 1);
+//        String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h - 1);
+        String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h);
         
 //        int n12 = hTau.compatibleTargetBonds(targetX, h, hMinusOneTauY);
         int n12 = hTau.compatibleTargetBonds(targetX, targetY);
         if (n12 == 0) return false;
         int m12 = countExistingBondsOfType(y, h, hMinusOneTauY);
        
+        System.out.println("m12 " + m12 + " n12 " + n12);
         return n12 - m12 >= 0;
     }
     
@@ -143,6 +147,7 @@ public class Graph {
         // count the number of bonds already used between x and y
         int m12 = 0;
         for (String hMinusOneTauY1 : getSignaturesOfBondedAtoms(x, h - 1)) {
+            System.out.println(hMinusOneTauY + " " + hMinusOneTauY1);
             if (hMinusOneTauY.equals(hMinusOneTauY1)) {
                 m12++;
             }

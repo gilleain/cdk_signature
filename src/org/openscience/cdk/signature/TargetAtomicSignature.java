@@ -228,7 +228,7 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
         if (current.visited) return;
         buffer.append(current.toString());
         current.visited = true;
-        if (h < maxH) {
+        if (h <= maxH) {
             boolean visited = visitedChildren(current);
             if (current.children.size() > 0 && !visited) buffer.append("(");
             for (Node child : current.children) {

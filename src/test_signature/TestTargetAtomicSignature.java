@@ -1,5 +1,7 @@
 package test_signature;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -13,6 +15,7 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.templates.MoleculeFactory;
 
+import org.openscience.cdk.signature.CDKAtomSignature;
 import org.openscience.cdk.signature.CDKMoleculeSignature;
 import org.openscience.cdk.signature.TargetAtomicSignature;
 
@@ -80,6 +83,44 @@ public class TestTargetAtomicSignature {
         TargetAtomicSignature sig = new TargetAtomicSignature(expected);
         String actual = sig.toString();
         Assert.assertEquals("labelled roundtrip failed", expected, actual);
+    }
+    
+    @Test
+    public void paperTest() {
+        // the example shown in Figure 4 of Faulon's enumeration paper
+        IMolecule paperExample = builder.newMolecule();
+        IAtom carbon1 = builder.newAtom("C");
+        paperExample.addAtom(carbon1);
+        IAtom carbon2 = builder.newAtom("C");
+        paperExample.addAtom(carbon2);
+        IAtom carbon3 = builder.newAtom("C");
+        paperExample.addAtom(carbon3);
+        IAtom carbon4 = builder.newAtom("C");
+        paperExample.addAtom(carbon4);
+        paperExample.addBond(0, 1, IBond.Order.SINGLE);
+        paperExample.addBond(1, 2, IBond.Order.SINGLE);
+        paperExample.addBond(2, 3, IBond.Order.SINGLE);
+        TestTargetAtomicSignature.addHydrogens(paperExample, carbon1, 3);
+        TestTargetAtomicSignature.addHydrogens(paperExample, carbon2, 2);
+        TestTargetAtomicSignature.addHydrogens(paperExample, carbon3, 2);
+        
+        // check that the height-2 signature is correct
+        String height2Signature = "[C]([C]([C][H][H])[C]([H][H][H])[H][H])";
+        CDKAtomSignature signature = new CDKAtomSignature(1, 2, paperExample);
+        String canonicalSignatureString = signature.toCanonicalString(); 
+        Assert.assertEquals(height2Signature, canonicalSignatureString);
+        
+        // check the signatures formed from the children of the root
+        String[] subsignatures = new String[] {"[C]([C][C][H][H])",
+                "[C]([C][H][H][H])", "[H]([C])", "[H]([C])" };
+        TargetAtomicSignature targetSignature = 
+            new TargetAtomicSignature(height2Signature);
+        List<String> subsignatureList = 
+            targetSignature.getSignatureStringsFromRootChildren(1); 
+        for (String subsignature : subsignatures) {
+            Assert.assertTrue(subsignatureList.contains(subsignature));
+        }
+        
     }
     
     @Test

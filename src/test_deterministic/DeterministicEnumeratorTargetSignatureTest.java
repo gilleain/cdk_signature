@@ -26,7 +26,20 @@ public class DeterministicEnumeratorTargetSignatureTest extends
     }
     
     @Test
-    public void metheneTest() {
+    public void metheneCyclopropaneTest() {
+        IAtomContainer methene = AbstractDeterministicTest.makeCH2();
+        int count = 3;
+        
+        TargetMolecularSignature tms = FragmentConverter.convert(methene, count);
+        String formulaString = "C3H6";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
+    public void metheneCyclobutaneTest() {
         IAtomContainer methene = AbstractDeterministicTest.makeCH2();
         int count = 4;
         
@@ -36,6 +49,10 @@ public class DeterministicEnumeratorTargetSignatureTest extends
             new DeterministicEnumerator(formulaString, tms);
         List<IAtomContainer> results = enumerator.generate();
         AbstractDeterministicTest.printResults(results);
+    }
+    
+    public static void main(String[] args) {
+        new DeterministicEnumeratorTargetSignatureTest().metheneCyclopropaneTest();
     }
 
 }

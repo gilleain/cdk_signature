@@ -1,5 +1,7 @@
 package test_deterministic;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 import org.openscience.cdk.deterministic.FragmentConverter;
 import org.openscience.cdk.deterministic.Graph;
@@ -20,6 +22,8 @@ public class GraphTest extends AbstractDeterministicTest {
             FragmentConverter.convert(fragment, 4);
         
         graph.assignAtomsToTarget(signature);
-        System.out.println(signature + "\t" + graph.getAtomTargetMap());
+        String table = Arrays.deepToString(signature.getLookupTable());
+        System.out.println(
+                signature + "\t" + table + "\t" + graph.getAtomTargetMap());
     }
 }
