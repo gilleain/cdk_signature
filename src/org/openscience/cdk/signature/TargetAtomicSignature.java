@@ -152,7 +152,10 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
         // tricky up-and-down traversal to take account of both vertices with  
         // multiple parents, and the labelling.
         
-        return this.toString(); // XXX - not canonical!
+//        return this.toString(); // XXX - not canonical!
+        StringBuffer buffer = new StringBuffer();
+        root.toString(buffer);
+        return buffer.toString();
     }
     
     public IMolecule toMolecule() {

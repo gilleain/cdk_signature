@@ -110,6 +110,7 @@ public class TargetMolecularSignature {
                 return false;
             }
         }
+        System.out.println(java.util.Arrays.toString(maxMatchHeights));
         for (int i = 0; i < maxMatchHeights.length; i++) {
             if (maxMatchHeights[i] == -1) {
                 return false;
@@ -122,7 +123,8 @@ public class TargetMolecularSignature {
         int height = tas.getHeight();
         String atomSignature = 
             new CDKAtomSignature(i, height, mol).toCanonicalString();
-        return atomSignature.equals(tas.toString());
+        String targetSignature = tas.toCanonicalSignatureString();
+        return atomSignature.equals(targetSignature);
     }
     
     public int size() {
