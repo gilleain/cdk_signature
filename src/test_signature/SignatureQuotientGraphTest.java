@@ -46,5 +46,18 @@ public class SignatureQuotientGraphTest extends AbstractSignatureTest {
         SignatureQuotientGraph qGraph = new SignatureQuotientGraph(propellane);
         checkParameters(qGraph, 2, 2, 1);
     }
+    
+    @Test
+    public void testC7H16Isomers() {
+        IMolecule c7H16A = AbstractSignatureTest.makeC7H16A();
+        IMolecule c7H16B = AbstractSignatureTest.makeC7H16B();
+        IMolecule c7H16C = AbstractSignatureTest.makeC7H16C();
+        SignatureQuotientGraph qGraphA = new SignatureQuotientGraph(c7H16A, 1);
+        SignatureQuotientGraph qGraphB = new SignatureQuotientGraph(c7H16B, 1);
+        SignatureQuotientGraph qGraphC = new SignatureQuotientGraph(c7H16C, 1);
+        checkParameters(qGraphA, 4, 7, 1);
+        checkParameters(qGraphB, 4, 5, 0);
+        checkParameters(qGraphC, 4, 7, 1);
+    }
 
 }

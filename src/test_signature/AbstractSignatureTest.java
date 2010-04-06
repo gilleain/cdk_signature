@@ -12,6 +12,77 @@ public class AbstractSignatureTest {
     public static NoNotificationChemObjectBuilder builder =
         NoNotificationChemObjectBuilder.getInstance();
     
+    public static void addHydrogens(IMolecule mol, int carbonIndex, int count) {
+        for (int i = 0; i < count; i++) {
+            mol.addAtom(builder.newAtom("H"));
+            int hydrogenIndex = mol.getAtomCount() - 1;
+            mol.addBond(carbonIndex, hydrogenIndex, IBond.Order.SINGLE);
+        }
+    }
+    
+    public static void addCarbons(IMolecule mol, int count) {
+        for (int i = 0; i < count; i++) {
+            mol.addAtom(builder.newAtom("C"));
+        }
+    }
+    
+    public static IMolecule makeC7H16A() {
+        IMolecule mol = builder.newMolecule();
+        AbstractSignatureTest.addCarbons(mol, 7);
+        mol.addBond(0, 1, IBond.Order.SINGLE);
+        mol.addBond(1, 2, IBond.Order.SINGLE);
+        mol.addBond(2, 3, IBond.Order.SINGLE);
+        mol.addBond(3, 4, IBond.Order.SINGLE);
+        mol.addBond(3, 5, IBond.Order.SINGLE);
+        mol.addBond(5, 6, IBond.Order.SINGLE);
+        AbstractSignatureTest.addHydrogens(mol, 0, 3);
+        AbstractSignatureTest.addHydrogens(mol, 1, 2);
+        AbstractSignatureTest.addHydrogens(mol, 2, 2);
+        AbstractSignatureTest.addHydrogens(mol, 3, 1);
+        AbstractSignatureTest.addHydrogens(mol, 4, 3);
+        AbstractSignatureTest.addHydrogens(mol, 5, 2);
+        AbstractSignatureTest.addHydrogens(mol, 6, 3);
+        return mol;
+    }
+    
+    public static IMolecule makeC7H16B() {
+        IMolecule mol = builder.newMolecule();
+        AbstractSignatureTest.addCarbons(mol, 7);
+        mol.addBond(0, 1, IBond.Order.SINGLE);
+        mol.addBond(1, 2, IBond.Order.SINGLE);
+        mol.addBond(2, 3, IBond.Order.SINGLE);
+        mol.addBond(2, 5, IBond.Order.SINGLE);
+        mol.addBond(3, 4, IBond.Order.SINGLE);
+        mol.addBond(5, 6, IBond.Order.SINGLE);
+        AbstractSignatureTest.addHydrogens(mol, 0, 3);
+        AbstractSignatureTest.addHydrogens(mol, 1, 2);
+        AbstractSignatureTest.addHydrogens(mol, 2, 1);
+        AbstractSignatureTest.addHydrogens(mol, 3, 2);
+        AbstractSignatureTest.addHydrogens(mol, 4, 3);
+        AbstractSignatureTest.addHydrogens(mol, 5, 2);
+        AbstractSignatureTest.addHydrogens(mol, 6, 3);
+        return mol;
+    }
+    
+    public static IMolecule makeC7H16C() {
+        IMolecule mol = builder.newMolecule();
+        AbstractSignatureTest.addCarbons(mol, 7);
+        mol.addBond(0, 2, IBond.Order.SINGLE);
+        mol.addBond(1, 2, IBond.Order.SINGLE);
+        mol.addBond(2, 3, IBond.Order.SINGLE);
+        mol.addBond(3, 4, IBond.Order.SINGLE);
+        mol.addBond(4, 5, IBond.Order.SINGLE);
+        mol.addBond(5, 6, IBond.Order.SINGLE);
+        AbstractSignatureTest.addHydrogens(mol, 0, 3);
+        AbstractSignatureTest.addHydrogens(mol, 1, 3);
+        AbstractSignatureTest.addHydrogens(mol, 2, 1);
+        AbstractSignatureTest.addHydrogens(mol, 3, 2);
+        AbstractSignatureTest.addHydrogens(mol, 4, 2);
+        AbstractSignatureTest.addHydrogens(mol, 5, 2);
+        AbstractSignatureTest.addHydrogens(mol, 6, 3);
+        return mol;
+    }
+    
     public static IMolecule makeDodecahedrane() {
         IMolecule dodec = builder.newMolecule();
         for (int i = 0; i < 20; i++) {
