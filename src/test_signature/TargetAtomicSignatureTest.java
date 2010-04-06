@@ -19,7 +19,7 @@ import org.openscience.cdk.signature.CDKAtomSignature;
 import org.openscience.cdk.signature.CDKMoleculeSignature;
 import org.openscience.cdk.signature.TargetAtomicSignature;
 
-public class TestTargetAtomicSignature {
+public class TargetAtomicSignatureTest {
     
     public static IChemObjectBuilder builder =
         NoNotificationChemObjectBuilder.getInstance();
@@ -34,16 +34,16 @@ public class TestTargetAtomicSignature {
     
     public static IMolecule makeTreeMolecule() {
         IMolecule propane = MoleculeFactory.makeAlkane(3);
-        TestTargetAtomicSignature.addHydrogens(propane, propane.getAtom(0), 3);
-        TestTargetAtomicSignature.addHydrogens(propane, propane.getAtom(1), 2);
-        TestTargetAtomicSignature.addHydrogens(propane, propane.getAtom(2), 3);
+        TargetAtomicSignatureTest.addHydrogens(propane, propane.getAtom(0), 3);
+        TargetAtomicSignatureTest.addHydrogens(propane, propane.getAtom(1), 2);
+        TargetAtomicSignatureTest.addHydrogens(propane, propane.getAtom(2), 3);
         return propane;
     }
     
     public static IMolecule makeRingMolecule() {
         IMolecule cyclohexane = MoleculeFactory.makeCyclohexane();
         for (int i = 0; i < 6; i++) {
-            TestTargetAtomicSignature.addHydrogens(
+            TargetAtomicSignatureTest.addHydrogens(
                     cyclohexane, cyclohexane.getAtom(i), 2);
         }
         return cyclohexane;
@@ -100,9 +100,9 @@ public class TestTargetAtomicSignature {
         paperExample.addBond(0, 1, IBond.Order.SINGLE);
         paperExample.addBond(1, 2, IBond.Order.SINGLE);
         paperExample.addBond(2, 3, IBond.Order.SINGLE);
-        TestTargetAtomicSignature.addHydrogens(paperExample, carbon1, 3);
-        TestTargetAtomicSignature.addHydrogens(paperExample, carbon2, 2);
-        TestTargetAtomicSignature.addHydrogens(paperExample, carbon3, 2);
+        TargetAtomicSignatureTest.addHydrogens(paperExample, carbon1, 3);
+        TargetAtomicSignatureTest.addHydrogens(paperExample, carbon2, 2);
+        TargetAtomicSignatureTest.addHydrogens(paperExample, carbon3, 2);
         
         // check that the height-2 signature is correct
         String height2Signature = "[C]([C]([C][H][H])[C]([H][H][H])[H][H])";
@@ -130,29 +130,29 @@ public class TestTargetAtomicSignature {
                            "[C,3]([C,6]([C,1]))))[C]([C]([C,7][C]" +
                            "([C,1][C,8]))[C,5]([C,8]([C,6])))[C]([C,2]" +
                            "[C,7]([C,4]([C,1]))))";
-        TestTargetAtomicSignature.testRoundtrip(sigString);
-        TestTargetAtomicSignature.checkMolecule(sigString, molecule);
+        TargetAtomicSignatureTest.testRoundtrip(sigString);
+        TargetAtomicSignatureTest.checkMolecule(sigString, molecule);
     }
     
     @Test
     public void testTreeMolecule() {
-         IMolecule molecule = TestTargetAtomicSignature.makeTreeMolecule();
+         IMolecule molecule = TargetAtomicSignatureTest.makeTreeMolecule();
          String sigString = "[C]([H][H][H][C]([H][H][C]([H][H][H])))";
-         TestTargetAtomicSignature.checkMolecule(sigString, molecule);
+         TargetAtomicSignatureTest.checkMolecule(sigString, molecule);
     }
     
     @Test
     public void testCyclicMolecule() {
-         IMolecule molecule = TestTargetAtomicSignature.makeRingMolecule();
+         IMolecule molecule = TargetAtomicSignatureTest.makeRingMolecule();
          String sigString = "[H]([C]([C]([C]([C,1]([H][H])[H][H])[H][H])" +
                             "[C]([C]([C,1][H][H])[H][H])[H]))";
-         TestTargetAtomicSignature.checkMolecule(sigString, molecule);
+         TargetAtomicSignatureTest.checkMolecule(sigString, molecule);
     }
     
     @Test
     public void labelledRoundtrip() {
         String expected = "[C]([C,1][C,2][C,3])";
-        TestTargetAtomicSignature.testRoundtrip(expected);
+        TargetAtomicSignatureTest.testRoundtrip(expected);
     }
     
     @Test

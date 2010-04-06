@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import org.openscience.cdk.signature.TargetMolecularSignature;
 
-public class TestTargetMolecularSignature {
+public class TargetMolecularSignatureTest {
     
     /**
      * Make a simple signature compatible with hexane.
@@ -98,7 +98,7 @@ public class TestTargetMolecularSignature {
     @Test
     public void compatibleBondsForHexane() {
         TargetMolecularSignature tms = 
-            TestTargetMolecularSignature.makeHexane();
+            TargetMolecularSignatureTest.makeHexane();
         Assert.assertEquals(0, tms.compatibleTargetBonds(0, 0)); // A->A
         Assert.assertEquals(1, tms.compatibleTargetBonds(0, 1)); // A->B
         Assert.assertEquals(0, tms.compatibleTargetBonds(0, 2)); // A->C
@@ -115,7 +115,7 @@ public class TestTargetMolecularSignature {
     @Test
     public void compatibleBondsForCuneaneExample() {
         TargetMolecularSignature tms = 
-            TestTargetMolecularSignature.makeCuneaneExample();
+            TargetMolecularSignatureTest.makeCuneaneExample();
         Assert.assertEquals(1, tms.compatibleTargetBonds(0, 0)); // A->A
         Assert.assertEquals(1, tms.compatibleTargetBonds(0, 1)); // A->B
         Assert.assertEquals(0, tms.compatibleTargetBonds(0, 2)); // A->C
