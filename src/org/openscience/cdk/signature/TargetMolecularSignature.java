@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -90,7 +91,7 @@ public class TargetMolecularSignature {
         this.height = height;
     }
     
-    public boolean matches(IMolecule molecule) {
+    public boolean matches(IAtomContainer molecule) {
         // record of the best (highest) match for each atom
         int[] maxMatchHeights = new int[molecule.getAtomCount()];
         Arrays.fill(maxMatchHeights, -1);
@@ -119,7 +120,7 @@ public class TargetMolecularSignature {
         return true;
     }
     
-    public boolean matches(TargetAtomicSignature tas, int i, IMolecule mol) {
+    public boolean matches(TargetAtomicSignature tas, int i, IAtomContainer mol) {
         int height = tas.getHeight();
         String atomSignature = 
             new CDKAtomSignature(i, height, mol).toCanonicalString();

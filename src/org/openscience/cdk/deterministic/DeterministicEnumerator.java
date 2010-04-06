@@ -138,7 +138,10 @@ public class DeterministicEnumerator {
     }
     
     private void enumerate(Graph g) {
-        if (g.isConnected() && g.isFullySaturated() && g.isCanonical()) {
+        if (g.isConnected() 
+                && g.isFullySaturated() 
+                    && g.isCanonical()
+                        && hTau.matches(g.getAtomContainer())) {
             this.handler.handle(g.getAtomContainer());
         } else {
             Orbit o = g.getUnsaturatedOrbit();
