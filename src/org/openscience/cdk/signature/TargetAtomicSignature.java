@@ -154,7 +154,7 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
         
         return this.toString(); // XXX - not canonical!
     }
-
+    
     public IMolecule toMolecule() {
         return this.toMolecule(NoNotificationChemObjectBuilder.getInstance());
     }

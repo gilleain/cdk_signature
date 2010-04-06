@@ -1,6 +1,7 @@
 package org.openscience.cdk.signature;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -87,6 +88,41 @@ public class TargetMolecularSignature {
     public TargetMolecularSignature(int height) {
         this.signatures = new ArrayList<TargetAtomicSignature>();
         this.height = height;
+    }
+    
+    public boolean matches(IMolecule molecule) {
+        // record of the best (highest) match for each atom
+        int[] maxMatchHeights = new int[molecule.getAtomCount()];
+        Arrays.fill(maxMatchHeights, -1);
+        
+        for (TargetAtomicSignature tas : signatures) {
+            int height = tas.getHeight();
+            boolean matchedAtLeastOne = false;
+            for (int i = 0; i < molecule.getAtomCount(); i++) {
+                if (matches(tas, i, molecule)) {
+                    matchedAtLeastOne = true;
+                    if (height > maxMatchHeights[i]) {
+                        maxMatchHeights[i] = height;
+                    }
+                }
+            }
+            if (!matchedAtLeastOne) {
+                return false;
+            }
+        }
+        for (int i = 0; i < maxMatchHeights.length; i++) {
+            if (maxMatchHeights[i] == -1) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public boolean matches(TargetAtomicSignature tas, int i, IMolecule mol) {
+        int height = tas.getHeight();
+        String atomSignature = 
+            new CDKAtomSignature(i, height, mol).toCanonicalString();
+        return atomSignature.equals(tas.toString());
     }
     
     public int size() {
