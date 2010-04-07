@@ -89,13 +89,22 @@ public class Graph {
     }
     
     public boolean height1SignatureMatches(int x, TargetMolecularSignature tms) {
+        if (targets.size() == 0) return true;   // TODO
         String target = tms.getTargetAtomicSignature(targets.get(x), 1);
         String atomSignature = 
             new CDKAtomSignature(x, 1, atomContainer).toCanonicalString();
-        System.out.println(
-                "Comparing " + target + " and " 
-                + atomSignature + " at " + x + " in " + this);
-        return target.equals(atomSignature);
+        boolean equal = target.equals(atomSignature);
+        if (equal) {
+            System.out.println(
+                    "EQ  " + target + " and " 
+                    + atomSignature + "\tat " + x + " in " + this);
+        } else {
+            System.out.println(
+                    "NEQ " + target + " and " 
+                    + atomSignature + "\tat " + x + " in " + this);
+            
+        }
+        return equal;
     }
 
     public boolean check(int x, int y, TargetMolecularSignature hTau) {
@@ -106,8 +115,8 @@ public class Graph {
         }
         
 //        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
-        boolean isCanonical = 
-            CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
+        boolean isCanonical = true;
+//            CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
         
         boolean isCompatible = true;
         if (hTau != null) {

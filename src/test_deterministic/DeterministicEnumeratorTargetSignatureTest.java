@@ -51,8 +51,36 @@ public class DeterministicEnumeratorTargetSignatureTest extends
         AbstractDeterministicTest.printResults(results);
     }
     
+    @Test
+    public void methylCycloPropaneTest() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(2);
+        tms.add("[C]([C][H][H][H])", 1);
+        tms.add("[C]([C][C][H][H])", 2);
+        tms.add("[C]([C][C][C][H])", 1);
+        tms.add("[H]([C])", 8);
+        String formulaString = "C4H8";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
+    public void dimethylCycloButane() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(2);
+        tms.add("[C]([C][H][H][H])", 2);
+        tms.add("[C]([C][C][H][H])", 2);
+        tms.add("[C]([C][C][C][H])", 2);
+        tms.add("[H]([C])", 12);
+        String formulaString = "C6H12";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
     public static void main(String[] args) {
-        new DeterministicEnumeratorTargetSignatureTest().metheneCyclopropaneTest();
+        new DeterministicEnumeratorTargetSignatureTest().dimethylCycloButane();
     }
 
 }
