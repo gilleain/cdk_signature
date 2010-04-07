@@ -170,7 +170,9 @@ public class DeterministicEnumerator {
 //            System.out.println("first atom " + x);
             
             for (Graph h : saturateAtom(x, g)) {
-                saturateOrbit(o, h, s);
+                if (h.height1SignatureMatches(x, hTau)) {
+                    saturateOrbit(o, h, s);
+                }
             }
         }
     }

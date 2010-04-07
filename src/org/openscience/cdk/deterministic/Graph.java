@@ -13,6 +13,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.signature.CDKAtomSignature;
 import org.openscience.cdk.signature.CDKMoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 import org.openscience.cdk.signature.TargetMolecularSignature;
@@ -87,6 +88,16 @@ public class Graph {
         }
     }
     
+    public boolean height1SignatureMatches(int x, TargetMolecularSignature tms) {
+        String target = tms.getTargetAtomicSignature(targets.get(x), 1);
+        String atomSignature = 
+            new CDKAtomSignature(x, 1, atomContainer).toCanonicalString();
+        System.out.println(
+                "Comparing " + target + " and " 
+                + atomSignature + " at " + x + " in " + this);
+        return target.equals(atomSignature);
+    }
+
     public boolean check(int x, int y, TargetMolecularSignature hTau) {
         boolean sSubgraphs = Util.saturatedSubgraph(x, atomContainer);
         if (sSubgraphs) {
