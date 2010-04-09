@@ -114,8 +114,8 @@ public class Graph {
             return false;
         }
         
-//        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
-        boolean isCanonical = true;
+        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+//        boolean isCanonical = true;
 //            CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
         
         boolean isCompatible = true;
@@ -143,8 +143,8 @@ public class Graph {
         int h = hTau.getHeight();
         int targetX = targets.get(x);
         int targetY = targets.get(y);
-//        String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h - 1);
-        String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h);
+        String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h - 1);
+//        String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h);
         
 //        int n12 = hTau.compatibleTargetBonds(targetX, h, hMinusOneTauY);
         int n12 = hTau.compatibleTargetBonds(targetX, targetY);
@@ -167,7 +167,7 @@ public class Graph {
         // count the number of bonds already used between x and y
         int m12 = 0;
         for (String hMinusOneTauY1 : getSignaturesOfBondedAtoms(x, h - 1)) {
-            System.out.println(hMinusOneTauY + " " + hMinusOneTauY1);
+            System.out.println(hMinusOneTauY + " " + hMinusOneTauY1 + " " + h);
             if (hMinusOneTauY.equals(hMinusOneTauY1)) {
                 m12++;
             }

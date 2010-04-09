@@ -24,7 +24,7 @@ public class FragmentConverter {
     public static TargetMolecularSignature convert(
             List<IAtomContainer> fragments, List<Integer> counts) {
         TargetMolecularSignature targetMolecularSignature = 
-            new TargetMolecularSignature(0);
+            new TargetMolecularSignature(1);    // FIXME - height
 
         // temporary store for signature strings - TODO convert TMS to allow
         // for adding new signatures and counting duplicates

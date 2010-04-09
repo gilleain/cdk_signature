@@ -65,6 +65,11 @@ public class DeterministicEnumeratorFormulaTest extends
     }
     
     @Test
+    public void testCNH6() {
+        DeterministicEnumeratorFormulaTest.testFormula("CH6N", 1);
+    }
+    
+    @Test
     public void testC2H2() {
         DeterministicEnumeratorFormulaTest.testFormula("C2H2", 1);
     }
@@ -92,6 +97,16 @@ public class DeterministicEnumeratorFormulaTest extends
     @Test
     public void testC3H8() {
         DeterministicEnumeratorFormulaTest.testFormula("C3H8", 1);
+    }
+    
+    @Test
+    public void testC3H6O() {
+        DeterministicEnumeratorFormulaTest.testFormula("C3H6O", 1);
+    }
+    
+    @Test
+    public void testC3H6N() {
+        DeterministicEnumeratorFormulaTest.testFormula("C3H6N", 1);
     }
     
     @Test

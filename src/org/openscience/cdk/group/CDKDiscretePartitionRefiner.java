@@ -29,12 +29,20 @@ public class CDKDiscretePartitionRefiner extends
      */
     private boolean checkForDisconnectedAtoms;
     
+    private boolean useBondOrders;
+    
     public CDKDiscretePartitionRefiner() {
-        this(false);
+        this(false, true);
     }
     
     public CDKDiscretePartitionRefiner(boolean checkForDisconnectedAtoms) {
         this.checkForDisconnectedAtoms = checkForDisconnectedAtoms;
+    }
+    
+    public CDKDiscretePartitionRefiner(
+            boolean checkForDisconnectedAtoms, boolean useBondOrders) {
+        this.checkForDisconnectedAtoms = checkForDisconnectedAtoms;
+        this.useBondOrders = useBondOrders;
     }
     
     /**
@@ -51,7 +59,11 @@ public class CDKDiscretePartitionRefiner extends
             for (IAtom connected : atomContainer.getConnectedAtomsList(a)) {
                 int index = atomContainer.getAtomNumber(connected);
                 IBond bond = atomContainer.getBond(a, connected);
-                connectedIndices.put(index, bondOrder(bond.getOrder()));
+                if (useBondOrders) {
+                    connectedIndices.put(index, bondOrder(bond.getOrder()));
+                } else {
+                    connectedIndices.put(index, 1);
+                }
             }
             table.add(connectedIndices);
         }
@@ -111,12 +123,15 @@ public class CDKDiscretePartitionRefiner extends
         }
         int n = getVertexCount();
         SSPermutationGroup group = new SSPermutationGroup(new Permutation(n));
-        IEquitablePartitionRefiner refiner = new CDKEquitablePartitionRefiner(connectionTable);
+        IEquitablePartitionRefiner refiner = 
+            new CDKEquitablePartitionRefiner(connectionTable, useBondOrders);
         setup(group, refiner);
     }
     
     private void setup(IAtomContainer atomContainer, SSPermutationGroup group) {
-        IEquitablePartitionRefiner refiner = new CDKEquitablePartitionRefiner(connectionTable);
+        // TODO : error XXX! connectionTable will be null FIXME
+        IEquitablePartitionRefiner refiner = 
+            new CDKEquitablePartitionRefiner(connectionTable);
         setup(group, refiner);
     }
     

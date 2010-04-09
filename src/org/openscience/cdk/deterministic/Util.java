@@ -90,7 +90,7 @@ public class Util {
             return true;
         }
         
-        if (atom.getSymbol().equals("N") && totalOrder >= 3) {
+        if (atom.getSymbol().equals("N") && totalOrder == 4) {
             return true;
         }
         

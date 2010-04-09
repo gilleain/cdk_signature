@@ -91,6 +91,18 @@ public class TargetMolecularSignatureTest extends AbstractSignatureTest {
     }
     
     @Test
+    public void targetAtomicSubsignatureTest() {
+        TargetMolecularSignature tms = 
+            TargetMolecularSignatureTest.makeHexaneSignature();
+        for (int h = 0; h < 2; h++) {
+            for (int j = 0; j < 3; j++) {
+                String subsignature = tms.getTargetAtomicSubSignature(j, h);
+                System.out.println("h " + h + " sig " + j + " " + subsignature);
+            }
+        }
+    }
+    
+    @Test
     public void roundtrip() {
         TargetMolecularSignature tms = makePaperExampleMolecularSignature();
         System.out.println(tms);

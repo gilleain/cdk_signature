@@ -27,7 +27,13 @@ public class CDKEquitablePartitionRefiner extends
     private boolean useAtomSymbol = true;
     
     public CDKEquitablePartitionRefiner(List<Map<Integer, Integer>> connectionTable) {
+        this(connectionTable, true);
+    }
+    
+    public CDKEquitablePartitionRefiner(
+            List<Map<Integer, Integer>> connectionTable, boolean useBondOrder) {
         this.connectionTable = connectionTable;
+        this.useBondOrder = useBondOrder;
     }
 
     public int neighboursInBlock(Set<Integer> block, int vertexIndex) {
