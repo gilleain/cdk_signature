@@ -123,7 +123,7 @@ public class TargetMolecularSignature {
     public boolean matches(TargetAtomicSignature tas, int i, IAtomContainer mol) {
         int height = tas.getHeight();
         String atomSignature = 
-            new CDKAtomSignature(i, height, mol).toCanonicalString();
+            new AtomSignature(i, height, mol).toCanonicalString();
         String targetSignature = tas.toCanonicalSignatureString();
         return atomSignature.equals(targetSignature);
     }
@@ -190,7 +190,7 @@ public class TargetMolecularSignature {
     }
     
     private int compatibleCount(IMolecule molecule, TargetAtomicSignature target) {
-        CDKMoleculeSignature sigFromMolecule = new CDKMoleculeSignature(molecule);
+        MoleculeSignature sigFromMolecule = new MoleculeSignature(molecule);
         int height = target.getHeight() - 1;
         if (height < 0) {
             return 1;

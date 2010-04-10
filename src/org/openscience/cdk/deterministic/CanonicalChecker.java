@@ -17,8 +17,8 @@ import org.openscience.cdk.group.SSPermutationGroup;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.signature.CDKMoleculeFromSignatureBuilder;
-import org.openscience.cdk.signature.CDKMoleculeSignature;
+import org.openscience.cdk.signature.MoleculeFromSignatureBuilder;
+import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 
 public class CanonicalChecker {
@@ -27,8 +27,8 @@ public class CanonicalChecker {
         new CDKDiscretePartitionRefiner(true);
     
     public static boolean isCanonicalByReconstruction(IAtomContainer atomContainer) {
-        CDKMoleculeSignature moleculeSignature = new CDKMoleculeSignature(atomContainer);
-        CDKMoleculeFromSignatureBuilder builder = new CDKMoleculeFromSignatureBuilder();
+        MoleculeSignature moleculeSignature = new MoleculeSignature(atomContainer);
+        MoleculeFromSignatureBuilder builder = new MoleculeFromSignatureBuilder();
         moleculeSignature.reconstructCanonicalGraph(
                 moleculeSignature.signatureForVertex(0), builder);
         IAtomContainer reconstruction = builder.getAtomContainer();
@@ -256,7 +256,7 @@ public class CanonicalChecker {
     }
     
     public static Partition signaturePartition(IAtomContainer atomContainer) {
-        CDKMoleculeSignature signature = new CDKMoleculeSignature(atomContainer);
+        MoleculeSignature signature = new MoleculeSignature(atomContainer);
         List<Orbit> orbits = signature.calculateOrbits();
         Map<String, Orbit> orbitMap = new HashMap<String, Orbit>();
         for (Orbit o : orbits) {
@@ -276,7 +276,7 @@ public class CanonicalChecker {
     }
     
     public static Partition compactSignaturePartition(IAtomContainer atomContainer) {
-      CDKMoleculeSignature signature = new CDKMoleculeSignature(atomContainer);
+      MoleculeSignature signature = new MoleculeSignature(atomContainer);
       int compactIndex = 0;
   
       Map<String, Integer> signatureBlockMap = new HashMap<String, Integer>();

@@ -10,7 +10,7 @@ import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.signature.CDKMoleculeSignature;
+import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 
 public class SimpleGraph {
@@ -140,8 +140,8 @@ public class SimpleGraph {
     
 
     public Orbit getUnsaturatedOrbit() {
-        CDKMoleculeSignature signature = 
-            new CDKMoleculeSignature(this.atomContainer);
+        MoleculeSignature signature = 
+            new MoleculeSignature(this.atomContainer);
         List<Orbit> orbits = signature.calculateOrbits();
         Collections.reverse(orbits);
         sort(orbits);
@@ -175,8 +175,8 @@ public class SimpleGraph {
      * @return a list of atom indices
      */
     public List<Integer> unsaturatedAtoms(int indexOfSaturatingAtom) {
-        CDKMoleculeSignature signature = 
-            new CDKMoleculeSignature(this.atomContainer);
+        MoleculeSignature signature = 
+            new MoleculeSignature(this.atomContainer);
         List<Orbit> orbits = signature.calculateOrbits();
 
         // XXX : fix this

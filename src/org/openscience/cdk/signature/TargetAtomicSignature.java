@@ -175,7 +175,7 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
         // XXX - this assumes that the molecule is built from the root!
         IAtom rootAtom = molecule.getAtom(0);
         
-        CDKMoleculeSignature signature = new CDKMoleculeSignature(molecule);
+        MoleculeSignature signature = new MoleculeSignature(molecule);
         ArrayList<String> sigStrings = new ArrayList<String>();
         for (IAtom child : molecule.getConnectedAtomsList(rootAtom)) {
             int i = molecule.getAtomNumber(child);

@@ -13,8 +13,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.signature.CDKAtomSignature;
-import org.openscience.cdk.signature.CDKMoleculeSignature;
+import org.openscience.cdk.signature.AtomSignature;
+import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 import org.openscience.cdk.signature.TargetMolecularSignature;
 
@@ -92,7 +92,7 @@ public class Graph {
         if (targets.size() == 0) return true;   // TODO
         String target = tms.getTargetAtomicSignature(targets.get(x), 1);
         String atomSignature = 
-            new CDKAtomSignature(x, 1, atomContainer).toCanonicalString();
+            new AtomSignature(x, 1, atomContainer).toCanonicalString();
         boolean equal = target.equals(atomSignature);
         if (equal) {
             System.out.println(
@@ -188,8 +188,8 @@ public class Graph {
         List<String> signatures = new ArrayList<String>();
         for (IAtom connected : atomContainer.getConnectedAtomsList(atom)) {
             int atomNumber = atomContainer.getAtomNumber(connected);
-            CDKMoleculeSignature signature = 
-                new CDKMoleculeSignature(this.atomContainer);
+            MoleculeSignature signature = 
+                new MoleculeSignature(this.atomContainer);
             signatures.add(signature.signatureStringForVertex(atomNumber, h));
         }
         return signatures;
@@ -228,8 +228,8 @@ public class Graph {
      * equal. 
      */
     public void partition() {
-        CDKMoleculeSignature signature = 
-            new CDKMoleculeSignature(this.atomContainer);
+        MoleculeSignature signature = 
+            new MoleculeSignature(this.atomContainer);
         this.orbits = signature.calculateOrbits();
         
         // XXX : fix this
@@ -332,8 +332,8 @@ public class Graph {
      */
     public List<Integer> unsaturatedAtoms(int indexOfSaturatingAtom) {
 //      public List<Integer> unsaturatedAtoms(int indexOfSaturatingAtom) {
-        CDKMoleculeSignature signature = 
-            new CDKMoleculeSignature(this.atomContainer);
+        MoleculeSignature signature = 
+            new MoleculeSignature(this.atomContainer);
         List<Orbit> orbits = signature.calculateOrbits();
 
         // XXX : fix this
@@ -442,8 +442,8 @@ public class Graph {
      * @return the orbit (list of atoms) to try and saturate
      */
     public Orbit getUnsaturatedOrbit() {
-        CDKMoleculeSignature signature = 
-            new CDKMoleculeSignature(this.atomContainer);
+        MoleculeSignature signature = 
+            new MoleculeSignature(this.atomContainer);
         List<Orbit> orbits = signature.calculateOrbits();
         Collections.reverse(orbits);
         sort(orbits);

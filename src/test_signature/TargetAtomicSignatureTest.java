@@ -15,8 +15,8 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import org.openscience.cdk.signature.CDKAtomSignature;
-import org.openscience.cdk.signature.CDKMoleculeSignature;
+import org.openscience.cdk.signature.AtomSignature;
+import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.TargetAtomicSignature;
 
 public class TargetAtomicSignatureTest {
@@ -106,7 +106,7 @@ public class TargetAtomicSignatureTest {
         
         // check that the height-2 signature is correct
         String height2Signature = "[C]([C]([C][H][H])[C]([H][H][H])[H][H])";
-        CDKAtomSignature signature = new CDKAtomSignature(1, 2, paperExample);
+        AtomSignature signature = new AtomSignature(1, 2, paperExample);
         String canonicalSignatureString = signature.toCanonicalString(); 
         Assert.assertEquals(height2Signature, canonicalSignatureString);
         
@@ -171,7 +171,7 @@ public class TargetAtomicSignatureTest {
         int height = 2;
         
         TargetAtomicSignature sig = new TargetAtomicSignature(sigString);
-        CDKMoleculeSignature sigSig = new CDKMoleculeSignature(sig.toMolecule());
+        MoleculeSignature sigSig = new MoleculeSignature(sig.toMolecule());
         String expected = sigSig.toCanonicalSignatureString(height);
         // every sub-signature of height 2 for cubane's children of the
         // root node is equal to the subsignature of height 2 for cubane

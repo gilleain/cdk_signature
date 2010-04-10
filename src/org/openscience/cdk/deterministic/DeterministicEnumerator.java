@@ -9,8 +9,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.signature.CDKAtomSignature;
-import org.openscience.cdk.signature.CDKMoleculeSignature;
+import org.openscience.cdk.signature.AtomSignature;
+import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 import org.openscience.cdk.signature.TargetMolecularSignature;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -127,7 +127,7 @@ public class DeterministicEnumerator {
         this.handler = new IEnumeratorResultHandler() {
             public void handle(IAtomContainer result) {
                 String signatureString = 
-                    new CDKMoleculeSignature(result).toCanonicalString();
+                    new MoleculeSignature(result).toCanonicalString();
 //                if (results.containsKey(signatureString)) {
 //                    return;
 //                } else {
@@ -191,7 +191,7 @@ public class DeterministicEnumerator {
         if (g.isSaturated(x)) {
 //            System.out.println(x + " is already saturated");
             String sig = 
-                new CDKAtomSignature(
+                new AtomSignature(
                         x, g.getAtomContainer()).toCanonicalString();
             if (!s.containsKey(sig)) {
                 s.put(sig, g);

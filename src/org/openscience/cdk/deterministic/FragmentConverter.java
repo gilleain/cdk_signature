@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.signature.CDKAtomSignature;
-import org.openscience.cdk.signature.CDKMoleculeSignature;
+import org.openscience.cdk.signature.AtomSignature;
+import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.TargetMolecularSignature;
 
 public class FragmentConverter {
@@ -32,13 +32,13 @@ public class FragmentConverter {
         
         int fragmentIndex = 0;
         for (IAtomContainer fragment : fragments) {
-            CDKMoleculeSignature fragmentSignature = 
-                new CDKMoleculeSignature(fragment);
+            MoleculeSignature fragmentSignature = 
+                new MoleculeSignature(fragment);
             int fragmentCount = counts.get(fragmentIndex);
             for (int i = 0; i < fragment.getAtomCount(); i++) {
                 if (FragmentConverter.isSaturated(i, fragment)) {
-                    CDKAtomSignature signature = 
-                        (CDKAtomSignature) 
+                    AtomSignature signature = 
+                        (AtomSignature) 
                             fragmentSignature.signatureForVertex(i);
                     String signatureString = signature.toString();
                     if (tmp.containsKey(signatureString)) {

@@ -15,8 +15,8 @@ public class SignatureQuotientGraph extends AbstractQuotientGraph {
     
     public SignatureQuotientGraph(IAtomContainer atomContainer, int height) {
         this.atomContainer = atomContainer;
-        CDKMoleculeSignature moleculeSignature = 
-            new CDKMoleculeSignature(atomContainer);
+        MoleculeSignature moleculeSignature = 
+            new MoleculeSignature(atomContainer);
         super.construct(moleculeSignature.getSymmetryClasses(height));
     }
 

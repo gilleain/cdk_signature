@@ -3,7 +3,7 @@ package org.openscience.cdk.deterministic;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.signature.CDKMoleculeSignature;
+import org.openscience.cdk.signature.MoleculeSignature;
 
 /**
  * A fragment is a number of identical atom containers, represented by the 
@@ -34,14 +34,14 @@ public class SignatureFragment extends AbstractFragment {
         super(count);
         this.signatureString = signatureString;
         this.fragmentAtomContainer = 
-            CDKMoleculeSignature.fromSignatureString(signatureString);
+            MoleculeSignature.fromSignatureString(signatureString);
     }
     
     public SignatureFragment(int count, IAtomContainer fragmentAtomContainer) {
         super(count);
         this.fragmentAtomContainer = fragmentAtomContainer;
         this.signatureString = 
-            new CDKMoleculeSignature(this.fragmentAtomContainer)
+            new MoleculeSignature(this.fragmentAtomContainer)
                 .toCanonicalString();
     }
     
