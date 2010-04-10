@@ -3,11 +3,13 @@ package org.openscience.cdk.deterministic;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.signature.CDKAtomSignature;
 import org.openscience.cdk.signature.CDKMoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 import org.openscience.cdk.signature.TargetMolecularSignature;
@@ -161,7 +163,7 @@ public class DeterministicEnumerator {
     }
     
     private void saturateOrbit(Orbit o, Graph g, ArrayList<Graph> s) {
-//        System.out.println("Saturating orbit : " + o);
+        System.out.println("Saturating orbit : " + o);
         if (o == null || o.isEmpty()) {
 //            System.out.println("orbit empty");
             s.add(g);
@@ -179,16 +181,21 @@ public class DeterministicEnumerator {
     }
     
     private List<Graph> saturateAtom(int x, Graph g) {
-        ArrayList<Graph> atomSolutions = new ArrayList<Graph>();
+        Map<String, Graph> atomSolutions = new HashMap<String, Graph>();
         saturateAtom(x, g, atomSolutions);
-        return atomSolutions;
+        return new ArrayList<Graph>(atomSolutions.values());
     }
     
-    private void saturateAtom(int x, Graph g, List<Graph> s) {
+    private void saturateAtom(int x, Graph g, Map<String, Graph> s) {
 //        System.out.println("saturating atom " + x + " in " + g);
         if (g.isSaturated(x)) {
 //            System.out.println(x + " is already saturated");
-            s.add(g);
+            String sig = 
+                new CDKAtomSignature(
+                        x, g.getAtomContainer()).toCanonicalString();
+            if (!s.containsKey(sig)) {
+                s.put(sig, g);
+            }
             return;
         } else {
             List<Integer> unsaturatedAtoms = g.unsaturatedAtoms(x);

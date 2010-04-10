@@ -346,7 +346,8 @@ public class CanonicalChecker {
         }
         
         CDKDiscretePartitionRefiner refiner = 
-            new CDKDiscretePartitionRefiner(true, false);   // XXX turning off bond orders!
+//            new CDKDiscretePartitionRefiner(true, false);   // XXX turning off bond orders!
+            new CDKDiscretePartitionRefiner(true, true);   
         refiner.refine(initial, atomContainer);
         return refiner.firstIsIdentity();
     }

@@ -114,8 +114,8 @@ public class Graph {
             return false;
         }
         
-        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
-//        boolean isCanonical = true;
+//        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+        boolean isCanonical = true;
 //            CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
         
         boolean isCompatible = true;
@@ -125,7 +125,7 @@ public class Graph {
             System.out.println("compatible " + isCompatible + " canonical " 
                     + isCanonical + "\t" + this);
         } else {
-            System.out.println("canonical " + isCanonical + "\t" + this);
+//            System.out.println("canonical " + isCanonical + "\t" + this);
         }
         return isCanonical && isCompatible;
     }
