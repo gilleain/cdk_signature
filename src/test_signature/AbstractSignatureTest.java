@@ -1,6 +1,5 @@
 package test_signature;
 
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
@@ -166,14 +165,7 @@ public class AbstractSignatureTest {
      */
     public static IMolecule makeCubane() {
         IMolecule mol = builder.newMolecule();
-        mol.addAtom(new Atom("C")); // 0
-        mol.addAtom(new Atom("C")); // 1
-        mol.addAtom(new Atom("C")); // 2
-        mol.addAtom(new Atom("C")); // 3
-        mol.addAtom(new Atom("C")); // 4
-        mol.addAtom(new Atom("C")); // 5
-        mol.addAtom(new Atom("C")); // 6
-        mol.addAtom(new Atom("C")); // 7
+        addCarbons(mol, 8);
         mol.addBond(0, 1, IBond.Order.SINGLE);
         mol.addBond(0, 3, IBond.Order.SINGLE);
         mol.addBond(0, 7, IBond.Order.SINGLE);
@@ -191,14 +183,7 @@ public class AbstractSignatureTest {
 
     public static IMolecule makeCuneane() {
         IMolecule mol = builder.newMolecule();
-        mol.addAtom(new Atom("C")); // 0
-        mol.addAtom(new Atom("C")); // 1
-        mol.addAtom(new Atom("C")); // 2
-        mol.addAtom(new Atom("C")); // 3
-        mol.addAtom(new Atom("C")); // 4
-        mol.addAtom(new Atom("C")); // 5
-        mol.addAtom(new Atom("C")); // 6
-        mol.addAtom(new Atom("C")); // 7
+        addCarbons(mol, 8);
         mol.addBond(0, 1, IBond.Order.SINGLE);
         mol.addBond(0, 3, IBond.Order.SINGLE);
         mol.addBond(0, 5, IBond.Order.SINGLE);
@@ -216,10 +201,7 @@ public class AbstractSignatureTest {
     
     public static IMolecule makeCyclobutane() {
         IMolecule mol = builder.newMolecule();
-        mol.addAtom(new Atom("C")); // 0
-        mol.addAtom(new Atom("C")); // 1
-        mol.addAtom(new Atom("C")); // 2
-        mol.addAtom(new Atom("C")); // 3
+        addCarbons(mol, 4);
         mol.addBond(0, 1, IBond.Order.SINGLE);
         mol.addBond(0, 3, IBond.Order.SINGLE);
         mol.addBond(1, 2, IBond.Order.SINGLE);
@@ -235,16 +217,7 @@ public class AbstractSignatureTest {
 
     public static IMolecule makeNapthalene() {
         IMolecule mol = builder.newMolecule();
-        mol.addAtom(new Atom("C")); // 0
-        mol.addAtom(new Atom("C")); // 1
-        mol.addAtom(new Atom("C")); // 2
-        mol.addAtom(new Atom("C")); // 3
-        mol.addAtom(new Atom("C")); // 4
-        mol.addAtom(new Atom("C")); // 5
-        mol.addAtom(new Atom("C")); // 6
-        mol.addAtom(new Atom("C")); // 7
-        mol.addAtom(new Atom("C")); // 8
-        mol.addAtom(new Atom("C")); // 9
+        addCarbons(mol, 10);
         for (IAtom atom : mol.atoms()) {
             atom.setFlag(CDKConstants.ISAROMATIC, true);
         }
@@ -267,12 +240,7 @@ public class AbstractSignatureTest {
 
     public static IMolecule makeHexane() {
         IMolecule mol = builder.newMolecule();
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
+        addCarbons(mol, 6);
         
         mol.addBond(0, 1, IBond.Order.SINGLE);
         mol.addBond(1, 2, IBond.Order.SINGLE);
@@ -282,15 +250,28 @@ public class AbstractSignatureTest {
         
         return mol;
     }
+    
+    public static IMolecule makeTwistane() {
+        IMolecule mol = builder.newMolecule();
+        addCarbons(mol, 10);
+        mol.addBond(0, 1, IBond.Order.SINGLE);
+        mol.addBond(0, 2, IBond.Order.SINGLE);
+        mol.addBond(1, 3, IBond.Order.SINGLE);
+        mol.addBond(1, 5, IBond.Order.SINGLE);
+        mol.addBond(2, 4, IBond.Order.SINGLE);
+        mol.addBond(2, 7, IBond.Order.SINGLE);
+        mol.addBond(3, 8, IBond.Order.SINGLE);
+        mol.addBond(3, 9, IBond.Order.SINGLE);
+        mol.addBond(4, 6, IBond.Order.SINGLE);
+        mol.addBond(4, 9, IBond.Order.SINGLE);
+        mol.addBond(5, 6, IBond.Order.SINGLE);
+        mol.addBond(7, 8, IBond.Order.SINGLE);
+        return mol;
+    }
 
     public static IMolecule makeBenzene() {
         IMolecule mol = builder.newMolecule();
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
+        addCarbons(mol, 6);
         for (IAtom atom : mol.atoms()) {
             atom.setFlag(CDKConstants.ISAROMATIC, true);
         }
@@ -316,11 +297,7 @@ public class AbstractSignatureTest {
      */
     public static IMolecule makePseudoPropellane() {
         IMolecule mol = builder.newMolecule();
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
-        mol.addAtom(new Atom("C"));
+        addCarbons(mol, 5);
         
         mol.addBond(0, 1, IBond.Order.SINGLE);
         mol.addBond(0, 2, IBond.Order.SINGLE);

@@ -134,7 +134,7 @@ public class MoleculeSignatureTest {
        String multipleFiveCycle = "C1C(CC2)CCC12"; 
        String signatureString = 
             this.canonicalStringFromSmiles(multipleFiveCycle);
-       String expected = "[C]([C]([C,2]([C,3]))[C]([C,3]([C,1]))[C]([C,1]))";
+       String expected = "[C]([C]([C,2]([C,3]))[C]([C,1]([C,3]))[C]([C,3]))";
        Assert.assertEquals(expected, signatureString);
     }
     

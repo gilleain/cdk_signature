@@ -48,6 +48,13 @@ public class SignatureQuotientGraphTest extends AbstractSignatureTest {
     }
     
     @Test
+    public void testTwistane() {
+        IMolecule twistane = AbstractSignatureTest.makeTwistane();
+        SignatureQuotientGraph qGraph = new SignatureQuotientGraph(twistane);
+        checkParameters(qGraph, 3, 4, 2);
+    }
+    
+    @Test
     public void testC7H16Isomers() {
         IMolecule c7H16A = AbstractSignatureTest.makeC7H16A();
         IMolecule c7H16B = AbstractSignatureTest.makeC7H16B();
