@@ -1,5 +1,6 @@
 package test_signature;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,9 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.graph.AtomContainerAtomPermutor;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -28,6 +31,33 @@ public class MoleculeSignatureTest {
     public MoleculeSignatureTest() {
         this.parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
         this.builder = DefaultChemObjectBuilder.getInstance();
+    }
+    
+    public void toMolfileString(IMolecule mol) {
+        MDLWriter writer = new MDLWriter(System.out);
+        try {
+            writer.writeMolecule(mol);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void randomPermutationTest(IMolecule mol) {
+        AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(mol);
+        String expected = new MoleculeSignature(mol).toCanonicalString();
+        int numberOfPermutationsTried = 0;
+        while (permutor.hasNext()) {
+            IAtomContainer permutation = permutor.randomNext();
+            String actual = 
+                new MoleculeSignature(permutation).toCanonicalString();
+            numberOfPermutationsTried++;
+            String msg = "Failed on permutation " + numberOfPermutationsTried;
+            Assert.assertEquals(msg, expected, actual);
+        }
+        System.out.println(expected);
+        System.out.println("Tried " + numberOfPermutationsTried);
     }
     
     public String canonicalStringFromSmiles(String smiles)
@@ -134,40 +164,48 @@ public class MoleculeSignatureTest {
        String multipleFiveCycle = "C1C(CC2)CCC12"; 
        String signatureString = 
             this.canonicalStringFromSmiles(multipleFiveCycle);
-       String expected = "[C]([C]([C,2]([C,3]))[C]([C,1]([C,3]))[C]([C,3]))";
+       String expected = "[C]([C]([C]([C,1]))[C]([C]([C,1]))[C]([C,1]))";
        Assert.assertEquals(expected, signatureString);
     }
     
     @Test
+    public void testSandwich() {
+        IMolecule sandwich = AbstractSignatureTest.makeSandwich(5, true);
+//        IMolecule sandwich = AbstractSignatureTest.makeSandwich(5, false);
+//        toMolfileString(sandwich);
+        randomPermutationTest(sandwich);
+    }
+    
+    @Test
     public void testCubane() {
-        String expected = "[C]([C]([C,4]([C,2])[C,1]([C,2]))" +
-        		          "[C]([C,4][C,3]([C,2]))[C]([C,3][C,1]))";
+        String expected = "[C]([C]([C,4]([C,3])[C,2]([C,3]))[C]([C,4][C,1]" +
+                          "([C,3]))[C]([C,1][C,2]))";
         IMolecule mol = AbstractSignatureTest.makeCubane();
         Assert.assertEquals(expected, this.canonicalStringFromMolecule(mol));
     }
     
     @Test
     public void testCage() {
-//        String expectedA =  "[C]([C]([C,2]([C]([C,3][C,4]))[C]([C,5]" +
-//                            "[C,3]([C,6]([C,1]))))[C]([C]([C,7][C]" +
-//                            "([C,1][C,8]))[C,5]([C,8]([C,6])))[C]([C,2]" +
-//                            "[C,7]([C,4]([C,1]))))";
-//        String expectedB =  "[C]([C]([C]([C,2][C]([C,1][C,3]))[C]" +
-//                            "([C,1]([C,4])[C,5]))[C]([C,2]([C,6]" +
-//                            "([C,3]))[C]([C,7][C,6]))[C]([C,5]([C,4]" +
-//                            "([C,8]))[C,7]([C,8]([C,3]))))";
+        String expectedA =  "[C]([C]([C]([C,5][C,4]([C,1]))[C]([C,6][C,4]))" +
+                            "[C]([C,5]([C]([C,1][C,2]))[C]([C,2]([C,3])[C,7]))"+
+                            "[C]([C,6]([C]([C,1][C,3]))[C,7]([C,3])))";
+        String expectedB =  "[C]([C]([C]([C]([C,2]([C,1])[C,5])[C,6])[C,8]" +
+                            "([C,5]([C,4])))[C]([C]([C,4]([C,1])[C,7])[C,8])" +
+                            "[C]([C,6]([C]([C,3][C,2]))[C,7]([C,3]([C,1]))))";
         IMolecule mol = AbstractSignatureTest.makeCage();
-//        String signature = this.canonicalStringFromMolecule(mol);
-//        Assert.assertEquals(expectedB, signature);
-//        Assert.assertFalse(expectedA.equals(signature));
-        String signature = fullStringFromMolecule(mol);
-        System.out.println(signature);
+        String signature = this.canonicalStringFromMolecule(mol);
+        Assert.assertEquals(expectedA, signature);
+        Assert.assertFalse(expectedB.equals(signature));
+        String fullSignature = fullStringFromMolecule(mol);
+        String fullExpected = "8" + expectedA + " + 8" + expectedB;
+//        System.out.println(fullSignature);
+        Assert.assertEquals(fullExpected, fullSignature);
     }
     
     @Test
     public void testPropellane() {
-        String expectedA = "[C]([C]([C,1])[C]([C,1])[C]([C,1])[C,1])";
-        String expectedB = "[C]([C]([C,1][C,2][C,3])[C,2]([C,1][C,3]))";
+        String expectedA = "[C]([C]([C,3])[C,3]([C,1][C,2])[C,1][C,2])";
+        String expectedB = "[C]([C]([C,1])[C]([C,1])[C]([C,1])[C,1])";
         IMolecule mol = AbstractSignatureTest.makePropellane();
         String signature = this.canonicalStringFromMolecule(mol);
         Assert.assertEquals(expectedA, signature);
@@ -176,7 +214,7 @@ public class MoleculeSignatureTest {
     
     @Test
     public void testBridgedCycloButane() {
-        String expected = "[C]([C]([C,1])[C]([C,1])[C,1])";
+        String expected = "[C]([C]([C,2])[C,2]([C,1])[C,1])";
         IMolecule mol = AbstractSignatureTest.makeBridgedCyclobutane();
         String signature = this.canonicalStringFromMolecule(mol);
         for (String atomicSignature : this.getAtomicSignatures(mol)) {
@@ -237,13 +275,56 @@ public class MoleculeSignatureTest {
     }
     
     @Test
+    public void testBenzeneWithDoubleBonds() {
+        IMolecule benzene = builder.newMolecule();
+        AbstractSignatureTest.addCarbons(benzene, 6);
+        for (int i = 0; i < 6; i++) {
+            AbstractSignatureTest.addHydrogens(benzene, i, 1);
+        }
+        benzene.addBond(0, 1, IBond.Order.SINGLE);
+        benzene.addBond(1, 2, IBond.Order.DOUBLE);
+        benzene.addBond(2, 3, IBond.Order.SINGLE);
+        benzene.addBond(3, 4, IBond.Order.DOUBLE);
+        benzene.addBond(4, 5, IBond.Order.SINGLE);
+        benzene.addBond(5, 0, IBond.Order.DOUBLE);
+        
+        MoleculeSignature signature = new MoleculeSignature(benzene); 
+        String carbonSignature = signature.signatureStringForVertex(0);
+        for (int i = 1; i < 6; i++) {
+            String carbonSignatureI = signature.signatureStringForVertex(i);
+            Assert.assertEquals(carbonSignature, carbonSignatureI);
+        }
+    }
+    
+    @Test
+    public void cyclobuteneTest() {
+        IMolecule cyclobutene = builder.newMolecule();
+        AbstractSignatureTest.addCarbons(cyclobutene, 4);
+        cyclobutene.addBond(0, 1, IBond.Order.SINGLE);
+        cyclobutene.addBond(0, 2, IBond.Order.SINGLE);
+        cyclobutene.addBond(1, 3, IBond.Order.DOUBLE);
+        cyclobutene.addBond(2, 3, IBond.Order.SINGLE);
+//        toMolfileString(cyclobutene);
+//        randomPermutationTest(cyclobutene);
+        System.out.println(fullStringFromMolecule(cyclobutene));
+    }
+    
+    @Test
     public void testPolyPhenylMolecule() {
-        // NOTE : currently doesn't work due (possibly) to CDK atom typing
         String smiles = "C1=CC=C(C=C1)P(C2=CC=CC=C2)(C3=CC=CC=C3)[RhH]" +
         		"(P(C4=CC=CC=C4)(C5=CC=CC=C5)C6=CC=CC=C6)(P(C7=CC=CC=C7)" +
         		"(C8=CC=CC=C8)C9=CC=CC=C9)P(C%10=CC=CC=C%10)" +
         		"(C%11=CC=CC=C%11)C%12=CC=CC=C%12";
         testSmiles(smiles);
+    }
+    
+    @Test
+    public void methylFerroceneTest() throws Exception {
+        String smiles = "CC12C3C4C5C1[Fe]23456789C%10C6C7C8C9%10";
+//        testSmiles(smiles);
+        IMolecule mol = parser.parseSmiles(smiles);
+//        toMolfileString(mol);
+        randomPermutationTest(mol);
     }
     
     @Test
