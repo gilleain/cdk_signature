@@ -261,7 +261,7 @@ public class MoleculeSignatureTest {
         try {
             IMolecule molecule = this.parser.parseSmiles(smiles);
             MoleculeSignature sig = new MoleculeSignature(molecule);
-            System.out.println(sig.toFullString());
+//            System.out.println(sig.toFullString());
             System.out.println(sig.toCanonicalString());
         } catch (Exception e) {
             
@@ -305,8 +305,26 @@ public class MoleculeSignatureTest {
         cyclobutene.addBond(1, 3, IBond.Order.DOUBLE);
         cyclobutene.addBond(2, 3, IBond.Order.SINGLE);
 //        toMolfileString(cyclobutene);
-//        randomPermutationTest(cyclobutene);
-        System.out.println(fullStringFromMolecule(cyclobutene));
+        randomPermutationTest(cyclobutene);
+//        System.out.println(fullStringFromMolecule(cyclobutene));
+    }
+    
+    @Test
+    public void fusedSquareMultipleBondTest() {
+        IMolecule mol = builder.newMolecule();
+        AbstractSignatureTest.addCarbons(mol, 7);
+        mol.addBond(0, 1, IBond.Order.SINGLE);
+        mol.addBond(0, 2, IBond.Order.SINGLE);
+        mol.addBond(0, 3, IBond.Order.SINGLE);
+        mol.addBond(0, 4, IBond.Order.SINGLE);
+        mol.addBond(1, 5, IBond.Order.DOUBLE);
+        mol.addBond(2, 5, IBond.Order.SINGLE);
+        mol.addBond(3, 6, IBond.Order.SINGLE);
+        mol.addBond(4, 6, IBond.Order.DOUBLE);
+//        toMolfileString(mol);
+        MoleculeSignature molSig = new MoleculeSignature(mol);
+        String sigFor0 = molSig.signatureStringForVertex(0);
+        System.out.println(sigFor0);
     }
     
     @Test

@@ -59,7 +59,7 @@ public class AtomSignature extends AbstractVertexSignature {
     }
 
     @Override
-    public String getEdgeSymbol(int vertexIndex, int otherVertexIndex) {
+    public String getEdgeLabel(int vertexIndex, int otherVertexIndex) {
         IAtom atomA = this.molecule.getAtom(vertexIndex);
         IAtom atomB = this.molecule.getAtom(otherVertexIndex);
         IBond bond = this.molecule.getBond(atomA, atomB);

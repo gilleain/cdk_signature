@@ -191,8 +191,7 @@ public class DeterministicEnumerator {
         if (g.isSaturated(x)) {
 //            System.out.println(x + " is already saturated");
             String sig = 
-                new AtomSignature(
-                        x, g.getAtomContainer()).toCanonicalString();
+                new AtomSignature(x, g.getAtomContainer()).toCanonicalString();
             if (!s.containsKey(sig)) {
                 s.put(sig, g);
             }
