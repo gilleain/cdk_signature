@@ -322,9 +322,10 @@ public class MoleculeSignatureTest {
         mol.addBond(3, 6, IBond.Order.SINGLE);
         mol.addBond(4, 6, IBond.Order.DOUBLE);
 //        toMolfileString(mol);
-        MoleculeSignature molSig = new MoleculeSignature(mol);
-        String sigFor0 = molSig.signatureStringForVertex(0);
-        System.out.println(sigFor0);
+//        MoleculeSignature molSig = new MoleculeSignature(mol);
+//        String sigFor0 = molSig.signatureStringForVertex(0);
+//        System.out.println(sigFor0);
+        randomPermutationTest(mol);
     }
     
     @Test
