@@ -26,6 +26,8 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
         
         public String symbol;
         
+        public String edgeSymbol;
+        
         public int label;
         
         public Node parent;
@@ -35,11 +37,16 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
         public boolean visited;
         
         public Node(String symbol, Node parent) {
-            this(symbol, -1, parent);
+            this(symbol, "", -1, parent);
         }
         
-        public Node(String symbol, int label, Node parent) {
+        public Node(String symbol, String edgeSymbol, Node parent) {
+            this(symbol, edgeSymbol, -1, parent);
+        }
+        
+        public Node(String symbol, String edgeSymbol, int label, Node parent) {
             this.symbol = symbol;
+            this.edgeSymbol = edgeSymbol;
             this.label = label;
             this.parent = parent;
             this.children = new ArrayList<Node>();
@@ -98,11 +105,14 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
         }
         
         public String toString() {
+            StringBuffer sb = new StringBuffer();
+            sb.append(this.edgeSymbol);
+            sb.append('[').append(this.symbol);
             if (this.isLabelled()) {
-                return "[" + this.symbol + "," + this.label + "]";
-            } else {
-                return "[" + this.symbol + "]";
+                sb.append(',').append(this.label);
             }
+            sb.append(']');
+            return sb.toString();
         }
     }
     
@@ -275,6 +285,8 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
         int maxHeight = 0;
         int currentHeight = 0;
         
+        String edgeSymbol = "";
+        
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (c == '(') {
@@ -305,17 +317,21 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
                 } else {
                     if (labelStart != -1) {
                         int label = Integer.parseInt(s.substring(labelStart, i)); 
-                        current = new Node(ss, label, parent);
+                        current = new Node(ss, edgeSymbol, label, parent);
                     } else {
-                        current = new Node(ss, parent);
+                        current = new Node(ss, edgeSymbol, parent);
                     }
                     parent.children.add(current);
                 }
                 labelStart = -1;
+                edgeSymbol = "";
             } else if (c == 'p') {
                 // ignore, for now
-            } else {
-            }
+            } else if (c == '=') {
+                edgeSymbol = String.valueOf(c);
+            } else if (c == '#') {
+                edgeSymbol = String.valueOf(c);
+            } 
         }
         
         this.height = maxHeight;
