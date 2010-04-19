@@ -93,6 +93,15 @@ public class TargetAtomicSignatureTest {
     }
     
     @Test
+    public void multipleBondSubSignaturesTest() {
+        String signatureString = "[C](=[C]([H][H])[C](=[C,1][H])[C,1]([H]))";
+        TargetAtomicSignature tas = new TargetAtomicSignature(signatureString);
+        List<String> subsignatures = tas.getSignatureStringsFromRootChildren(1);
+        Assert.assertTrue(subsignatures.contains("[C](=[C][H][H])"));
+        Assert.assertTrue(subsignatures.contains("[C]([C]=[C][H])"));
+    }
+    
+    @Test
     public void paperTest() {
         // the example shown in Figure 4 of Faulon's enumeration paper
         IMolecule paperExample = builder.newMolecule();

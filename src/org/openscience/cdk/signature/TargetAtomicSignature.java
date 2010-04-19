@@ -80,13 +80,25 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
             
             // now check to see if a bond should be added
             if (parentAtom != null) {
-                IBond bond = builder.newBond(parentAtom, atom);
+                IBond.Order order = convertBondSymbolToOrder();
+                IBond bond = builder.newBond(parentAtom, atom, order);
+                
                 if (!mol.contains(bond)) {
                     mol.addBond(bond);
                 }
             }
             for (Node child : this.children) {
                 child.toMolecule(builder, mol, atom, labelAtomNumberMap);
+            }
+        }
+        
+        public IBond.Order convertBondSymbolToOrder() {
+            if (edgeSymbol.equals("=")) {
+                return IBond.Order.DOUBLE;
+            } else if (edgeSymbol.equals("#")) {
+                return IBond.Order.TRIPLE;
+            } else {
+                return IBond.Order.SINGLE;
             }
         }
         
@@ -242,17 +254,25 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
         buffer.append(current.toString());
         current.visited = true;
         if (h <= maxH) {
-            boolean visited = visitedChildren(current);
-            if (current.children.size() > 0 && !visited) buffer.append("(");
+            boolean visitedChildren = visitedChildren(current);
+            if (current.children.size() > 0 && !visitedChildren) {
+                buffer.append("(");
+            }
             for (Node child : current.children) {
                 traverse(child, h + 1, maxH, buffer);
             }
             if (current.parent != null) {
-                if (visited && !current.parent.visited) buffer.append("(");
+                if (visitedChildren && !current.parent.visited) {
+                    buffer.append("(");
+                }
                 traverse(current.parent, h + 1, maxH, buffer);
-                if (visited && !current.parent.visited) buffer.append(")");
+                if (visitedChildren && !current.parent.visited) {
+                    buffer.append(")");
+                }
             }
-            if (current.children.size() > 0 && !visited) buffer.append(")");
+            if (current.children.size() > 0 && !visitedChildren) {
+                buffer.append(")");
+            }
         }
     }
     
