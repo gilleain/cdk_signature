@@ -11,6 +11,26 @@ public class AbstractSignatureTest {
     public static NoNotificationChemObjectBuilder builder =
         NoNotificationChemObjectBuilder.getInstance();
         
+    public static void print(IMolecule mol) {
+        for (int i = 0; i < mol.getAtomCount(); i++) {
+            IAtom a = mol.getAtom(i);
+            System.out.print(a.getSymbol() + " " + i + " ");
+        }
+        System.out.println();
+        for (IBond bond : mol.bonds()) {
+            IAtom aa = bond.getAtom(0);
+            IAtom ab = bond.getAtom(1);
+            int o = bond.getOrder().ordinal() + 1;
+            int x = mol.getAtomNumber(aa);
+            int y = mol.getAtomNumber(ab);
+            if (x < y) {
+                System.out.print(x + "-" + y + "(" + o + "),");
+            } else {
+                System.out.print(y + "-" + x + "(" + o + "),");
+            }
+        }
+    }
+    
     public static void addHydrogens(IMolecule mol, int carbonIndex, int count) {
         for (int i = 0; i < count; i++) {
             mol.addAtom(builder.newAtom("H"));
@@ -23,6 +43,23 @@ public class AbstractSignatureTest {
         for (int i = 0; i < count; i++) {
             mol.addAtom(builder.newAtom("C"));
         }
+    }
+    
+    public static IMolecule makeCycleWheel(int ringSize, int ringCount) {
+        IMolecule mol = builder.newMolecule();
+        AbstractSignatureTest.addCarbons(mol, (ringSize * ringCount) + 1);
+        for (int r = 0; r < ringCount; r++) {
+            int start = ringSize * r + 1;
+            mol.addBond(0, start, IBond.Order.SINGLE);
+            int prev = start;
+            for (int i = 0; i < ringSize - 1; i++) {
+                int current = start + i + 1;
+                mol.addBond(prev, current, IBond.Order.SINGLE);
+                prev = current;
+            }
+            mol.addBond(start, prev, IBond.Order.SINGLE);
+        }
+        return mol;
     }
     
     public static IMolecule makeSandwich(int ringSize, boolean hasMethyl) {

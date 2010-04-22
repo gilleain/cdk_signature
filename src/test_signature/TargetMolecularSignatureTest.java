@@ -73,7 +73,7 @@ public class TargetMolecularSignatureTest extends AbstractSignatureTest {
     }
     
     public static void printTable(TargetMolecularSignature tms) {
-        tms.compatibleTargetBonds(0, 0);
+        int[][] lookupTable = tms.getLookupTable();
         int n = tms.size();
         System.out.print("  ");
         for (int i = 0; i < n; i++) {
@@ -83,11 +83,58 @@ public class TargetMolecularSignatureTest extends AbstractSignatureTest {
         for (int i = 0; i < n; i++) {
             System.out.print(i + " ");
             for (int j = 0; j < n; j++) {
-               System.out.print(tms.compatibleTargetBonds(i, j));
+               System.out.print(lookupTable[i][j]);
                System.out.print(" ");
             }
             System.out.print("\n");
         }
+    }
+    
+    @Test
+    public void methyleneCyclopropeneTest() {
+        String signatureA = "[C]([C](=[C][C,1])=[C,1]([H])[H])";
+        String signatureB = "[C](=[C]([H][H])[C](=[C,1][H])[C,1]([H]))";
+        String signatureC = "[C](=[C]([C][C])[H][H])";
+        String signatureD = "[H]([C](=[C][H]))";
+        String signatureE = "[H]([C]([C]=[C]))";
+        
+        TargetMolecularSignature tms = new TargetMolecularSignature(2);
+        tms.add(signatureA, 2);
+        tms.add(signatureB, 1);
+        tms.add(signatureC, 1);
+        tms.add(signatureD, 2);
+        tms.add(signatureE, 2);
+        
+        printTable(tms);
+        Assert.assertEquals(1, tms.compatibleTargetBonds(0, 0)); // A->A
+        Assert.assertEquals(2, tms.compatibleTargetBonds(0, 1)); // A->B
+        Assert.assertEquals(0, tms.compatibleTargetBonds(0, 2)); // A->C
+        Assert.assertEquals(0, tms.compatibleTargetBonds(0, 3)); // A->D
+        Assert.assertEquals(1, tms.compatibleTargetBonds(0, 4)); // A->E
+        
+        Assert.assertEquals(1, tms.compatibleTargetBonds(1, 0)); // B->A
+        Assert.assertEquals(0, tms.compatibleTargetBonds(1, 1)); // B->B
+        Assert.assertEquals(1, tms.compatibleTargetBonds(1, 2)); // B->C
+        Assert.assertEquals(0, tms.compatibleTargetBonds(1, 3)); // B->D
+        Assert.assertEquals(0, tms.compatibleTargetBonds(1, 4)); // B->E
+        
+        Assert.assertEquals(0, tms.compatibleTargetBonds(2, 0)); // C->A
+        Assert.assertEquals(1, tms.compatibleTargetBonds(2, 1)); // C->B
+        Assert.assertEquals(0, tms.compatibleTargetBonds(2, 2)); // C->C
+        Assert.assertEquals(1, tms.compatibleTargetBonds(2, 3)); // C->D
+        Assert.assertEquals(0, tms.compatibleTargetBonds(2, 4)); // C->E
+        
+        Assert.assertEquals(1, tms.compatibleTargetBonds(3, 0)); // D->A
+        Assert.assertEquals(0, tms.compatibleTargetBonds(3, 1)); // D->B
+        Assert.assertEquals(2, tms.compatibleTargetBonds(3, 2)); // D->C
+        Assert.assertEquals(0, tms.compatibleTargetBonds(3, 3)); // D->D
+        Assert.assertEquals(0, tms.compatibleTargetBonds(3, 4)); // D->E
+        
+        Assert.assertEquals(1, tms.compatibleTargetBonds(3, 0)); // E->A
+        Assert.assertEquals(0, tms.compatibleTargetBonds(3, 1)); // E->B
+        Assert.assertEquals(2, tms.compatibleTargetBonds(3, 2)); // E->C
+        Assert.assertEquals(0, tms.compatibleTargetBonds(3, 3)); // E->D
+        Assert.assertEquals(0, tms.compatibleTargetBonds(3, 4)); // E->E
     }
     
     @Test

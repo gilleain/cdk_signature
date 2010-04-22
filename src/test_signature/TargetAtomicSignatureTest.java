@@ -19,7 +19,7 @@ import org.openscience.cdk.signature.AtomSignature;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.TargetAtomicSignature;
 
-public class TargetAtomicSignatureTest {
+public class TargetAtomicSignatureTest extends AbstractSignatureTest {
     
     public static IChemObjectBuilder builder =
         NoNotificationChemObjectBuilder.getInstance();
@@ -49,18 +49,7 @@ public class TargetAtomicSignatureTest {
         return cyclohexane;
     }
     
-    public static void print(IMolecule mol) {
-        for (int i = 0; i < mol.getAtomCount(); i++) {
-            IAtom a = mol.getAtom(i);
-            System.out.println(a.getSymbol() + " " + i);
-        }
-        for (IBond bond : mol.bonds()) {
-            IAtom aa = bond.getAtom(0);
-            IAtom ab = bond.getAtom(1);
-            System.out.println(
-                    mol.getAtomNumber(aa) + "-" + mol.getAtomNumber(ab));
-        }
-    }
+  
     
     public static void printSmiles(IMolecule mol) {
         SmilesGenerator generator = new SmilesGenerator();
@@ -86,6 +75,14 @@ public class TargetAtomicSignatureTest {
     }
     
     @Test
+    public void reconstructingMultipleBondTargetSignature() {
+        String signature = "[C]([C](=[C][C,1])=[C,1]([H])[H])";
+        TargetAtomicSignature tas = new TargetAtomicSignature(signature);
+        IMolecule mol = tas.toMolecule();
+        print(mol);
+    }
+    
+    @Test
     public void multipleBondTest() {
         String signatureString = "[C](=[C]([C,1])[C,1](=[C,1]))";
         TargetAtomicSignature tas = new TargetAtomicSignature(signatureString);
@@ -94,11 +91,12 @@ public class TargetAtomicSignatureTest {
     
     @Test
     public void multipleBondSubSignaturesTest() {
-        String signatureString = "[C](=[C]([H][H])[C](=[C,1][H])[C,1]([H]))";
+        String signatureString = "[C]([C](=[C][C,1])=[C,1]([H])[H])";
         TargetAtomicSignature tas = new TargetAtomicSignature(signatureString);
         List<String> subsignatures = tas.getSignatureStringsFromRootChildren(1);
-        Assert.assertTrue(subsignatures.contains("[C](=[C][H][H])"));
-        Assert.assertTrue(subsignatures.contains("[C]([C]=[C][H])"));
+        for (String subSignature : subsignatures) {
+            System.out.println(subSignature);
+        }
     }
     
     @Test

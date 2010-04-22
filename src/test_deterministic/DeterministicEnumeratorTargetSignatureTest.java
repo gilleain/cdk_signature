@@ -26,6 +26,28 @@ public class DeterministicEnumeratorTargetSignatureTest extends
     }
     
     @Test
+    public void metheneCyclopropeneWithHeight2Sigs() {
+        String signatureA = "[C]([C](=[C][C,1])=[C,1]([H])[H])";
+        String signatureB = "[C](=[C]([H][H])[C](=[C,1][H])[C,1]([H]))";
+        String signatureC = "[C](=[C]([C][C])[H][H])";
+        String signatureD = "[H]([C](=[C][H]))";
+        String signatureE = "[H]([C]([C]=[C]))";
+        
+        TargetMolecularSignature tms = new TargetMolecularSignature(2);
+        tms.add(signatureA, 2);
+        tms.add(signatureB, 1);
+        tms.add(signatureC, 1);
+        tms.add(signatureD, 2);
+        tms.add(signatureE, 2);
+        
+        String formulaString = "C4H4";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
     public void metheneCyclopropaneTest() {
         IAtomContainer methene = AbstractDeterministicTest.makeCH2();
         int count = 3;

@@ -310,6 +310,26 @@ public class MoleculeSignatureTest {
     }
     
     @Test
+    public void methyleneCyclopropeneTest() {
+        IMolecule mol = builder.newMolecule();
+        AbstractSignatureTest.addCarbons(mol, 4);
+        AbstractSignatureTest.addHydrogens(mol, 1, 2);
+        AbstractSignatureTest.addHydrogens(mol, 2, 1);
+        AbstractSignatureTest.addHydrogens(mol, 3, 1);
+        mol.addBond(0, 1, IBond.Order.DOUBLE);
+        mol.addBond(0, 2, IBond.Order.SINGLE);
+        mol.addBond(0, 3, IBond.Order.SINGLE);
+        mol.addBond(2, 3, IBond.Order.DOUBLE);
+        MoleculeSignature molSig = new MoleculeSignature(mol);
+        for (int i = 0; i < 4; i++) {
+            String sigForIHeight2 = molSig.signatureStringForVertex(i, 2);
+            System.out.println(i + " " + sigForIHeight2);
+        }
+//        AbstractSignatureTest.print(mol);
+//        toMolfileString(mol);
+    }
+    
+    @Test
     public void fusedSquareMultipleBondTest() {
         IMolecule mol = builder.newMolecule();
         AbstractSignatureTest.addCarbons(mol, 7);
@@ -344,6 +364,18 @@ public class MoleculeSignatureTest {
         IMolecule mol = parser.parseSmiles(smiles);
 //        toMolfileString(mol);
         randomPermutationTest(mol);
+    }
+    
+    @Test
+    public void cycleWheelTest() {
+        IMolecule threeThreeWheel = AbstractSignatureTest.makeCycleWheel(3, 3);
+//        AbstractSignatureTest.print(threeThreeWheel);
+//        toMolfileString(threeThreeWheel);
+//        IMolecule threeFourWheel = AbstractSignatureTest.makeCycleWheel(3, 4);
+//        toMolfileString(threeFourWheel);
+        for (String signature : getAtomicSignatures(threeThreeWheel)) {
+            System.out.println(signature);
+        }
     }
     
     @Test
