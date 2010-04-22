@@ -130,11 +130,11 @@ public class TargetMolecularSignatureTest extends AbstractSignatureTest {
         Assert.assertEquals(0, tms.compatibleTargetBonds(3, 3)); // D->D
         Assert.assertEquals(0, tms.compatibleTargetBonds(3, 4)); // D->E
         
-        Assert.assertEquals(1, tms.compatibleTargetBonds(3, 0)); // E->A
-        Assert.assertEquals(0, tms.compatibleTargetBonds(3, 1)); // E->B
-        Assert.assertEquals(2, tms.compatibleTargetBonds(3, 2)); // E->C
-        Assert.assertEquals(0, tms.compatibleTargetBonds(3, 3)); // E->D
-        Assert.assertEquals(0, tms.compatibleTargetBonds(3, 4)); // E->E
+        Assert.assertEquals(1, tms.compatibleTargetBonds(4, 0)); // E->A
+        Assert.assertEquals(0, tms.compatibleTargetBonds(4, 1)); // E->B
+        Assert.assertEquals(2, tms.compatibleTargetBonds(4, 2)); // E->C
+        Assert.assertEquals(0, tms.compatibleTargetBonds(4, 3)); // E->D
+        Assert.assertEquals(0, tms.compatibleTargetBonds(4, 4)); // E->E
     }
     
     @Test
