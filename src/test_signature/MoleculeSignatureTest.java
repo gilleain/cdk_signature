@@ -204,17 +204,17 @@ public class MoleculeSignatureTest {
     
     @Test
     public void testPropellane() {
-        String expectedA = "[C]([C]([C,3])[C,3]([C,1][C,2])[C,1][C,2])";
+        String expectedA = "[C]([C]([C,3])[C,2]([C,1][C,3])[C,2][C,1])";
         String expectedB = "[C]([C]([C,1])[C]([C,1])[C]([C,1])[C,1])";
         IMolecule mol = AbstractSignatureTest.makePropellane();
         String signature = this.canonicalStringFromMolecule(mol);
-        Assert.assertEquals(expectedA, signature);
-        Assert.assertFalse(expectedB.equals(signature));
+        Assert.assertEquals(expectedB, signature);
+        Assert.assertFalse(expectedA.equals(signature));
     }
     
     @Test
     public void testBridgedCycloButane() {
-        String expected = "[C]([C]([C,2])[C,2]([C,1])[C,1])";
+        String expected = "[C]([C]([C,1])[C]([C,1])[C,1])";
         IMolecule mol = AbstractSignatureTest.makeBridgedCyclobutane();
         String signature = this.canonicalStringFromMolecule(mol);
         for (String atomicSignature : this.getAtomicSignatures(mol)) {
@@ -349,12 +349,25 @@ public class MoleculeSignatureTest {
     }
     
     @Test
-    public void testPolyPhenylMolecule() {
+    public void testPolyPhenylMolecule() throws Exception {
         String smiles = "C1=CC=C(C=C1)P(C2=CC=CC=C2)(C3=CC=CC=C3)[RhH]" +
         		"(P(C4=CC=CC=C4)(C5=CC=CC=C5)C6=CC=CC=C6)(P(C7=CC=CC=C7)" +
         		"(C8=CC=CC=C8)C9=CC=CC=C9)P(C%10=CC=CC=C%10)" +
         		"(C%11=CC=CC=C%11)C%12=CC=CC=C%12";
-        testSmiles(smiles);
+//        testSmiles(smiles);
+        IMolecule mol = parser.parseSmiles(smiles);
+        int rhIndex = 0;
+        for (int i = 0; i < mol.getAtomCount(); i++) {
+            if (mol.getAtom(i).getSymbol().equals("Rh")) {
+                rhIndex = i;
+                break;
+            }
+        }
+//        System.out.println("rh index = " + rhIndex);
+        MoleculeSignature molSig = new MoleculeSignature(mol);
+        String signatureForRh = molSig.signatureStringForVertex(rhIndex);
+        System.out.println(signatureForRh);
+//        toMolfileString(mol);
     }
     
     @Test
@@ -368,14 +381,27 @@ public class MoleculeSignatureTest {
     
     @Test
     public void cycleWheelTest() {
-        IMolecule threeThreeWheel = AbstractSignatureTest.makeCycleWheel(3, 3);
-//        AbstractSignatureTest.print(threeThreeWheel);
-//        toMolfileString(threeThreeWheel);
-//        IMolecule threeFourWheel = AbstractSignatureTest.makeCycleWheel(3, 4);
-//        toMolfileString(threeFourWheel);
-        for (String signature : getAtomicSignatures(threeThreeWheel)) {
-            System.out.println(signature);
-        }
+        IMolecule mol = AbstractSignatureTest.makeCycleWheel(3, 3);
+//        AbstractSignatureTest.print(mol);
+        toMolfileString(mol);
+        MoleculeSignature molSig = new MoleculeSignature(mol);
+//        String centralSignature = molSig.signatureStringForVertex(0);
+//        System.out.println(centralSignature);
+//        for (String signature : getAtomicSignatures(threeThreeWheel)) {
+//            System.out.println(signature);
+//        }
+    }
+    
+    @Test
+    public void ttprTest() {
+        int phosphateCount = 3;
+        int ringCount = 3;
+        IMolecule ttpr = 
+           AbstractSignatureTest.makeRhLikeStructure(phosphateCount, ringCount);
+//        toMolfileString(ttpr);
+        MoleculeSignature molSig = new MoleculeSignature(ttpr);
+        String centralSignature = molSig.signatureStringForVertex(0);
+        System.out.println(centralSignature);
     }
     
     @Test

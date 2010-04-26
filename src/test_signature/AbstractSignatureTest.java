@@ -45,19 +45,41 @@ public class AbstractSignatureTest {
         }
     }
     
+    public static void addRing(int atomToAttachTo, int ringSize, IMolecule mol) {
+        int numberOfAtoms = mol.getAtomCount();
+        int previous = atomToAttachTo;
+        for (int i = 0; i < ringSize; i++) {
+            mol.addAtom(builder.newAtom("C"));
+            int current = numberOfAtoms + i;
+            mol.addBond(previous, current, IBond.Order.SINGLE);
+            previous = current;
+        }
+        mol.addBond(
+             numberOfAtoms, numberOfAtoms + (ringSize - 1), IBond.Order.SINGLE);
+    }
+    
+    public static IMolecule makeRhLikeStructure(int pCount, int ringCount) {
+        IMolecule ttpr = builder.newMolecule();
+        ttpr.addAtom(builder.newAtom("Rh"));
+        for (int i = 1; i <= pCount; i++) {
+            ttpr.addAtom(builder.newAtom("P"));
+            ttpr.addBond(0, i, IBond.Order.SINGLE);
+        }
+        
+        for (int j = 1; j <= pCount; j++) {
+            for (int k = 0; k < ringCount; k++) {
+                AbstractSignatureTest.addRing(j, 6, ttpr);
+            }
+        }
+        
+        return ttpr;
+    }
+    
     public static IMolecule makeCycleWheel(int ringSize, int ringCount) {
         IMolecule mol = builder.newMolecule();
-        AbstractSignatureTest.addCarbons(mol, (ringSize * ringCount) + 1);
+        mol.addAtom(builder.newAtom("C"));
         for (int r = 0; r < ringCount; r++) {
-            int start = ringSize * r + 1;
-            mol.addBond(0, start, IBond.Order.SINGLE);
-            int prev = start;
-            for (int i = 0; i < ringSize - 1; i++) {
-                int current = start + i + 1;
-                mol.addBond(prev, current, IBond.Order.SINGLE);
-                prev = current;
-            }
-            mol.addBond(start, prev, IBond.Order.SINGLE);
+            AbstractSignatureTest.addRing(0, ringSize, mol);
         }
         return mol;
     }
