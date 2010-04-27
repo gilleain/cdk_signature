@@ -44,6 +44,21 @@ public class MoleculeSignatureTest {
         }
     }
     
+    public void fullPermutationTest(IMolecule mol) {
+        AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(mol);
+        String expected = new MoleculeSignature(mol).toCanonicalString();
+        System.out.println("canonical = " + expected);
+        int numberOfPermutationsTried = 0;
+        while (permutor.hasNext()) {
+            IAtomContainer permutation = permutor.next();
+            String actual = 
+                new MoleculeSignature(permutation).toCanonicalString();
+            numberOfPermutationsTried++;
+            String msg = "Failed on permutation " + numberOfPermutationsTried;
+            Assert.assertEquals(msg, expected, actual);
+        }
+    }
+    
     public void randomPermutationTest(IMolecule mol) {
         AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(mol);
         String expected = new MoleculeSignature(mol).toCanonicalString();
@@ -380,11 +395,17 @@ public class MoleculeSignatureTest {
     }
     
     @Test
+    public void threeMethylSulphanylPropanal() throws Exception {
+        String smiles = "O=CCCSC";
+        fullPermutationTest(parser.parseSmiles(smiles));
+    }
+    
+    @Test
     public void cycleWheelTest() {
         IMolecule mol = AbstractSignatureTest.makeCycleWheel(3, 3);
 //        AbstractSignatureTest.print(mol);
         toMolfileString(mol);
-        MoleculeSignature molSig = new MoleculeSignature(mol);
+//        MoleculeSignature molSig = new MoleculeSignature(mol);
 //        String centralSignature = molSig.signatureStringForVertex(0);
 //        System.out.println(centralSignature);
 //        for (String signature : getAtomicSignatures(threeThreeWheel)) {
