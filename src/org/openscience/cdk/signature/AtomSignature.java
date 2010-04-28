@@ -7,7 +7,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 import signature.AbstractVertexSignature;
-import signature.ColoredTree;
 
 /**
  * The signature for a molecule rooted at a particular atom.
@@ -80,10 +79,6 @@ public class AtomSignature extends AbstractVertexSignature {
     @Override
     public String getVertexSymbol(int vertexIndex) {
         return this.molecule.getAtom(vertexIndex).getSymbol();
-    }
-
-    public static ColoredTree parse(String signatureString) {
-        return AbstractVertexSignature.parse(signatureString);
     }
 
 }
