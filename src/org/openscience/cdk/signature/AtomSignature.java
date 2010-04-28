@@ -27,7 +27,7 @@ public class AtomSignature extends AbstractVertexSignature {
      * @param molecule the molecule to create the signature from
      */
     public AtomSignature(int atomIndex, IAtomContainer molecule) {
-        super('[', ']');
+        super();
         this.molecule = molecule;
         super.createMaximumHeight(atomIndex, molecule.getAtomCount());
     }
@@ -41,7 +41,7 @@ public class AtomSignature extends AbstractVertexSignature {
      * @param molecule the molecule to create the signature from
      */
     public AtomSignature(int atomIndex, int height, IAtomContainer molecule) {
-        super('[', ']');
+        super();
         this.molecule = molecule;
         super.create(atomIndex, molecule.getAtomCount(), height);
     }
@@ -83,7 +83,7 @@ public class AtomSignature extends AbstractVertexSignature {
     }
 
     public static ColoredTree parse(String signatureString) {
-        return AbstractVertexSignature.parseWithNodeSymbols(signatureString, '[', ']');
+        return AbstractVertexSignature.parse(signatureString);
     }
 
 }
