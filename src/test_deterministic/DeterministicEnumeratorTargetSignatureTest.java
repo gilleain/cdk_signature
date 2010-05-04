@@ -12,7 +12,22 @@ public class DeterministicEnumeratorTargetSignatureTest extends
                 AbstractDeterministicTest {
     
     @Test
-    public void degreeThreeTest() {
+    public void degreeThreeDodecahedraneTest() {
+        IAtomContainer degreeThreeFragment = 
+            AbstractDeterministicTest.makeDegreeThreeFragment();
+        int count = 20;
+        TargetMolecularSignature tms = 
+            FragmentConverter.convert(degreeThreeFragment, count);
+        System.out.println(tms);
+        String formulaString = "C20H20";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
+    public void degreeThreeCubaneCuneaneTest() {
         IAtomContainer degreeThreeFragment = 
             AbstractDeterministicTest.makeDegreeThreeFragment();
         int count = 8;
@@ -101,6 +116,19 @@ public class DeterministicEnumeratorTargetSignatureTest extends
     }
     
     @Test
+    public void metheneCycloheptaneTest() {
+        IAtomContainer methene = AbstractDeterministicTest.makeCH2();
+        int count = 7;
+        
+        TargetMolecularSignature tms = FragmentConverter.convert(methene, count);
+        String formulaString = "C7H14";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
     public void methylCycloPropaneTest() {
         TargetMolecularSignature tms = new TargetMolecularSignature(1);
         tms.add("[C]([C][C][C][H])", 1);
@@ -140,8 +168,53 @@ public class DeterministicEnumeratorTargetSignatureTest extends
         AbstractDeterministicTest.printResults(results);
     }
     
+    @Test
+    public void mixedCHCH2CH3Test() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(1);
+        tms.add("[C]([C][C][C][H])", 1);
+        tms.add("[C]([C][C][H][H])", 3);
+        tms.add("[C]([C][H][H][H])", 3);
+        tms.add("[H]([C])", 16);
+        String formulaString = "C7H16";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
+    public void twistaneTest() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(1);
+        tms.add("[C]([C][C][C][H])", 4);
+        tms.add("[C]([C][C][H][H])", 6);
+        tms.add("[H]([C])", 16);
+        String formulaString = "C10H16";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
+    public void pineneTest() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(1);
+        tms.add("[C]([C][C][C][C])", 1);    // four carbons
+        tms.add("[C]([C]=[C][H])", 1);      // double bond, carbon and hydrogen
+        tms.add("[C]([C][C]=[C])", 1);      // double bond, two carbons
+        tms.add("[C]([C][C][C][H])", 2);    // CH
+        tms.add("[C]([C][C][H][H])", 2);    // CH2
+        tms.add("[C]([C][H][H][H])", 3);    // CH3
+        tms.add("[H]([C])", 16);
+        String formulaString = "C10H16";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
     public static void main(String[] args) {
-        new DeterministicEnumeratorTargetSignatureTest().dimethylCycloButane();
+//        new DeterministicEnumeratorTargetSignatureTest().dimethylCycloButane();
+        new DeterministicEnumeratorTargetSignatureTest().mixedCHCH2CH3Test();
 //        new DeterministicEnumeratorTargetSignatureTest().degreeThreeTest();
     }
 
