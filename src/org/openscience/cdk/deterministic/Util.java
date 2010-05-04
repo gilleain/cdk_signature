@@ -78,6 +78,8 @@ public class Util {
         for (IBond bond : container.getConnectedBondsList(atom)) {
             totalOrder += bond.getOrder().ordinal() + 1;
         }
+//        System.out.println("atom " + container.getAtomNumber(atom) 
+//                + " symbol " + atom.getSymbol() + " order " + totalOrder);
         if (atom.getSymbol().equals("H") && totalOrder >= 1) {
             return true;
         }

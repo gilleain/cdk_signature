@@ -404,10 +404,10 @@ public class MoleculeSignatureTest {
     public void cycleWheelTest() {
         IMolecule mol = AbstractSignatureTest.makeCycleWheel(3, 3);
 //        AbstractSignatureTest.print(mol);
-        toMolfileString(mol);
-//        MoleculeSignature molSig = new MoleculeSignature(mol);
-//        String centralSignature = molSig.signatureStringForVertex(0);
-//        System.out.println(centralSignature);
+//        toMolfileString(mol);
+        MoleculeSignature molSig = new MoleculeSignature(mol);
+        String centralSignature = molSig.signatureStringForVertex(0);
+        System.out.println(centralSignature);
 //        for (String signature : getAtomicSignatures(threeThreeWheel)) {
 //            System.out.println(signature);
 //        }

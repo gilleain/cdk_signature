@@ -143,15 +143,29 @@ public class Graph {
         int h = hTau.getHeight();
         int targetX = targets.get(x);
         int targetY = targets.get(y);
+        System.out.println(
+                "Checking compatibility of " + x + " and " + y
+                + " targetX " + targetX + " targetY " + targetY);
         String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h - 1);
 //        String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h);
         
 //        int n12 = hTau.compatibleTargetBonds(targetX, h, hMinusOneTauY);
         int n12 = hTau.compatibleTargetBonds(targetX, targetY);
-        if (n12 == 0) return false;
+        
+        if (n12 == 0) {
+            System.out.println("n12 == 0 NO " + targetX + " " + targetY);
+            return false;
+        } else {
+            System.out.println("n12 != 0 " + targetX + " " + targetY);
+        }
         int m12 = countExistingBondsOfType(y, h, hMinusOneTauY);
        
-        System.out.println("m12 " + m12 + " n12 " + n12);
+        boolean lessThanOrEqual = n12 - m12 >= 0;
+        if (lessThanOrEqual) {
+            System.out.println("m12 " + m12 + " n12 " + n12);
+        } else {
+            System.out.println("m12 " + m12 + " n12 " + n12 + " NO");
+        }
         return n12 - m12 >= 0;
     }
     
@@ -167,7 +181,10 @@ public class Graph {
         // count the number of bonds already used between x and y
         int m12 = 0;
         for (String hMinusOneTauY1 : getSignaturesOfBondedAtoms(x, h - 1)) {
-            System.out.println(hMinusOneTauY + " " + hMinusOneTauY1 + " " + h);
+            System.out.println(
+                  "Counting existing bonds "
+                    + hMinusOneTauY + " " + hMinusOneTauY1 
+                    + " h= " + h + " x = " + x);
             if (hMinusOneTauY.equals(hMinusOneTauY1)) {
                 m12++;
             }
@@ -212,10 +229,16 @@ public class Graph {
         for (int i = 0; i < this.atomContainer.getAtomCount(); i++) {
             if (currentCount > 0) {
                 currentCount -= 1;
+                System.out.println("assigning " + 
+                        signature.getTargetAtomicSignature(currentTarget)
+                        + " to "  + i);
                 this.targets.add(currentTarget);
             } else {
                 currentTarget += 1;
                 currentCount = signature.getCount(currentTarget) - 1;
+                System.out.println("assigning " + 
+                        signature.getTargetAtomicSignature(currentTarget)
+                        + " to "  + i);
                 this.targets.add(currentTarget);
             }
         }

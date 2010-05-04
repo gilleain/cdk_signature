@@ -141,11 +141,14 @@ public class DeterministicEnumerator {
     
     private void enumerate(Graph g) {
         if (g.isConnected() 
-                && g.isFullySaturated() 
+                && g.isFullySaturated()) 
 //                    && g.isCanonical()
-                        && (hTau == null || hTau.matches(g.getAtomContainer()))) {
-            System.out.println("solution " + g);
-            this.handler.handle(g.getAtomContainer());
+                {
+//            System.out.println("CHECKING solution " + g);
+            if (hTau == null || hTau.matches(g.getAtomContainer())) {
+                System.out.println("SOLUTION " + g);
+                this.handler.handle(g.getAtomContainer());
+            }
         } else {
             Orbit o = g.getUnsaturatedOrbit();
             if (o == null) return;

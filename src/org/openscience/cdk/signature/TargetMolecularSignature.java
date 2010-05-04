@@ -174,7 +174,7 @@ public class TargetMolecularSignature {
             for (int j = i; j < n; j++) {
                 TargetAtomicSignature signatureB = this.signatures.get(j);
                 IMolecule moleculeB = molecules.get(j);
-//                System.out.println("A, B:");
+//                System.out.println("A, B: (i, j) : (" + i + " " + j + ")");
 //                System.out.println(signatureA.toString());
 //                System.out.println(signatureB.toString());
                 
@@ -198,11 +198,12 @@ public class TargetMolecularSignature {
         String a = sigFromMolecule.signatureStringForVertex(0, height);
         int count = 0;
         for (String b : target.getSignatureStringsFromRootChildren(height)) {
-//            System.out.println(a);
-//            System.out.println(b);
+//            System.out.println("a " + a);
+//            System.out.println("b " + b);
 //            System.out.println("---------------------------------");
             if (a.equals(b)) count++;
         }
+//        System.out.println("count = " + count);
         return count;
     }
     
@@ -234,7 +235,7 @@ public class TargetMolecularSignature {
         // compatible with the (h - 1) signature of y 
         int n12 = 0;
         for (String subSignature : this.getBondedSignatures(targetX, h - 1)) {
-            System.out.println(subSignature 
+            System.out.println("Compatible? " + subSignature 
                     + "\t" + hMinusOneTauY 
                     + "\t" + subSignature.equals(hMinusOneTauY));
             if (hMinusOneTauY.equals(subSignature)) {
