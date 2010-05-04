@@ -201,7 +201,8 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
         ArrayList<String> sigStrings = new ArrayList<String>();
         for (IAtom child : molecule.getConnectedAtomsList(rootAtom)) {
             int i = molecule.getAtomNumber(child);
-            sigStrings.add(signature.signatureStringForVertex(i, height));
+            String subSignature = signature.signatureStringForVertex(i, height); 
+            sigStrings.add(subSignature);
         }
         return sigStrings;
     }
@@ -214,7 +215,9 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
      * @return a string representation of the sub-signature
      */
     public String getSubSignature(int h) {
-        return getSignatureString(root, h);
+        IMolecule molecule = this.toMolecule();
+        MoleculeSignature signature = new MoleculeSignature(molecule);
+        return signature.signatureStringForVertex(0, h);
     }
     
     /**

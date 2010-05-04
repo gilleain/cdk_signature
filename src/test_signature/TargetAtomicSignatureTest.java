@@ -190,8 +190,19 @@ public class TargetAtomicSignatureTest extends AbstractSignatureTest {
         // every sub-signature of height 2 for cubane's children of the
         // root node is equal to the subsignature of height 2 for cubane
         for (String actual : sig.getSignatureStringsFromRootChildren(height)) {
+            System.out.println(actual);
             Assert.assertEquals(expected, actual);
         }
+    }
+    
+    @Test
+    public void subsignatureFromRootIn3Cycle() {
+        String sigString = "[C]([C]([C,1])[C,1])";
+        String expected = "[C]([C][C])";
+        TargetAtomicSignature sig = new TargetAtomicSignature(sigString);
+        String subsig = sig.getSubSignature(1);
+//        System.out.println(subsig);
+        Assert.assertEquals(expected, subsig);
     }
     
     @Test
