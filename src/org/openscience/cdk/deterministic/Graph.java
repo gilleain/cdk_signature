@@ -122,8 +122,13 @@ public class Graph {
         if (hTau != null) {
             isCompatible = compatibleBond(x, y, hTau) 
                         && compatibleBond(y, x, hTau);
-            System.out.println("compatible " + isCompatible + " canonical " 
-                    + isCanonical + "\t" + this);
+//            System.out.println("compatible " + isCompatible + " canonical " 
+//                    + isCanonical + "\t" + this);
+            if (isCompatible) {
+                System.out.println("ACCEPTED " + this);
+            } else {
+                System.out.println("REJECTED " + this);
+            }
         } else {
 //            System.out.println("canonical " + isCanonical + "\t" + this);
         }
@@ -139,32 +144,30 @@ public class Graph {
      * @param hTau the target molecular signature to use
      * @return true if a bond can be formed
      */
-    public boolean compatibleBond(int x, int y, TargetMolecularSignature hTau) {
+    public boolean compatibleBond(int x1, int x2, TargetMolecularSignature hTau) {
         int h = hTau.getHeight();
-        int targetX = targets.get(x);
-        int targetY = targets.get(y);
+        int targetX1 = targets.get(x1);
+        int targetX2 = targets.get(x2);
         System.out.println(
-                "Checking compatibility of " + x + " and " + y
-                + " targetX " + targetX + " targetY " + targetY);
-        String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h - 1);
-//        String hMinusOneTauY = hTau.getTargetAtomicSignature(targetY, h);
+                "Checking compatibility of " + x1 + " and " + x2
+                + " targetX1 " + targetX1 + " targetX2 " + targetX2);
         
-//        int n12 = hTau.compatibleTargetBonds(targetX, h, hMinusOneTauY);
-        int n12 = hTau.compatibleTargetBonds(targetX, targetY);
+        int n12 = hTau.compatibleTargetBonds(targetX2, targetX1);
         
         if (n12 == 0) {
-            System.out.println("n12 == 0 NO " + targetX + " " + targetY);
+            System.out.println("n12 == 0 NO " + targetX1 + " " + targetX2);
             return false;
         } else {
-            System.out.println("n12 != 0 " + targetX + " " + targetY);
+            System.out.println("n12 != 0 " + targetX1 + " " + targetX2);
         }
-        int m12 = countExistingBondsOfType(y, h, hMinusOneTauY);
+        int m12 = countExistingBondsOfType(x1, x2, h, hTau);
        
         boolean lessThanOrEqual = n12 - m12 >= 0;
         if (lessThanOrEqual) {
-            System.out.println("m12 " + m12 + " n12 " + n12);
+            System.out.println("Existing(m12) " + m12 + " Compatible(n12) " + n12);
         } else {
-            System.out.println("m12 " + m12 + " n12 " + n12 + " NO");
+            System.out.println(
+                    "Existing(m12) " + m12 + " Compatible(n12) " + n12 + " NO");
         }
         return n12 - m12 >= 0;
     }
@@ -172,20 +175,25 @@ public class Graph {
     /**
      * Count of the existing bonds of a particular type.
      * 
-     * @param x the index of an atom
+     * @param atomIndex the index of an atom
      * @param h the height of the signature
-     * @param hMinusOneTauY the h-1 signature to match against
+     * @param hTau the target molecular signature
      * @return
      */
-    public int countExistingBondsOfType(int x, int h, String hMinusOneTauY) {
+    public int countExistingBondsOfType(
+            int x1, int x2, int h, TargetMolecularSignature hTau) {
+        
         // count the number of bonds already used between x and y
+        int targetX2 = targets.get(x2);
+        String hMinusOneTauX2 = hTau.getTargetAtomicSignature(targetX2, h - 1);
         int m12 = 0;
-        for (String hMinusOneTauY1 : getSignaturesOfBondedAtoms(x, h - 1)) {
+        for (String hMinusOneTauY1 : getSignaturesOfBondedAtoms(x1, h - 1)) {
             System.out.println(
                   "Counting existing bonds "
-                    + hMinusOneTauY + " " + hMinusOneTauY1 
-                    + " h= " + h + " x = " + x);
-            if (hMinusOneTauY.equals(hMinusOneTauY1)) {
+                    + hMinusOneTauX2 + " " + hMinusOneTauY1 
+                    + " height = " + h + " atomIndex1 = " + x1 +
+                    " atomIndex2 = " + x2);
+            if (hMinusOneTauX2.equals(hMinusOneTauY1)) {
                 m12++;
             }
         }

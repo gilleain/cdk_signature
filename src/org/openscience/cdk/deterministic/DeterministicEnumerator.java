@@ -144,12 +144,12 @@ public class DeterministicEnumerator {
                 && g.isFullySaturated()) 
 //                    && g.isCanonical()
                 {
-            if (hTau == null || hTau.matches(g.getAtomContainer())) {
+//            if (hTau == null || hTau.matches(g.getAtomContainer())) {
                 System.out.println("SOLUTION " + g);
                 this.handler.handle(g.getAtomContainer());
-            } else {
-                System.out.println("NO MATCH " + g);
-            }
+//            } else {
+//                System.out.println("NO MATCH " + g);
+//            }
         } else {
             Orbit o = g.getUnsaturatedOrbit();
             if (o == null) return;
