@@ -6,17 +6,59 @@ import org.junit.Test;
 import org.openscience.cdk.deterministic.DeterministicEnumerator;
 import org.openscience.cdk.deterministic.FragmentConverter;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.TargetMolecularSignature;
 
 public class DeterministicEnumeratorTargetSignatureTest extends 
                 AbstractDeterministicTest {
     
     @Test
-    public void degreeTreeHeight2Test() {
+    public void cubaneHeight2Test() {
+        IMolecule mol = builder.newMolecule();
+        for (int i = 0; i < 8; i++) { mol.addAtom(builder.newAtom("C")); }
+        mol.addBond(0, 1, IBond.Order.SINGLE);
+        mol.addBond(0, 3, IBond.Order.SINGLE);
+        mol.addBond(0, 7, IBond.Order.SINGLE);
+        mol.addBond(1, 2, IBond.Order.SINGLE);
+        mol.addBond(1, 6, IBond.Order.SINGLE);
+        mol.addBond(2, 3, IBond.Order.SINGLE); 
+        mol.addBond(2, 5, IBond.Order.SINGLE); 
+        mol.addBond(3, 4, IBond.Order.SINGLE);
+        mol.addBond(4, 5, IBond.Order.SINGLE);
+        mol.addBond(4, 7, IBond.Order.SINGLE);
+        mol.addBond(5, 6, IBond.Order.SINGLE);
+        mol.addBond(6, 7, IBond.Order.SINGLE);
+        for (int i = 0; i < 8; i++) { 
+            mol.addAtom(builder.newAtom("H"));
+            mol.addBond(i, 8 + i, IBond.Order.SINGLE);
+            System.out.println("bonding " + i + " and " + 2 * (i + 1));
+        }
+//        System.out.println(AbstractDeterministicTest.toSmiles(mol));
+        
+        MoleculeSignature molSig = new MoleculeSignature(mol);
+        String height2CSig = molSig.signatureStringForVertex(0, 2);
+        String height2HSig = molSig.signatureStringForVertex(8, 2);
+        System.out.println(height2CSig);
+        System.out.println(height2HSig);
+        
         TargetMolecularSignature tms = new TargetMolecularSignature(2);
-        tms.add("[C]([C]([C][C])[C]([C][C])[C]([C][C])[H]", 20);
-        tms.add("[H]([C]([C][C][C]))", 20);
-        String formulaString = "C20H20";
+        tms.add(height2CSig, 8);
+        tms.add(height2HSig, 8);
+        String formulaString = "C8H8";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
+    public void degreeThreeHeight2Test() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(2);
+        tms.add("[C]([C]([C][C][H])[C]([C][C][H])[C]([C][C][H])[H])", 12);
+        tms.add("[H]([C]([C][C][C]))", 12);
+        String formulaString = "C12H12";
         DeterministicEnumerator enumerator = 
             new DeterministicEnumerator(formulaString, tms);
         List<IAtomContainer> results = enumerator.generate();
@@ -175,6 +217,20 @@ public class DeterministicEnumeratorTargetSignatureTest extends
         tms.add("[C]([C][C][H][H])", 4);
         tms.add("[H]([C])", 8);
         String formulaString = "C4H8";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
+    public void methylCycloButane() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(1);
+        tms.add("[C]([C][C][C][H])", 1);
+        tms.add("[C]([C][C][H][H])", 3);
+        tms.add("[C]([C][H][H][H])", 1);
+        tms.add("[H]([C])", 10);
+        String formulaString = "C5H10";
         DeterministicEnumerator enumerator = 
             new DeterministicEnumerator(formulaString, tms);
         List<IAtomContainer> results = enumerator.generate();
