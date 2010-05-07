@@ -19,6 +19,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
+import org.openscience.cdk.signature.SignatureQuotientGraph;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 
@@ -461,5 +462,52 @@ public class MoleculeSignatureTest {
 //            System.out.println(orbits.get(key));
 //        }
         Assert.assertEquals(3, orbits.size());
+    }
+    
+    @Test
+    public void napthaleneWithDoubleBondsAndHydrogenHeightTest() {
+        IMolecule napthalene = builder.newMolecule();
+        for (int i = 0; i < 10; i++) { 
+            napthalene.addAtom(builder.newAtom("C")); 
+        }
+        napthalene.addBond(0, 1, IBond.Order.SINGLE);
+        napthalene.addBond(0, 5, IBond.Order.DOUBLE);
+        napthalene.addBond(1, 2, IBond.Order.DOUBLE);
+        napthalene.addBond(1, 6, IBond.Order.SINGLE);
+        napthalene.addBond(2, 3, IBond.Order.SINGLE);
+        napthalene.addBond(2, 9, IBond.Order.SINGLE);
+        napthalene.addBond(3, 4, IBond.Order.DOUBLE);
+        napthalene.addBond(4, 5, IBond.Order.SINGLE);
+        napthalene.addBond(6, 7, IBond.Order.DOUBLE);
+        napthalene.addBond(7, 8, IBond.Order.SINGLE);
+        napthalene.addBond(8, 9, IBond.Order.DOUBLE);
+        
+        napthalene.addAtom(builder.newAtom("H"));
+        napthalene.addBond(0, 10, IBond.Order.SINGLE);
+        napthalene.addAtom(builder.newAtom("H"));
+        napthalene.addBond(3, 11, IBond.Order.SINGLE);
+        napthalene.addAtom(builder.newAtom("H"));
+        napthalene.addBond(4, 12, IBond.Order.SINGLE);
+        napthalene.addAtom(builder.newAtom("H"));
+        napthalene.addBond(5, 13, IBond.Order.SINGLE);
+        napthalene.addAtom(builder.newAtom("H"));
+        napthalene.addBond(6, 14, IBond.Order.SINGLE);
+        napthalene.addAtom(builder.newAtom("H"));
+        napthalene.addBond(7, 15, IBond.Order.SINGLE);
+        napthalene.addAtom(builder.newAtom("H"));
+        napthalene.addBond(8, 16, IBond.Order.SINGLE);
+        napthalene.addAtom(builder.newAtom("H"));
+        napthalene.addBond(9, 17, IBond.Order.SINGLE);
+        
+        int height = 2;
+//        MoleculeSignature molSig = new MoleculeSignature(napthalene);
+//        for (int i = 0; i < napthalene.getAtomCount(); i++) {
+//            String sigString = molSig.signatureStringForVertex(i, height);
+//            System.out.println(i + " " + sigString);
+//        }
+        SignatureQuotientGraph mqg = 
+            new SignatureQuotientGraph(napthalene, height);
+        System.out.println(mqg);
+        
     }
 }
