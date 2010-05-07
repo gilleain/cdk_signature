@@ -210,8 +210,9 @@ public class DeterministicEnumerator {
                 
                 if (copy.check(x, y, hTau)) {
 //                    System.out.println("passed all tests");
-                    if (this.bondCreationListener != null) {
-//                        this.bondCreationListener.bondAdded(new BondCreationEvent(g, copy));
+                    if (bondCreationListener != null) {
+                        bondCreationListener.bondAdded(
+                                new BondCreationEvent(g, copy));
                     }
                     saturateAtom(x, copy, s);
                 }

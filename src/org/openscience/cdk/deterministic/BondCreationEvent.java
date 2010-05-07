@@ -2,11 +2,11 @@ package org.openscience.cdk.deterministic;
 
 public class BondCreationEvent {
 
-    public final SimpleGraph parent;
+    public final Graph parent;
     
-    public final SimpleGraph child;
+    public final Graph child;
     
-    public BondCreationEvent(SimpleGraph parent, SimpleGraph child) {
+    public BondCreationEvent(Graph parent, Graph child) {
         this.parent = parent;
         this.child = child;
     }

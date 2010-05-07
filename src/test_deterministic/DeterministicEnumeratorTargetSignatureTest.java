@@ -14,6 +14,40 @@ import org.openscience.cdk.signature.TargetMolecularSignature;
 public class DeterministicEnumeratorTargetSignatureTest extends 
                 AbstractDeterministicTest {
     
+    public void run(TargetMolecularSignature tms, String formulaString) {
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
+    public void multipleBondedRingHeight2Test() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(2);
+        String a = "[C](=[C]([C][H])[C](=[C][H])[H])"; 
+        String b = "[C]([C]([C]=[C])=[C]([C][H])[H])";
+        String c = "[C](=[C]([C][C])[C](=[C][H])[C](=[C][H]))";
+        String h = "[H]([C]([C]=[C]))";
+        
+        tms.add(a, 4);
+        tms.add(b, 4);
+        tms.add(c, 4);
+        tms.add(h, 8);
+        String formulaString = "C10H8";
+//        System.out.println(java.util.Arrays.deepToString(tms.getLookupTable()));
+        run(tms, formulaString);
+    }
+    
+    @Test
+    public void multipleBondedRingHeight1Test() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(1);
+        tms.add("[C]([C][C]=[C])", 4);
+        tms.add("[C]([C]=[C][H])", 10);
+        tms.add("[H]([C])", 10);
+        String formulaString = "C14H10";
+        run(tms, formulaString);
+    }
+    
     @Test
     public void cubaneHeight2Test() {
         IMolecule mol = builder.newMolecule();
