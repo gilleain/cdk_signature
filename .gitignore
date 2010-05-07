@@ -4,3 +4,5 @@
 *.out
 *.txt
 bin
+.DS_Store
+jars
