@@ -34,7 +34,7 @@ public class ControlPanel extends JPanel implements ActionListener {
     private List<Integer> counts;
     
     public ControlPanel() {
-        setLayout(new GridLayout(7, 1));
+        setLayout(new GridLayout(1, 8));
         
         testValues = new JButton("Test");
         testValues.setActionCommand("TEST");

@@ -1,6 +1,7 @@
 package app;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -31,7 +32,11 @@ public class Debugger extends JFrame
     
     private GraphPanel mainGraphPanel;
     
-    private ColoredTreePanel treePanel;
+    private ColoredTreePanel targetTreePanel;
+    
+    private ColoredTreePanel actualTreePanel;
+    
+    private MoleculePanel molPanel;
     
     private ControlPanel controlPanel;
     
@@ -47,6 +52,10 @@ public class Debugger extends JFrame
     
     public static final int TREE_PANEL_HEIGHT = 300;
     
+    public static final int MOL_PANEL_WIDTH = 500;
+    
+    public static final int MOL_PANEL_HEIGHT = 300;
+    
     public Debugger() {
         setLayout(new BorderLayout());
         thumbViewer = new GraphThumbViewer(
@@ -55,22 +64,29 @@ public class Debugger extends JFrame
         thumbViewer.addSelectionListener(this);
         add(thumbViewer, BorderLayout.WEST);
         
-        JPanel centralPanel = new JPanel(new BorderLayout());
+        JPanel centralPanel = new JPanel(new GridLayout(2, 1));
         mainGraphPanel = new GraphPanel(
                 GRAPH_PANEL_WIDTH, GRAPH_PANEL_HEIGHT, false);
         mainGraphPanel.setBorder(BorderFactory.createEtchedBorder());
         mainGraphPanel.addMouseListener(this);
-        centralPanel.add(mainGraphPanel, BorderLayout.CENTER);
+        centralPanel.add(mainGraphPanel);
         
-        treePanel = new ColoredTreePanel(TREE_PANEL_WIDTH, TREE_PANEL_HEIGHT);
-        treePanel.setBorder(BorderFactory.createEtchedBorder());
-        centralPanel.add(treePanel, BorderLayout.SOUTH);
+        targetTreePanel = new ColoredTreePanel(TREE_PANEL_WIDTH, TREE_PANEL_HEIGHT);
+        targetTreePanel.setBorder(BorderFactory.createEtchedBorder());
+        centralPanel.add(targetTreePanel);
         add(centralPanel, BorderLayout.CENTER);
         
         controlPanel = new ControlPanel();
         controlPanel.addRunListener(this);
-        add(controlPanel, BorderLayout.EAST);
+        add(controlPanel, BorderLayout.NORTH);
         
+        JPanel rightPanel = new JPanel(new GridLayout(2, 1));
+        molPanel = new MoleculePanel(MOL_PANEL_WIDTH, MOL_PANEL_HEIGHT);
+        rightPanel.add(molPanel);
+        
+        actualTreePanel = new ColoredTreePanel(TREE_PANEL_WIDTH, TREE_PANEL_HEIGHT);
+        rightPanel.add(actualTreePanel);
+        add(rightPanel, BorderLayout.EAST);
 //        setPreferredSize(new Dimension(1200, 600));
         
         pack();
@@ -125,7 +141,7 @@ public class Debugger extends JFrame
         if (target != -1) {
             List<String> signatures = controlPanel.getSignatures();
             String selectedSignature = signatures.get(target);
-            treePanel.setTree(AbstractVertexSignature.parse(selectedSignature));
+            targetTreePanel.setTree(AbstractVertexSignature.parse(selectedSignature));
         }
         repaint();
     }
