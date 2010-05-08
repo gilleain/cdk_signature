@@ -53,7 +53,7 @@ public class ElementFragment extends AbstractFragment {
      */
     public IAtom makeAtom(IChemObjectBuilder builder) {
         decreaseCount();
-        return builder.newAtom(elementSymbol);
+        return builder.newInstance(IAtom.class, elementSymbol);
     }
     
     public String toString() {

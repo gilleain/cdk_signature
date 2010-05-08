@@ -26,9 +26,9 @@ public class TargetAtomicSignatureTest extends AbstractSignatureTest {
     
     public static void addHydrogens(IMolecule mol, IAtom atom, int n) {
         for (int i = 0; i < n; i++) {
-            IAtom h = builder.newAtom("H");
+            IAtom h = builder.newInstance(IAtom.class, "H");
             mol.addAtom(h);
-            mol.addBond(builder.newBond(atom, h));
+            mol.addBond(builder.newInstance(IBond.class, atom, h));
         }
     }
     
@@ -102,14 +102,14 @@ public class TargetAtomicSignatureTest extends AbstractSignatureTest {
     @Test
     public void paperTest() {
         // the example shown in Figure 4 of Faulon's enumeration paper
-        IMolecule paperExample = builder.newMolecule();
-        IAtom carbon1 = builder.newAtom("C");
+        IMolecule paperExample = builder.newInstance(IMolecule.class);
+        IAtom carbon1 = builder.newInstance(IAtom.class, "C");
         paperExample.addAtom(carbon1);
-        IAtom carbon2 = builder.newAtom("C");
+        IAtom carbon2 = builder.newInstance(IAtom.class, "C");
         paperExample.addAtom(carbon2);
-        IAtom carbon3 = builder.newAtom("C");
+        IAtom carbon3 = builder.newInstance(IAtom.class, "C");
         paperExample.addAtom(carbon3);
-        IAtom carbon4 = builder.newAtom("C");
+        IAtom carbon4 = builder.newInstance(IAtom.class, "C");
         paperExample.addAtom(carbon4);
         paperExample.addBond(0, 1, IBond.Order.SINGLE);
         paperExample.addBond(1, 2, IBond.Order.SINGLE);

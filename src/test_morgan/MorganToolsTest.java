@@ -8,17 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.group.Partition;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 public class MorganToolsTest {
     
-    public static NoNotificationChemObjectBuilder builder =
+    public static IChemObjectBuilder builder =
         NoNotificationChemObjectBuilder.getInstance();
 
     public long[] getMorganNumbers(IAtomContainer atomContainer) {
@@ -100,9 +100,9 @@ public class MorganToolsTest {
     }
 
     public IMolecule makeMethylCycloButane() {
-        IMolecule mol = builder.newMolecule();
+        IMolecule mol = builder.newInstance(IMolecule.class);
         for (int i = 0; i < 5; i++) {
-            mol.addAtom(builder.newAtom("C"));
+            mol.addAtom(builder.newInstance(IAtom.class, "C"));
         }
         mol.addBond(0, 1, IBond.Order.SINGLE);
         mol.addBond(1, 2, IBond.Order.SINGLE);
@@ -113,9 +113,9 @@ public class MorganToolsTest {
     }
     
     public IMolecule makeBridgedMethylCycloPentane() {
-        IMolecule mol = builder.newMolecule();
+        IMolecule mol = builder.newInstance(IMolecule.class);
         for (int i = 0; i < 7; i++) {
-            mol.addAtom(builder.newAtom("C"));
+            mol.addAtom(builder.newInstance(IAtom.class, "C"));
         }
         mol.addBond(0, 1, IBond.Order.SINGLE);
         mol.addBond(1, 2, IBond.Order.SINGLE);
@@ -129,9 +129,9 @@ public class MorganToolsTest {
     }
 
     public IMolecule makeCuneane() {
-        IMolecule mol = builder.newMolecule();
+        IMolecule mol = builder.newInstance(IMolecule.class);
         for (int i = 0; i < 8; i++) {
-            mol.addAtom(builder.newAtom("C"));
+            mol.addAtom(builder.newInstance(IAtom.class, "C"));
         }
         mol.addBond(0, 1, IBond.Order.SINGLE);
         mol.addBond(0, 3, IBond.Order.SINGLE);
@@ -149,9 +149,9 @@ public class MorganToolsTest {
     }
     
     public IMolecule makeThreeFourSixSevenRing() {
-        IMolecule mol = builder.newMolecule();
+        IMolecule mol = builder.newInstance(IMolecule.class);
         for (int i = 0; i < 12; i++) {
-            mol.addAtom(builder.newAtom("C"));
+            mol.addAtom(builder.newInstance(IAtom.class, "C"));
         }
         mol.addBond(0, 1, IBond.Order.SINGLE);
         mol.addBond(0, 2, IBond.Order.SINGLE);

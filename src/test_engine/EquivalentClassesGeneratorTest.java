@@ -20,23 +20,23 @@ public class EquivalentClassesGeneratorTest {
     
     public void addHydrogens(IAtomContainer ac, IAtom atom, int nH) {
         for (int i = 0; i < nH; i++) {
-            IAtom h = builder.newAtom("H");
+            IAtom h = builder.newInstance(IAtom.class,"H");
             ac.addAtom(h);
-            ac.addBond(builder.newBond(atom, h, IBond.Order.SINGLE));
+            ac.addBond(builder.newInstance(IBond.class, atom, h, IBond.Order.SINGLE));
         }
     }
     
     public IAtomContainer makeMethyl() {
-        IAtomContainer methyl = builder.newAtomContainer();
-        IAtom c = builder.newAtom("C");
+        IAtomContainer methyl = builder.newInstance(IAtomContainer.class);
+        IAtom c = builder.newInstance(IAtom.class,"C");
         methyl.addAtom(c);
         addHydrogens(methyl, c, 3);
         return methyl;
     }
     
     public IAtomContainer makeEthyl() {
-        IAtomContainer ethyl = builder.newAtomContainer();
-        IAtom c = builder.newAtom("C");
+        IAtomContainer ethyl = builder.newInstance(IAtomContainer.class);
+        IAtom c = builder.newInstance(IAtom.class,"C");
         ethyl.addAtom(c);
         addHydrogens(ethyl, c, 2);
         return ethyl;

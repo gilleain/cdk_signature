@@ -26,7 +26,8 @@ public class DefaultEnumeratorResultHandler implements IEnumeratorResultHandler 
 
     public void handle(IAtomContainer result) {
         if (ConnectivityChecker.isConnected(result)) {
-            IMolecule molecule = result.getBuilder().newMolecule(result);
+            IMolecule molecule = 
+                result.getBuilder().newInstance(IMolecule.class, result);
             String smiles = this.smilesGenerator.createSMILES(molecule);
             System.out.println(smiles);
         } else {

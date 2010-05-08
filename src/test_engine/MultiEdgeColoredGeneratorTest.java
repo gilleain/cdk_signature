@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.openscience.cdk.group.Graph;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -41,10 +42,10 @@ public class MultiEdgeColoredGeneratorTest {
         IChemObjectBuilder builder = NoNotificationChemObjectBuilder.getInstance();
         List<IMolecule> molecules = new ArrayList<IMolecule>();
         for (Graph graph : generator.graphs) {
-            IMolecule molecule = builder.newMolecule();
+            IMolecule molecule = builder.newInstance(IMolecule.class);
             for (int color : graph.colors) {
                 String symbol = generator.colorStringMap.get(color);
-                molecule.addAtom(builder.newAtom(symbol));
+                molecule.addAtom(builder.newInstance(IAtom.class,symbol));
             }
             for (Graph.Edge edge : graph.edges) {
                 molecule.addBond(edge.a, edge.b, getOrder(edge));

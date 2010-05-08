@@ -66,7 +66,7 @@ public class EqClGen {
             assert elementSymbols.size() == counts.size();
             
             builder = NoNotificationChemObjectBuilder.getInstance();
-            atomContainer = builder.newAtomContainer();
+            atomContainer = builder.newInstance(IAtomContainer.class);
             this.groups = new ArrayList<Group>();
 
             int atomIndex = 0;
@@ -75,7 +75,8 @@ public class EqClGen {
                 String elementSymbol = elementSymbols.get(i);
                 int count = counts.get(i);
                 for (int j = 0; j < count; j++) {
-                    atomContainer.addAtom(builder.newAtom(elementSymbol));
+                    atomContainer.addAtom(
+                            builder.newInstance(IAtom.class, elementSymbol));
                     group.atomIndices.add(atomIndex);
                     atomIndex++;
                 }
@@ -167,7 +168,8 @@ public class EqClGen {
             for (int i = 0; i < number; i++) {
                 int otherAtomIndex = otherGroup.atomIndices.get(i);
                 IAtom otherAtom = atomContainer.getAtom(otherAtomIndex);
-                IBond bond = atom.getBuilder().newBond(atom, otherAtom);
+                IBond bond = 
+                    atom.getBuilder().newInstance(IBond.class, atom, otherAtom);
                 atomContainer.addBond(bond);
             }
         }

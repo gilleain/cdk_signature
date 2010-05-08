@@ -8,6 +8,7 @@ import java.util.List;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.group.Graph;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -100,9 +101,9 @@ public class CarbonGenerator {
     }
     
     public static IMolecule convert(Graph graph) {
-        IMolecule molecule = builder.newMolecule();
+        IMolecule molecule = builder.newInstance(IMolecule.class);
         for (String label : graph.getLabels()) {
-            molecule.addAtom(builder.newAtom(label));
+            molecule.addAtom(builder.newInstance(IAtom.class, label));
         }
         
         for (Graph.Edge arc : graph.edges) {

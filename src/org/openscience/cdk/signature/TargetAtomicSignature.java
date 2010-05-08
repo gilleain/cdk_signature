@@ -66,7 +66,7 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
                     int number = labelAtomNumberMap.get(label);
                     atom = mol.getAtom(number);
                 } else {
-                    atom = builder.newAtom(this.symbol);
+                    atom = builder.newInstance(IAtom.class, this.symbol);
                     mol.addAtom(atom);
                     int atomIndex = mol.getAtomCount() - 1;
                     labelAtomNumberMap.put(label, atomIndex);
@@ -74,14 +74,14 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
                 
             } else {
               // XXX - what if the symbol is not an atom symbol?
-                atom = builder.newAtom(this.symbol);
+                atom = builder.newInstance(IAtom.class, this.symbol);
                 mol.addAtom(atom);
             }
             
             // now check to see if a bond should be added
             if (parentAtom != null) {
                 IBond.Order order = convertBondSymbolToOrder();
-                IBond bond = builder.newBond(parentAtom, atom, order);
+                IBond bond = builder.newInstance(IBond.class, parentAtom, atom, order);
                 
                 if (!mol.contains(bond)) {
                     mol.addBond(bond);
@@ -185,7 +185,7 @@ public class TargetAtomicSignature implements Comparable<TargetAtomicSignature> 
     }
 
     public IMolecule toMolecule(IChemObjectBuilder builder) {
-        IMolecule molecule = builder.newMolecule();
+        IMolecule molecule = builder.newInstance(IMolecule.class);
         this.root.toMolecule(
                 builder, molecule, null, new HashMap<Integer, Integer>());
         return molecule;

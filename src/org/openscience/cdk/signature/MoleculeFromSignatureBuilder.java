@@ -1,5 +1,6 @@
 package org.openscience.cdk.signature;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -50,12 +51,12 @@ public class MoleculeFromSignatureBuilder extends AbstractGraphBuilder {
 
     @Override
     public void makeGraph() {
-        this.container = this.builder.newAtomContainer();
+        this.container = this.builder.newInstance(IAtomContainer.class);
     }
 
     @Override
     public void makeVertex(String label) {
-        this.container.addAtom(this.builder.newAtom(label));
+        this.container.addAtom(this.builder.newInstance(IAtom.class, label));
     }
     
     /**

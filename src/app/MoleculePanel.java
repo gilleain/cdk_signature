@@ -9,8 +9,12 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.openscience.cdk.deterministic.Graph;
+import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.RendererModel;
@@ -30,9 +34,7 @@ public class MoleculePanel extends JPanel {
     
     private StructureDiagramGenerator sdg;
     
-    private List<IMolecule> molecules;
-    
-    private int panelWidth;
+    private IMolecule molecule;
     
     public int moleculeWidth;
     
@@ -42,7 +44,6 @@ public class MoleculePanel extends JPanel {
         renderer = new AtomContainerRenderer(getGenerators(), new AWTFontManager());
         setRenderingParameters();
         sdg = new StructureDiagramGenerator();
-        this.panelWidth = panelWidth;
         this.setPreferredSize(new Dimension(panelWidth, panelHeight));
         this.setBackground(Color.WHITE);
     }
@@ -70,34 +71,65 @@ public class MoleculePanel extends JPanel {
             }
 
         });
-        generators.add(new RingGenerator());
+//        generators.add(new RingGenerator());
         generators.add(new BasicBondGenerator());
         generators.add(new BasicAtomGenerator());
         
         return generators;
     }
     
-    public void setMolecule(IMolecule molecule) {
-        this.molecules = new ArrayList<IMolecule>();
-        this.molecules.add(diagramGenerate(molecule));
-    }
-
-    public void setMolecules(List<IMolecule> molecules) {
-        this.molecules = new ArrayList<IMolecule>();
-        for (IMolecule molecule : molecules) {
-            IMolecule generated = diagramGenerate(molecule);
-            if (generated != null) {
-                this.molecules.add(generated);
+    public void setMoleculeFromGraph(Graph graph) {
+        IAtomContainer atomContainer = graph.getAtomContainer();
+        
+        try {
+            IAtomContainer clonedContainer = 
+                (IAtomContainer) atomContainer.clone();
+            int i = 0;
+            List<IAtom> keptAtoms = new ArrayList<IAtom>();
+            for (IAtom atom : clonedContainer.atoms()) {
+                if (clonedContainer.getConnectedAtomsCount(atom) == 0) {
+//                    clonedContainer.removeAtom(atom);
+                    System.out.println("removing atom " + i);
+                } else {
+                    System.out.println("keeping atom " + i);
+                    keptAtoms.add(atom);
+                }
+                i++;
             }
+            IAtom[] keptAtomArr = new IAtom[keptAtoms.size()];
+            for (int j = 0; j < keptAtoms.size(); j++) { 
+                keptAtomArr[j] = keptAtoms.get(j); 
+            }
+            clonedContainer.setAtoms(keptAtomArr);
+//            System.out.println(new Graph(mol));
+            if (ConnectivityChecker.isConnected(clonedContainer)) {
+                IMolecule mol = 
+                    clonedContainer.getBuilder().newInstance(IMolecule.class);
+                setMolecule(mol);
+            } else {
+                IMoleculeSet molecules = 
+                    ConnectivityChecker.partitionIntoMolecules(clonedContainer);
+                setMolecule(molecules.getMolecule(0));
+            }
+        } catch (CloneNotSupportedException cnse) {
+            
         }
     }
+    
+    public void setMolecule(IMolecule molecule) {
+        this.molecule = diagramGenerate(molecule);
+        for (int i = 0; i < molecule.getAtomCount(); i++) {
+            this.molecule.getAtom(i).setFormalCharge(0);
+        }
+    }
+
     
     private IMolecule diagramGenerate(IMolecule molecule) {
         this.sdg.setMolecule(molecule, true);
         try {
             this.sdg.generateCoordinates();
         } catch (Exception c) {
-//            c.printStackTrace();
+            c.printStackTrace();
             return null;
         }
         return sdg.getMolecule();
@@ -105,32 +137,15 @@ public class MoleculePanel extends JPanel {
     
     public void paint(Graphics g) {
         super.paint(g);
-        if (molecules != null) {
-            paintMolecules(g);
-        }
-    }
-    
-    private void paintMolecules(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        int columns = panelWidth / (moleculeWidth / 2);
-//        int x = moleculeWidth / 4;
-        int x = moleculeWidth / 2;
-//        int y = moleculeHeight / 4;
-        int y = moleculeHeight / 3;
-        int i = 0;
-        renderer.setDrawCenter(x, y);
-        for (IMolecule molecule : molecules) {
-            i++;
-            renderer.paintMolecule(
-                    molecule, new AWTDrawVisitor(g2), getBounds(), false);
-            if (i == columns) {
-                y += moleculeHeight / 2;
-                x = moleculeWidth / 2;
-                i = 0;
-            } else {
-                x += moleculeWidth / 2;
+        if (molecule != null) {
+            Graphics2D g2 = (Graphics2D) g;
+            try {
+                renderer.paintMolecule(
+                        molecule, new AWTDrawVisitor(g2), getBounds(), false);
+            } catch (NullPointerException npe) {
+                npe.printStackTrace();
             }
-            renderer.setDrawCenter(x, y);
+
         }
     }
     

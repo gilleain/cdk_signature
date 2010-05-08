@@ -7,10 +7,11 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.deterministic.CanonicalChecker;
 import org.openscience.cdk.graph.AtomContainerAtomPermutor;
-import org.openscience.cdk.graph.Permutor;
+//import org.openscience.cdk.graph.Permutor;
 import org.openscience.cdk.group.CDKDiscretePartitionRefiner;
 import org.openscience.cdk.group.Permutation;
 import org.openscience.cdk.group.SSPermutationGroup;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -31,18 +32,18 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testAutGroupForCamphor() {
-        IAtomContainer camphor = builder.newAtomContainer();
-        camphor.addAtom(builder.newAtom("C"));
-        camphor.addAtom(builder.newAtom("C"));
-        camphor.addAtom(builder.newAtom("C"));
-        camphor.addAtom(builder.newAtom("C"));
-        camphor.addAtom(builder.newAtom("C"));
-        camphor.addAtom(builder.newAtom("C"));
-        camphor.addAtom(builder.newAtom("C"));
-        camphor.addAtom(builder.newAtom("C"));
-        camphor.addAtom(builder.newAtom("C"));
-        camphor.addAtom(builder.newAtom("C"));
-        camphor.addAtom(builder.newAtom("O"));
+        IAtomContainer camphor = builder.newInstance(IAtomContainer.class);
+        camphor.addAtom(builder.newInstance(IAtom.class,"C"));
+        camphor.addAtom(builder.newInstance(IAtom.class,"C"));
+        camphor.addAtom(builder.newInstance(IAtom.class,"C"));
+        camphor.addAtom(builder.newInstance(IAtom.class,"C"));
+        camphor.addAtom(builder.newInstance(IAtom.class,"C"));
+        camphor.addAtom(builder.newInstance(IAtom.class,"C"));
+        camphor.addAtom(builder.newInstance(IAtom.class,"C"));
+        camphor.addAtom(builder.newInstance(IAtom.class,"C"));
+        camphor.addAtom(builder.newInstance(IAtom.class,"C"));
+        camphor.addAtom(builder.newInstance(IAtom.class,"C"));
+        camphor.addAtom(builder.newInstance(IAtom.class,"O"));
         
         camphor.addBond(0, 2, IBond.Order.SINGLE);
         camphor.addBond(1, 2, IBond.Order.SINGLE);
@@ -64,24 +65,24 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testBridgedCycloButane() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));    // 0
-        atomContainer.addAtom(builder.newAtom("C"));    // 1
-        atomContainer.addAtom(builder.newAtom("C"));    // 2
-        atomContainer.addAtom(builder.newAtom("C"));    // 3
-        atomContainer.addAtom(builder.newAtom("C"));    // 4
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 0
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 1
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 2
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 3
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 4
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 5
-        atomContainer.addAtom(builder.newAtom("H"));    // 6
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 5
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 6
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 7
-        atomContainer.addAtom(builder.newAtom("H"));    // 8
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 7
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 8
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 9
-        atomContainer.addAtom(builder.newAtom("H"));    // 10
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 9
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 10
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 11
-        atomContainer.addAtom(builder.newAtom("H"));    // 12
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 11
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 12
         
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
         atomContainer.addBond(0, 3, IBond.Order.SINGLE);
@@ -109,15 +110,15 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testPartialC4H4() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("H"));
-        atomContainer.addAtom(builder.newAtom("H"));
-        atomContainer.addAtom(builder.newAtom("H"));
-        atomContainer.addAtom(builder.newAtom("H"));
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
         atomContainer.addBond(0, 1, IBond.Order.DOUBLE);
         atomContainer.addBond(0, 3, IBond.Order.SINGLE);
         atomContainer.addBond(0, 4, IBond.Order.SINGLE);
@@ -136,15 +137,15 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testC4H4Isomer() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("H"));
-        atomContainer.addAtom(builder.newAtom("H"));
-        atomContainer.addAtom(builder.newAtom("H"));
-        atomContainer.addAtom(builder.newAtom("H"));
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
         atomContainer.addBond(0, 1, IBond.Order.SINGLE);
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
         atomContainer.addBond(0, 3, IBond.Order.DOUBLE);
@@ -161,28 +162,28 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testMinimalCanonicalExample() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
         atomContainer.addBond(0, 1, IBond.Order.SINGLE);
         Assert.assertTrue(isCanonical(atomContainer));
     }
     
     @Test
     public void testMinimalCanonicalExampleWithDisconnectedAtoms() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
         Assert.assertTrue(isCanonicalWithDisconnectedAtoms(atomContainer));
     }
     
     @Test
     public void testPartialButaneA() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("H"));
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
         atomContainer.addBond(0, 1, IBond.Order.SINGLE);
         boolean isCanonical = 
             CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
@@ -191,13 +192,13 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testPartialButane() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("C"));
-        atomContainer.addAtom(builder.newAtom("H"));
-        atomContainer.addAtom(builder.newAtom("H"));
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));
         atomContainer.addBond(0, 1, IBond.Order.SINGLE);
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
         atomContainer.addBond(0, 4, IBond.Order.SINGLE);
@@ -213,23 +214,23 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testButene() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));    // 0
-        atomContainer.addAtom(builder.newAtom("C"));    // 1
-        atomContainer.addAtom(builder.newAtom("C"));    // 2
-        atomContainer.addAtom(builder.newAtom("C"));    // 3
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 0
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 1
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 2
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 3
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 4
-        atomContainer.addAtom(builder.newAtom("H"));    // 5
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 4
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 5
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 6
-        atomContainer.addAtom(builder.newAtom("H"));    // 7
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 6
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 7
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 8
-        atomContainer.addAtom(builder.newAtom("H"));    // 9
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 8
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 9
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 10
-        atomContainer.addAtom(builder.newAtom("H"));    // 11
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 10
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 11
         
         atomContainer.addBond(0, 1, IBond.Order.DOUBLE);
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
@@ -252,23 +253,23 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testButane() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));    // 0
-        atomContainer.addAtom(builder.newAtom("C"));    // 1
-        atomContainer.addAtom(builder.newAtom("C"));    // 2
-        atomContainer.addAtom(builder.newAtom("C"));    // 3
-        atomContainer.addAtom(builder.newAtom("H"));    // 4
-        atomContainer.addAtom(builder.newAtom("H"));    // 5
-        atomContainer.addAtom(builder.newAtom("H"));    // 6
-        atomContainer.addAtom(builder.newAtom("H"));    // 7
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 0
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 1
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 2
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 3
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 4
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 5
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 6
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 7
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 8
-        atomContainer.addAtom(builder.newAtom("H"));    // 9
-        atomContainer.addAtom(builder.newAtom("H"));    // 10
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 8
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 9
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 10
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 11
-        atomContainer.addAtom(builder.newAtom("H"));    // 12
-        atomContainer.addAtom(builder.newAtom("H"));    // 13
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 11
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 12
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 13
         
         atomContainer.addBond(0, 1, IBond.Order.SINGLE);
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
@@ -295,23 +296,23 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testIsoButane() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));    // 0
-        atomContainer.addAtom(builder.newAtom("C"));    // 1
-        atomContainer.addAtom(builder.newAtom("C"));    // 2
-        atomContainer.addAtom(builder.newAtom("C"));    // 3
-        atomContainer.addAtom(builder.newAtom("H"));    // 4
-        atomContainer.addAtom(builder.newAtom("H"));    // 5
-        atomContainer.addAtom(builder.newAtom("H"));    // 6
-        atomContainer.addAtom(builder.newAtom("H"));    // 7
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 0
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 1
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 2
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 3
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 4
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 5
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 6
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 7
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 8
-        atomContainer.addAtom(builder.newAtom("H"));    // 9
-        atomContainer.addAtom(builder.newAtom("H"));    // 10
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 8
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 9
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 10
         
-        atomContainer.addAtom(builder.newAtom("H"));    // 11
-        atomContainer.addAtom(builder.newAtom("H"));    // 12
-        atomContainer.addAtom(builder.newAtom("H"));    // 13
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 11
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 12
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 13
         
         atomContainer.addBond(0, 1, IBond.Order.SINGLE);
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
@@ -334,16 +335,16 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testPropene() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));    // 0
-        atomContainer.addAtom(builder.newAtom("C"));    // 1
-        atomContainer.addAtom(builder.newAtom("C"));    // 2
-        atomContainer.addAtom(builder.newAtom("H"));    // 3
-        atomContainer.addAtom(builder.newAtom("H"));    // 4
-        atomContainer.addAtom(builder.newAtom("H"));    // 5
-        atomContainer.addAtom(builder.newAtom("H"));    // 6
-        atomContainer.addAtom(builder.newAtom("H"));    // 7
-        atomContainer.addAtom(builder.newAtom("H"));    // 8
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 0
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 1
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 2
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 3
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 4
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 5
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 6
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 7
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 8
         
         atomContainer.addBond(0, 1, IBond.Order.DOUBLE);
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
@@ -362,24 +363,24 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void testNeoPentane() {
-        IAtomContainer atomContainer = builder.newAtomContainer();
-        atomContainer.addAtom(builder.newAtom("C"));    // 0
-        atomContainer.addAtom(builder.newAtom("C"));    // 1
-        atomContainer.addAtom(builder.newAtom("C"));    // 2
-        atomContainer.addAtom(builder.newAtom("C"));    // 3
-        atomContainer.addAtom(builder.newAtom("C"));    // 4
-        atomContainer.addAtom(builder.newAtom("H"));    // 5
-        atomContainer.addAtom(builder.newAtom("H"));    // 6
-        atomContainer.addAtom(builder.newAtom("H"));    // 7
-        atomContainer.addAtom(builder.newAtom("H"));    // 8
-        atomContainer.addAtom(builder.newAtom("H"));    // 9
-        atomContainer.addAtom(builder.newAtom("H"));    // 10
-        atomContainer.addAtom(builder.newAtom("H"));    // 11
-        atomContainer.addAtom(builder.newAtom("H"));    // 12
-        atomContainer.addAtom(builder.newAtom("H"));    // 13
-        atomContainer.addAtom(builder.newAtom("H"));    // 14
-        atomContainer.addAtom(builder.newAtom("H"));    // 15
-        atomContainer.addAtom(builder.newAtom("H"));    // 16
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 0
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 1
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 2
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 3
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"C"));    // 4
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 5
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 6
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 7
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 8
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 9
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 10
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 11
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 12
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 13
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 14
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 15
+        atomContainer.addAtom(builder.newInstance(IAtom.class,"H"));    // 16
         
         atomContainer.addBond(0, 1, IBond.Order.SINGLE);
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
@@ -418,16 +419,16 @@ public class CDKDiscretePartitionRefinerTest {
     @Test
     public void ngonTests() {
         
-        IAtomContainer fourgon = builder.newAtomContainer();
-        for (int i = 0; i < 4; i++) { fourgon.addAtom(builder.newAtom("C")); }
+        IAtomContainer fourgon = builder.newInstance(IAtomContainer.class);
+        for (int i = 0; i < 4; i++) { fourgon.addAtom(builder.newInstance(IAtom.class,"C")); }
         fourgon.addBond(0, 1, IBond.Order.SINGLE);
         fourgon.addBond(0, 2, IBond.Order.SINGLE);
         fourgon.addBond(1, 3, IBond.Order.SINGLE);
         fourgon.addBond(2, 3, IBond.Order.SINGLE);
         halfMatrix(fourgon);
         
-        IAtomContainer fivegon = builder.newAtomContainer();
-        for (int i = 0; i < 5; i++) { fivegon.addAtom(builder.newAtom("C")); }
+        IAtomContainer fivegon = builder.newInstance(IAtomContainer.class);
+        for (int i = 0; i < 5; i++) { fivegon.addAtom(builder.newInstance(IAtom.class,"C")); }
         fivegon.addBond(0, 1, IBond.Order.SINGLE);
         fivegon.addBond(0, 2, IBond.Order.SINGLE);
         fivegon.addBond(1, 3, IBond.Order.SINGLE);
@@ -435,8 +436,8 @@ public class CDKDiscretePartitionRefinerTest {
         fivegon.addBond(3, 4, IBond.Order.SINGLE);
         halfMatrix(fivegon);
         
-        IAtomContainer sixgon = builder.newAtomContainer();
-        for (int i = 0; i < 6; i++) { sixgon.addAtom(builder.newAtom("C")); }
+        IAtomContainer sixgon = builder.newInstance(IAtomContainer.class);
+        for (int i = 0; i < 6; i++) { sixgon.addAtom(builder.newInstance(IAtom.class,"C")); }
         sixgon.addBond(0, 1, IBond.Order.SINGLE);
         sixgon.addBond(0, 2, IBond.Order.SINGLE);
         sixgon.addBond(1, 3, IBond.Order.SINGLE);
@@ -449,11 +450,11 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void cnopPermutation() {
-        IAtomContainer cnop = builder.newAtomContainer();
-        cnop.addAtom(builder.newAtom("C"));
-        cnop.addAtom(builder.newAtom("N"));
-        cnop.addAtom(builder.newAtom("O"));
-        cnop.addAtom(builder.newAtom("P"));
+        IAtomContainer cnop = builder.newInstance(IAtomContainer.class);
+        cnop.addAtom(builder.newInstance(IAtom.class,"C"));
+        cnop.addAtom(builder.newInstance(IAtom.class,"N"));
+        cnop.addAtom(builder.newInstance(IAtom.class,"O"));
+        cnop.addAtom(builder.newInstance(IAtom.class,"P"));
         cnop.addBond(0, 1, IBond.Order.SINGLE);
         cnop.addBond(0, 2, IBond.Order.SINGLE);
         cnop.addBond(1, 3, IBond.Order.SINGLE);
@@ -463,8 +464,8 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void fourgonPermutation() {
-        IAtomContainer fourgon = builder.newAtomContainer();
-        for (int i = 0; i < 4; i++) { fourgon.addAtom(builder.newAtom("C")); }
+        IAtomContainer fourgon = builder.newInstance(IAtomContainer.class);
+        for (int i = 0; i < 4; i++) { fourgon.addAtom(builder.newInstance(IAtom.class,"C")); }
         fourgon.addBond(0, 1, IBond.Order.DOUBLE);
         fourgon.addBond(0, 2, IBond.Order.SINGLE);
         fourgon.addBond(1, 3, IBond.Order.SINGLE);
@@ -474,8 +475,8 @@ public class CDKDiscretePartitionRefinerTest {
     
     @Test
     public void fivegonPermutation() {
-        IAtomContainer fivegon = builder.newAtomContainer();
-        for (int i = 0; i < 5; i++) { fivegon.addAtom(builder.newAtom("C")); }
+        IAtomContainer fivegon = builder.newInstance(IAtomContainer.class);
+        for (int i = 0; i < 5; i++) { fivegon.addAtom(builder.newInstance(IAtom.class,"C")); }
         fivegon.addBond(0, 1, IBond.Order.SINGLE);
         fivegon.addBond(0, 2, IBond.Order.DOUBLE);
         fivegon.addBond(1, 3, IBond.Order.DOUBLE);
@@ -485,32 +486,32 @@ public class CDKDiscretePartitionRefinerTest {
         int [] p = new int[] {2, 0, 4, 1, 3};
         
         // this is a hack - fix permutor!
-        Permutor rawPermutor = new Permutor(5);
-        int rank = 0;
-        while (rawPermutor.hasNext()) {
-            int[] next = rawPermutor.getNextPermutation();
-            if (Arrays.equals(p, next)) {
-                break;
-            }
-            rank++;
-        }
-        
-        AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(fivegon);
-        Permutation permutation = new Permutation(p);
-//        permutor.setPermutation(p);
-        permutor.setRank(rank);
-        String s1 = CanonicalChecker.edgeString(fivegon, permutation);
-        IAtomContainer permuted = permutor.next();
-        String s2 = CanonicalChecker.edgeString(permuted, new Permutation(5));
-        System.out.println(s1);
-        System.out.println(s2);
+//        Permutor rawPermutor = new Permutor(5);
+//        int rank = 0;
+//        while (rawPermutor.hasNext()) {
+//            int[] next = rawPermutor.getNextPermutation();
+//            if (Arrays.equals(p, next)) {
+//                break;
+//            }
+//            rank++;
+//        }
+//        
+//        AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(fivegon);
+//        Permutation permutation = new Permutation(p);
+////        permutor.setPermutation(p);
+//        permutor.setRank(rank);
+////        String s1 = CanonicalChecker.edgeString(fivegon, permutation);
+////        IAtomContainer permuted = permutor.next();
+//        String s2 = CanonicalChecker.edgeString(permuted, new Permutation(5));
+//        System.out.println(s1);
+//        System.out.println(s2);
 //        permutationTest(fivegon);
     }
     
     @Test
     public void sixgonPermutation() {
-        IAtomContainer sixgon = builder.newAtomContainer();
-        for (int i = 0; i < 6; i++) { sixgon.addAtom(builder.newAtom("C")); }
+        IAtomContainer sixgon = builder.newInstance(IAtomContainer.class);
+        for (int i = 0; i < 6; i++) { sixgon.addAtom(builder.newInstance(IAtom.class,"C")); }
         sixgon.addBond(0, 1, IBond.Order.DOUBLE);
         sixgon.addBond(0, 2, IBond.Order.SINGLE);
         sixgon.addBond(1, 3, IBond.Order.SINGLE);
@@ -530,10 +531,10 @@ public class CDKDiscretePartitionRefinerTest {
             boolean canon = CanonicalChecker.isCanonicalWithSignaturePartition(permutation);
 //            if (!canon) continue;
             boolean aut = isAutomorphic(container, permutation);
-            System.out.println("permutation is canonical? " 
-                    +  ((canon)? "CANON" : "")
-                    + " under " + Arrays.toString(permutor.getCurrentPermutation())
-                    + " is aut " + ((aut)? "TRUE" : ""));
+//            System.out.println("permutation is canonical? " 
+//                    +  ((canon)? "CANON" : "")
+//                    + " under " + Arrays.toString(permutor.getCurrentPermutation())
+//                    + " is aut " + ((aut)? "TRUE" : ""));
         }
     }
     

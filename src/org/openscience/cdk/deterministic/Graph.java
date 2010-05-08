@@ -503,7 +503,8 @@ public class Graph {
      */
     public boolean noSaturatedSubgraphs(int x) {
         IMolecule subGraph = 
-            NoNotificationChemObjectBuilder.getInstance().newMolecule();
+            NoNotificationChemObjectBuilder.getInstance()
+            .newInstance(IMolecule.class);
         List<IAtom> sphere = new ArrayList<IAtom>(); 
         IAtom atomX = atomContainer.getAtom(x);
         sphere.add(atomX);

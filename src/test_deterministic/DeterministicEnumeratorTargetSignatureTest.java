@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Test;
 import org.openscience.cdk.deterministic.DeterministicEnumerator;
 import org.openscience.cdk.deterministic.FragmentConverter;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -50,8 +51,8 @@ public class DeterministicEnumeratorTargetSignatureTest extends
     
     @Test
     public void cubaneHeight2Test() {
-        IMolecule mol = builder.newMolecule();
-        for (int i = 0; i < 8; i++) { mol.addAtom(builder.newAtom("C")); }
+        IMolecule mol = builder.newInstance(IMolecule.class);
+        for (int i = 0; i < 8; i++) { mol.addAtom(builder.newInstance(IAtom.class,"C")); }
         mol.addBond(0, 1, IBond.Order.SINGLE);
         mol.addBond(0, 3, IBond.Order.SINGLE);
         mol.addBond(0, 7, IBond.Order.SINGLE);
@@ -65,7 +66,7 @@ public class DeterministicEnumeratorTargetSignatureTest extends
         mol.addBond(5, 6, IBond.Order.SINGLE);
         mol.addBond(6, 7, IBond.Order.SINGLE);
         for (int i = 0; i < 8; i++) { 
-            mol.addAtom(builder.newAtom("H"));
+            mol.addAtom(builder.newInstance(IAtom.class,"H"));
             mol.addBond(i, 8 + i, IBond.Order.SINGLE);
             System.out.println("bonding " + i + " and " + 2 * (i + 1));
         }

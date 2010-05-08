@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.openscience.cdk.group.Graph;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
@@ -131,16 +133,16 @@ public class Matrix {
     }
     
     public final SmilesGenerator generator = new SmilesGenerator();
-    public final NoNotificationChemObjectBuilder nnb 
-                = NoNotificationChemObjectBuilder.getInstance();
+    public final IChemObjectBuilder nnb = 
+        NoNotificationChemObjectBuilder.getInstance();
     
     public IMolecule toMolecule() {
     
 //        System.out.println(this);
-        IMolecule molecule = nnb.newMolecule();
+        IMolecule molecule = nnb.newInstance(IMolecule.class);
         int n = this.rowNumbers.size();
         for (int i = 0; i < n; i++ ){
-            molecule.addAtom(nnb.newAtom("C"));
+            molecule.addAtom(nnb.newInstance(IAtom.class, "C"));
         }
         for (int i = 0; i < n; i++) {
             int r = this.rowNumbers.get(i);

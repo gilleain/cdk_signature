@@ -130,6 +130,7 @@ public class Debugger extends JFrame
     public void valueChanged(ListSelectionEvent e) {
         Graph selected = thumbViewer.getSelected();
         mainGraphPanel.setGraph(selected);
+        molPanel.setMoleculeFromGraph(selected);
     }
     
 

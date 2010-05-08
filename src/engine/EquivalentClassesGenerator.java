@@ -366,7 +366,7 @@ public class EquivalentClassesGenerator {
             IAtom x = attachmentPointACopy.fragment.getAtom(a.atomIndex);
             IAtom y = attachmentPointACopy.fragment.getAtom(newAtomIndex);
             IBond.Order o = IBond.Order.SINGLE;
-            IBond bond = a.fragment.getBuilder().newBond(x, y, o);
+            IBond bond = a.fragment.getBuilder().newInstance(IBond.class, x, y, o);
             attachmentPointACopy.fragment.addBond(bond);
             
             graph.elementBeingSaturated = attachmentPointACopy;

@@ -45,7 +45,7 @@ public class FragmentGraph {
             Map<String, Integer> fragmentCounts, 
             IChemObjectBuilder builder,
             String initialLabel) {
-        this.atomContainer = builder.newAtomContainer();
+        this.atomContainer = builder.newInstance(IAtomContainer.class);
         this.labels = new ArrayList<String>();
         
         this.fragments = new HashMap<String, Fragment>();
@@ -56,7 +56,7 @@ public class FragmentGraph {
             // TODO : allow more than just element fragments...
             if (firstLabel && label.equals(initialLabel)) {
                 this.fragments.put(label, new ElementFragment(count - 1, label));
-                this.atomContainer.addAtom(builder.newAtom(label));
+                this.atomContainer.addAtom(builder.newInstance(IAtom.class, label));
                 this.labels.add(label);
                 firstLabel = false;
             } else {
@@ -110,7 +110,8 @@ public class FragmentGraph {
         IAtom existingAtom = this.atomContainer.getAtom(atomIndex);
         this.atomContainer.addAtom(fragmentAtom);
         this.labels.add(fragmentLabel);
-        this.atomContainer.addBond(builder.newBond(existingAtom, fragmentAtom));
+        this.atomContainer.addBond(
+                builder.newInstance(IBond.class, existingAtom, fragmentAtom));
     }
     
     /**
@@ -125,7 +126,8 @@ public class FragmentGraph {
         IAtom b = this.atomContainer.getAtom(atomIndex2);
         IBond existingBond = this.atomContainer.getBond(a, b);
         if (existingBond == null) {
-            this.atomContainer.addBond(builder.newBond(a, b, IBond.Order.SINGLE));
+            this.atomContainer.addBond(
+                    builder.newInstance(IBond.class, a, b, IBond.Order.SINGLE));
         } else {
             IBond.Order o = existingBond.getOrder();
             if (o == IBond.Order.SINGLE) {

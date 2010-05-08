@@ -6,6 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openscience.cdk.deterministic.DeterministicEnumerator;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -29,13 +30,13 @@ public class DeterministicEnumeratorFormulaTest extends
     
     public void addAtoms(IAtomContainer ac, String symbol, int count) {
         for (int i = 0; i < count; i++) { 
-            ac.addAtom(builder.newAtom(symbol)); 
+            ac.addAtom(builder.newInstance(IAtom.class,symbol)); 
         }
     }
     
     @Test
     public void testPartialEthane() {
-        IAtomContainer ac = builder.newAtomContainer();
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
         addAtoms(ac, "C", 3);
         addAtoms(ac, "H", 8);
         ac.addBond(0, 3, IBond.Order.SINGLE);
@@ -47,7 +48,7 @@ public class DeterministicEnumeratorFormulaTest extends
     
     @Test
     public void testCNCN() {
-        IAtomContainer ac = builder.newAtomContainer();
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
         addAtoms(ac, "C", 2);
         addAtoms(ac, "N", 2);
         ac.addBond(0, 1, IBond.Order.SINGLE);

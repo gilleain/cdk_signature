@@ -118,9 +118,9 @@ public class CanonicalChecker {
             IAtomContainer permuted = permutor.next();
             boolean canonical = refiner.isCanonical(permuted);
             if (canonical) {
-                String p = Arrays.toString(permutor.getCurrentPermutation());
-//                System.out.println(p + " is canonical? " + canonical);
-                System.out.println(p + " " + edgeString(permuted, new Permutation(n)));
+//                String p = Arrays.toString(permutor.getCurrentPermutation());
+////                System.out.println(p + " is canonical? " + canonical);
+//                System.out.println(p + " " + edgeString(permuted, new Permutation(n)));
             }
         }
     }
@@ -249,8 +249,8 @@ public class CanonicalChecker {
             IAtomContainer permuted = permutor.next();
             Partition partition = CanonicalChecker.signaturePartition(permuted);
             if (partition.inOrder()) {
-                String pstr = Arrays.toString(permutor.getCurrentPermutation());
-                System.out.println(pstr + " " + partition);
+//                String pstr = Arrays.toString(permutor.getCurrentPermutation());
+//                System.out.println(pstr + " " + partition);
             }
         }
     }

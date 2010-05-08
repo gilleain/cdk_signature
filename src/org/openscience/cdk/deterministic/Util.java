@@ -53,7 +53,8 @@ public class Util {
     public static boolean saturatedSubgraph(
             int atomNumber, IAtomContainer container) {
         IMolecule subGraph = 
-            NoNotificationChemObjectBuilder.getInstance().newMolecule();
+            NoNotificationChemObjectBuilder.getInstance()
+                .newInstance(IMolecule.class);
         List<IAtom> sphere = new ArrayList<IAtom>(); 
         IAtom atomX = container.getAtom(atomNumber);
         sphere.add(atomX);
@@ -117,12 +118,12 @@ public class Util {
     
     public static IAtomContainer makeAtomContainerFromFormula(
             IMolecularFormula formula,  IChemObjectBuilder builder) {
-        IAtomContainer atomContainer = builder.newAtomContainer();
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
         
         ArrayList<IAtom> atoms = new ArrayList<IAtom>();
         for (IIsotope isotope : formula.isotopes()) {
             for (int i = 0; i < formula.getIsotopeCount(isotope); i++) {
-                atoms.add(builder.newAtom(isotope));
+                atoms.add(builder.newInstance(IAtom.class, isotope));
             }
         }
         
