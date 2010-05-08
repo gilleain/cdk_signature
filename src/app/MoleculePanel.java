@@ -13,6 +13,7 @@ import org.openscience.cdk.deterministic.Graph;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -56,6 +57,7 @@ public class MoleculePanel extends JPanel {
 //        renderer.getRenderer2DModel().setAtomRadius(0.1);
 //        renderer.getRenderer2DModel().setBondWidth(2);
 //        renderer.getRenderer2DModel().setBondDistance(0.1);
+        renderer.getRenderer2DModel().setScale(0.75);
     }
 
     private List<IAtomContainerGenerator> getGenerators() {
@@ -72,7 +74,8 @@ public class MoleculePanel extends JPanel {
 
         });
 //        generators.add(new RingGenerator());
-        generators.add(new BasicBondGenerator());
+//        generators.add(new BasicBondGenerator());
+        generators.add(new TmpBondGenerator());
         generators.add(new BasicAtomGenerator());
         
         return generators;
@@ -103,10 +106,14 @@ public class MoleculePanel extends JPanel {
             clonedContainer.setAtoms(keptAtomArr);
 //            System.out.println(new Graph(mol));
             if (ConnectivityChecker.isConnected(clonedContainer)) {
+                System.out.println("CONNECTED");
                 IMolecule mol = 
                     clonedContainer.getBuilder().newInstance(IMolecule.class);
+                for (IAtom a : clonedContainer.atoms()) { mol.addAtom(a); }
+                for (IBond b : clonedContainer.bonds()) { mol.addBond(b); }
                 setMolecule(mol);
             } else {
+                System.out.println("NOT CONNECTED");
                 IMoleculeSet molecules = 
                     ConnectivityChecker.partitionIntoMolecules(clonedContainer);
                 setMolecule(molecules.getMolecule(0));
@@ -121,6 +128,8 @@ public class MoleculePanel extends JPanel {
         for (int i = 0; i < molecule.getAtomCount(); i++) {
             this.molecule.getAtom(i).setFormalCharge(0);
         }
+        System.out.println("Setting molecule " + new Graph(molecule));
+        repaint();
     }
 
     
