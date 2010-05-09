@@ -46,9 +46,14 @@ public class DeterministicEnumerator {
     private IEnumeratorResultHandler handler;
     
     /**
-     * Listener for debugging/visualization purposes.
+     * Listener for debugging/visualization of bond creation events.
      */
     private BondCreationListener bondCreationListener;
+    
+    /**
+     * Listener for debugging/visualization of atom saturation events.
+     */
+    private AtomSaturationListener atomSaturationListener;
     
     /**
      * The target molecular signature that constrains the generation process
@@ -76,6 +81,10 @@ public class DeterministicEnumerator {
     
     public DeterministicEnumerator(IAtomContainer initialContainer) {
         this.initialContainer = initialContainer;
+    }
+    
+    public void setAtomSaturationListener(AtomSaturationListener listener) {
+        this.atomSaturationListener = listener;
     }
     
     public void setBondCreationListener(BondCreationListener listener) {
@@ -194,6 +203,10 @@ public class DeterministicEnumerator {
 //        System.out.println("saturating atom " + x + " in " + g);
         if (g.isSaturated(x)) {
 //            System.out.println(x + " is already saturated");
+            if (atomSaturationListener != null) {
+                atomSaturationListener.atomSaturated(
+                        new AtomSaturationEvent(g, x));
+            }
             String sig = 
                 new AtomSignature(x, g.getAtomContainer()).toCanonicalString();
             if (!s.containsKey(sig)) {
