@@ -58,18 +58,19 @@ public class MoleculePanel extends JPanel {
     
     private void setRenderingParameters() {
         RendererModel model = renderer.getRenderer2DModel();
-        model.drawNumbers();
+        model.setDrawNumbers(true);
         model.getRenderingParameter(
                 BasicAtomGenerator.CompactShape.class).setValue(
                         BasicAtomGenerator.Shape.OVAL);
         model.getRenderingParameter(
                 BasicAtomGenerator.CompactAtom.class).setValue(true);
-//        renderer.getRenderer2DModel().setIsCompact(true);
-//        renderer.getRenderer2DModel().setKekuleStructure(true);
-//        renderer.getRenderer2DModel().setAtomRadius(0.1);
-//        renderer.getRenderer2DModel().setBondWidth(2);
-//        renderer.getRenderer2DModel().setBondDistance(0.1);
-//        renderer.getRenderer2DModel().setScale(0.75);
+        model.getRenderingParameter(
+                BasicAtomGenerator.KekuleStructure.class).setValue(true);
+//        for (IGeneratorParameter p : model.getRenderingParameters()) {
+//            System.out.println(p.getClass().getSimpleName() + " " + p.getValue());
+//        }
+//        System.out.println("IS COMPACT : " + model.getRenderingParameter(
+//                BasicAtomGenerator.CompactAtom.class).getValue());
     }
 
     private List<IAtomContainerGenerator> getGenerators() {

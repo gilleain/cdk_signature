@@ -24,6 +24,14 @@ public class GraphPanel extends JPanel {
         selected = -1;
     }
     
+    public String getSignature(int atomIndex) {
+        if (graph != null) {
+            return graph.getSignatureOfAtom(atomIndex);
+        } else {
+            return "";
+        }
+    }
+    
     public void setGraph(Graph graph) {
         this.graph = graph;
         repaint();
@@ -41,7 +49,7 @@ public class GraphPanel extends JPanel {
         }
     }
     
-    public void select(int x, int y) {
+    public int select(int x, int y) {
         int w = getWidth();
         int h = getHeight();
         int center = w / 2;
@@ -49,6 +57,7 @@ public class GraphPanel extends JPanel {
        
         selected = GraphRenderer.getSelected(
                 x, y, graph, center, w, axis, isThumbnail);
+        return selected;
     }
     
     public void paint(Graphics g) {

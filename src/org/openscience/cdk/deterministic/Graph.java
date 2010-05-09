@@ -200,6 +200,10 @@ public class Graph {
         return m12;
     }
     
+    public String getSignatureOfAtom(int atomIndex) {
+        return new AtomSignature(atomIndex, atomContainer).toCanonicalString();
+    }
+
     /**
      * The signatures of the atoms in the graph bonded to the atom at <code>x
      * </code> up to height <code>h</code>.

@@ -137,16 +137,26 @@ public class Debugger extends JFrame
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        mainGraphPanel.select(x, y);
+        int selected = mainGraphPanel.select(x, y);
         int target = mainGraphPanel.getTarget();
         if (target != -1) {
-            List<String> signatures = controlPanel.getSignatures();
-            String selectedSignature = signatures.get(target);
-            targetTreePanel.setTree(
-                    AbstractVertexSignature.parse(selectedSignature));
-            molPanel.selectAtom(target);
+            displayTargetSignature(target);
+            molPanel.selectAtom(selected);
+            displayActualSignature(selected);
         }
         repaint();
+    }
+    
+    public void displayTargetSignature(int atomIndex) {
+        List<String> signatures = controlPanel.getSignatures();
+        String selectedSignature = signatures.get(atomIndex);
+        targetTreePanel.setTree(
+                AbstractVertexSignature.parse(selectedSignature));
+    }
+    
+    public void displayActualSignature(int atomIndex) {
+        String sig = mainGraphPanel.getSignature(atomIndex);
+        actualTreePanel.setTree(AbstractVertexSignature.parse(sig));
     }
 
     public void mouseEntered(MouseEvent e) {
