@@ -54,8 +54,12 @@ public class GraphThumbViewer extends JPanel {
     }
     
     public void addGraph(Graph graph) {
-
         ((DefaultListModel)list.getModel()).addElement(graph);
+        repaint();
+    }
+
+    public void clear() {
+        ((DefaultListModel)list.getModel()).clear();
         repaint();
     }
 

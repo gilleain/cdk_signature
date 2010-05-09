@@ -35,6 +35,8 @@ public class ControlPanel extends JPanel implements ActionListener {
     
     private JButton selectOrbitSaturationListenerButton;
     
+    private JButton clearButton;
+    
     private List<String> signatures;
     
     private List<Integer> counts;
@@ -44,7 +46,7 @@ public class ControlPanel extends JPanel implements ActionListener {
     private ListenerType selectedListenerType;
     
     public ControlPanel() {
-        setLayout(new GridLayout(1, 10));
+        setLayout(new GridLayout(1, 11));
         
         testValues = new JButton("Test");
         testValues.setActionCommand("TEST");
@@ -52,7 +54,12 @@ public class ControlPanel extends JPanel implements ActionListener {
         add(testValues);
         
         runButton = new JButton("Run");
+        runButton.setActionCommand("RUN");
         add(runButton);
+        
+        clearButton = new JButton("Clear");
+        clearButton.setActionCommand("CLEAR");
+        add(clearButton);
         
         addFormulaButton = new JButton("Add Formula");
         addFormulaButton.setActionCommand("ADDF");
@@ -106,8 +113,9 @@ public class ControlPanel extends JPanel implements ActionListener {
         return counts;
     }
     
-    public void addRunListener(ActionListener listener) {
+    public void addButtonListener(ActionListener listener) {
         runButton.addActionListener(listener);
+        clearButton.addActionListener(listener);
     }
     
     public ListenerType getSelectedListenerType() {
@@ -130,11 +138,11 @@ public class ControlPanel extends JPanel implements ActionListener {
             signatures.add("[C]([C][C][H][H])");
             signatures.add("[C]([C][H][H][H])");
             signatures.add("[H]([C])");
-            counts.add(2);
-            counts.add(2);
-            counts.add(2);
-            counts.add(12);
-            currentFormula = "C6H12";
+            counts.add(1);
+            counts.add(3);
+            counts.add(1);
+            counts.add(10);
+            currentFormula = "C5H10";
         } else if (e.getActionCommand().equals("SELECT_ATOM_SAT")) {
             selectedListenerType = ListenerType.ATOM_SATURATION;
         } else if (e.getActionCommand().equals("SELECT_BOND_CRE")) {

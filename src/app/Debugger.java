@@ -84,7 +84,7 @@ public class Debugger extends JFrame
         add(centralPanel, BorderLayout.CENTER);
         
         controlPanel = new ControlPanel();
-        controlPanel.addRunListener(this);
+        controlPanel.addButtonListener(this);
         add(controlPanel, BorderLayout.NORTH);
         
         JPanel rightPanel = new JPanel(new GridLayout(2, 1));
@@ -101,20 +101,23 @@ public class Debugger extends JFrame
     }
     
     public void actionPerformed(ActionEvent e) {
-        System.out.println("action performed");
-        List<String> signatures = controlPanel.getSignatures();
-        List<Integer> counts = controlPanel.getCounts();
-        String formula = controlPanel.getCurrentFormula();
-        if (signatures.size() != counts.size()) {
-            System.err.println("SIGS != COUNTS");
-            return;
+        if (e.getActionCommand().equals("RUN")) {
+            List<String> signatures = controlPanel.getSignatures();
+            List<Integer> counts = controlPanel.getCounts();
+            String formula = controlPanel.getCurrentFormula();
+            if (signatures.size() != counts.size()) {
+                System.err.println("SIGS != COUNTS");
+                return;
+            }
+            System.out.println("formula = " + formula);
+            for (int i = 0; i < signatures.size(); i++) {
+                System.out.println(signatures.get(i) + " x" + counts.get(i));
+            }
+            
+            run(formula, signatures, counts);
+        } else if (e.getActionCommand().equals("CLEAR")) {
+            thumbViewer.clear();
         }
-        System.out.println("formula = " + formula);
-        for (int i = 0; i < signatures.size(); i++) {
-            System.out.println(signatures.get(i) + " x" + counts.get(i));
-        }
-        
-        run(formula, signatures, counts);
     }
 
     private void run(
