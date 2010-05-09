@@ -57,7 +57,7 @@ public class MoleculePanel extends JPanel {
 //        renderer.getRenderer2DModel().setAtomRadius(0.1);
 //        renderer.getRenderer2DModel().setBondWidth(2);
 //        renderer.getRenderer2DModel().setBondDistance(0.1);
-        renderer.getRenderer2DModel().setScale(0.75);
+//        renderer.getRenderer2DModel().setScale(0.75);
     }
 
     private List<IAtomContainerGenerator> getGenerators() {
@@ -149,6 +149,7 @@ public class MoleculePanel extends JPanel {
         if (molecule != null) {
             Graphics2D g2 = (Graphics2D) g;
             try {
+                renderer.setup(molecule, getBounds());
                 renderer.paintMolecule(
                         molecule, new AWTDrawVisitor(g2), getBounds(), false);
             } catch (NullPointerException npe) {

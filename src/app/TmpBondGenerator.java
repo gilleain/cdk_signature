@@ -15,6 +15,7 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.LineElement;
 import org.openscience.cdk.renderer.generators.IAtomContainerGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator.BondWidth;
 
 public class TmpBondGenerator implements IAtomContainerGenerator {
 
@@ -26,8 +27,11 @@ public class TmpBondGenerator implements IAtomContainerGenerator {
             IAtom b = bond.getAtom(1);
             Point2d pA = a.getPoint2d();
             Point2d pB = b.getPoint2d();
+            double w = 
+                model.getRenderingParameter(BondWidth.class).getValue() 
+                / model.getScale();
             bondGroup.add(
-                    new LineElement(pA.x, pA.y, pB.x, pB.y, 1, Color.BLACK));
+                    new LineElement(pA.x, pA.y, pB.x, pB.y, w, Color.BLACK));
         }
         return bondGroup;
     }
