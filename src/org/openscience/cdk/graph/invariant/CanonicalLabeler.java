@@ -50,9 +50,17 @@ public class CanonicalLabeler {
            }
         };
     
-    public int[] canonLabel(IAtomContainer atomContainer) {
-           return CanonicalLabeler.canonicallyLabel(atomContainer); 
+    public void canonLabel(IAtomContainer atomContainer) {
+        int[] labels = canonicallyLabel(atomContainer);
+        for (int i = 0; i < labels.length; i++) {
+            atomContainer.getAtom(i).setProperty(
+                 org.openscience.cdk.smiles.InvPair.CANONICAL_LABEL, (long)labels[i]);
+        }
     }
+        
+//    public int[] canonLabel(IAtomContainer atomContainer) {
+//           return CanonicalLabeler.canonicallyLabel(atomContainer); 
+//    }
         
     /**
      * Canonically label the fragment. The labels are set as atom property

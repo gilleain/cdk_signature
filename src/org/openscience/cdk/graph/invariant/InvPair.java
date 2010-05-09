@@ -10,7 +10,7 @@ import org.openscience.cdk.math.Primes;
  *
  */
 public class InvPair  {
-
+    
     private int last = 0;
 
     private int current = 0;
