@@ -14,17 +14,24 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.openscience.cdk.deterministic.AtomSaturationEvent;
+import org.openscience.cdk.deterministic.AtomSaturationListener;
 import org.openscience.cdk.deterministic.BondCreationEvent;
 import org.openscience.cdk.deterministic.BondCreationListener;
 import org.openscience.cdk.deterministic.DeterministicEnumerator;
 import org.openscience.cdk.deterministic.Graph;
+import org.openscience.cdk.deterministic.OrbitSaturationEvent;
+import org.openscience.cdk.deterministic.OrbitSaturationListener;
 import org.openscience.cdk.signature.TargetMolecularSignature;
+
+import app.ControlPanel.ListenerType;
 
 import signature.AbstractVertexSignature;
 import signature.display.ColoredTreePanel;
 
 public class Debugger extends JFrame 
-    implements ActionListener, BondCreationListener, ListSelectionListener, MouseListener {
+    implements ActionListener, AtomSaturationListener, 
+               BondCreationListener, ListSelectionListener, MouseListener, OrbitSaturationListener {
     
     private DeterministicEnumerator enumerator;
     
@@ -118,12 +125,29 @@ public class Debugger extends JFrame
             tms.add(signatures.get(i), counts.get(i));
         }
         enumerator = new DeterministicEnumerator(formula, tms);
-        enumerator.setBondCreationListener(this);
+        ListenerType listenerType = controlPanel.getSelectedListenerType();
+        if (listenerType == ListenerType.ATOM_SATURATION) {
+            enumerator.setAtomSaturationListener(this);
+        } else if (listenerType == ListenerType.BOND_CREATION) {
+            enumerator.setBondCreationListener(this);
+        } else if (listenerType == ListenerType.ORBIT_SATURATION) {
+            enumerator.setOrbitSaturationListener(this);
+        }
         enumerator.generate();
+    }
+
+    public void atomSaturated(AtomSaturationEvent atomSaturationEvent) {
+        thumbViewer.addGraph(atomSaturationEvent.graph);
+        thumbViewer.repaint();
     }
 
     public void bondAdded(BondCreationEvent bondCreationEvent) {
         thumbViewer.addGraph(bondCreationEvent.child);
+        thumbViewer.repaint();
+    }
+
+    public void orbitSaturation(OrbitSaturationEvent orbitSaturationEvent) {
+        thumbViewer.addGraph(orbitSaturationEvent.graph);
         thumbViewer.repaint();
     }
 

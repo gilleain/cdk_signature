@@ -46,14 +46,19 @@ public class DeterministicEnumerator {
     private IEnumeratorResultHandler handler;
     
     /**
+     * Listener for debugging/visualization of atom saturation events.
+     */
+    private AtomSaturationListener atomSaturationListener;
+
+    /**
      * Listener for debugging/visualization of bond creation events.
      */
     private BondCreationListener bondCreationListener;
     
     /**
-     * Listener for debugging/visualization of atom saturation events.
+     * Listener for debugging/visualization of orbit saturation events.
      */
-    private AtomSaturationListener atomSaturationListener;
+    private OrbitSaturationListener orbitSaturationListener;
     
     /**
      * The target molecular signature that constrains the generation process
@@ -89,6 +94,10 @@ public class DeterministicEnumerator {
     
     public void setBondCreationListener(BondCreationListener listener) {
         this.bondCreationListener = listener;
+    }
+    
+    public void setOrbitSaturationListener(OrbitSaturationListener listener) {
+        this.orbitSaturationListener = listener;
     }
     
     /**
@@ -179,6 +188,10 @@ public class DeterministicEnumerator {
         System.out.println("Saturating orbit : " + o);
         if (o == null || o.isEmpty()) {
 //            System.out.println("orbit empty");
+            if (orbitSaturationListener != null) {
+                orbitSaturationListener.orbitSaturation(
+                        new OrbitSaturationEvent(g, o.getLabel()));
+            }
             s.add(g);
         } else {
             int x = o.getFirstAtom();

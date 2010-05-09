@@ -29,12 +29,22 @@ public class ControlPanel extends JPanel implements ActionListener {
     
     private String currentFormula;
     
+    private JButton selectAtomSaturationListenerButton;
+    
+    private JButton selectBondCreationListenerButton;
+    
+    private JButton selectOrbitSaturationListenerButton;
+    
     private List<String> signatures;
     
     private List<Integer> counts;
     
+    public enum ListenerType { BOND_CREATION, ATOM_SATURATION, ORBIT_SATURATION };
+    
+    private ListenerType selectedListenerType;
+    
     public ControlPanel() {
-        setLayout(new GridLayout(1, 8));
+        setLayout(new GridLayout(1, 10));
         
         testValues = new JButton("Test");
         testValues.setActionCommand("TEST");
@@ -63,8 +73,25 @@ public class ControlPanel extends JPanel implements ActionListener {
         counterField = new JSpinner();
         add(counterField);
         
+        selectAtomSaturationListenerButton = new JButton("ATOM");
+        selectAtomSaturationListenerButton.setActionCommand("SELECT_ATOM_SAT");
+        selectAtomSaturationListenerButton.addActionListener(this);
+        add(selectAtomSaturationListenerButton);
+        
+        selectBondCreationListenerButton = new JButton("BOND");
+        selectBondCreationListenerButton.setActionCommand("SELECT_BOND_CRE");
+        selectBondCreationListenerButton.addActionListener(this);
+        add(selectBondCreationListenerButton);
+        
+        selectOrbitSaturationListenerButton = new JButton("ORBIT");
+        selectOrbitSaturationListenerButton.setActionCommand("SELECT_ORBIT_SAT");
+        selectOrbitSaturationListenerButton.addActionListener(this);
+        add(selectOrbitSaturationListenerButton);
+        
         signatures = new ArrayList<String>();
         counts = new ArrayList<Integer>();
+        
+        selectedListenerType = ListenerType.BOND_CREATION;
     }
     
     public String getCurrentFormula() {
@@ -81,6 +108,10 @@ public class ControlPanel extends JPanel implements ActionListener {
     
     public void addRunListener(ActionListener listener) {
         runButton.addActionListener(listener);
+    }
+    
+    public ListenerType getSelectedListenerType() {
+        return selectedListenerType;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -104,6 +135,12 @@ public class ControlPanel extends JPanel implements ActionListener {
             counts.add(2);
             counts.add(12);
             currentFormula = "C6H12";
+        } else if (e.getActionCommand().equals("SELECT_ATOM_SAT")) {
+            selectedListenerType = ListenerType.ATOM_SATURATION;
+        } else if (e.getActionCommand().equals("SELECT_BOND_CRE")) {
+            selectedListenerType = ListenerType.BOND_CREATION;
+        } else if (e.getActionCommand().equals("SELECT_ORBIT_SAT")) {
+            selectedListenerType = ListenerType.ORBIT_SATURATION;
         }
     }
 
