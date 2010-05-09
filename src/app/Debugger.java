@@ -142,7 +142,9 @@ public class Debugger extends JFrame
         if (target != -1) {
             List<String> signatures = controlPanel.getSignatures();
             String selectedSignature = signatures.get(target);
-            targetTreePanel.setTree(AbstractVertexSignature.parse(selectedSignature));
+            targetTreePanel.setTree(
+                    AbstractVertexSignature.parse(selectedSignature));
+            molPanel.selectAtom(target);
         }
         repaint();
     }

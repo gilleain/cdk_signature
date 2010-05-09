@@ -16,12 +16,20 @@ import org.openscience.cdk.renderer.elements.LineElement;
 import org.openscience.cdk.renderer.generators.IAtomContainerGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator.BondWidth;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 public class TmpBondGenerator implements IAtomContainerGenerator {
-
+    
     public IRenderingElement generate(
             IAtomContainer atomContainer, RendererModel model) {
         ElementGroup bondGroup = new ElementGroup();
+        IChemObjectSelection selection = model.getSelection();
+        IAtomContainer selectedContainer;
+        if (selection != null) {
+            selectedContainer = selection.getConnectedAtomContainer();
+        } else {
+            selectedContainer = null;
+        }
         for (IBond bond : atomContainer.bonds()) {
             IAtom a = bond.getAtom(0);
             IAtom b = bond.getAtom(1);
@@ -30,8 +38,11 @@ public class TmpBondGenerator implements IAtomContainerGenerator {
             double w = 
                 model.getRenderingParameter(BondWidth.class).getValue() 
                 / model.getScale();
-            bondGroup.add(
-                    new LineElement(pA.x, pA.y, pB.x, pB.y, w, Color.BLACK));
+            Color color = Color.BLACK;
+            if (selectedContainer != null && selectedContainer.contains(bond)) {
+                color = Color.RED;
+            }
+            bondGroup.add(new LineElement(pA.x, pA.y, pB.x, pB.y, w, color));
         }
         return bondGroup;
     }

@@ -49,13 +49,13 @@ public class ControlPanel extends JPanel implements ActionListener {
         addFormulaButton.addActionListener(this);
         add(addFormulaButton);
         
+        formulaField = new JTextField();
+        add(formulaField);
+        
         addSignatureButton = new JButton("Add Signature");
         addSignatureButton.setActionCommand("ADDS");
         addSignatureButton.addActionListener(this);
         add(addSignatureButton);
-        
-        formulaField = new JTextField();
-        add(formulaField);
         
         signatureField = new JTextField();
         add(signatureField);

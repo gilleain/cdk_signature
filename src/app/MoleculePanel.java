@@ -22,11 +22,10 @@ import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
-import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BoundsGenerator;
 import org.openscience.cdk.renderer.generators.IAtomContainerGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
-import org.openscience.cdk.renderer.generators.RingGenerator;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 
 public class MoleculePanel extends JPanel {
@@ -40,6 +39,8 @@ public class MoleculePanel extends JPanel {
     public int moleculeWidth;
     
     public int moleculeHeight;
+
+    private BasicAtomGenerator basicAtomGenerator;
     
     public MoleculePanel(int panelWidth, int panelHeight) {
         renderer = new AtomContainerRenderer(getGenerators(), new AWTFontManager());
@@ -49,9 +50,20 @@ public class MoleculePanel extends JPanel {
         this.setBackground(Color.WHITE);
     }
     
+    public void selectAtom(int atomIndex) {
+        IChemObjectSelection selection = 
+            new BondFlagSelection(atomIndex, molecule);
+        renderer.getRenderer2DModel().setSelection(selection);
+    }
+    
     private void setRenderingParameters() {
-        
-//        renderer.getRenderer2DModel().setCompactShape(AtomShape.OVAL);
+        RendererModel model = renderer.getRenderer2DModel();
+        model.drawNumbers();
+        model.getRenderingParameter(
+                BasicAtomGenerator.CompactShape.class).setValue(
+                        BasicAtomGenerator.Shape.OVAL);
+        model.getRenderingParameter(
+                BasicAtomGenerator.CompactAtom.class).setValue(true);
 //        renderer.getRenderer2DModel().setIsCompact(true);
 //        renderer.getRenderer2DModel().setKekuleStructure(true);
 //        renderer.getRenderer2DModel().setAtomRadius(0.1);
@@ -76,7 +88,8 @@ public class MoleculePanel extends JPanel {
 //        generators.add(new RingGenerator());
 //        generators.add(new BasicBondGenerator());
         generators.add(new TmpBondGenerator());
-        generators.add(new BasicAtomGenerator());
+        basicAtomGenerator = new BasicAtomGenerator(); 
+        generators.add(basicAtomGenerator);
         
         return generators;
     }
