@@ -14,14 +14,17 @@ public class GraphPanel extends JPanel {
     
     private Graph graph;
     
-    private int selected;
+    private int selectedAtom;
+    
+    private int selectedBond;
     
     public GraphPanel(int w, int h, boolean isThumbnail) {
         graph = null;
         this.isThumbnail = isThumbnail;
         setPreferredSize(new Dimension(w, h));
         setBackground(Color.WHITE);
-        selected = -1;
+        selectedAtom = -1;
+        selectedBond = -1;
     }
     
     public String getSignature(int atomIndex) {
@@ -37,15 +40,15 @@ public class GraphPanel extends JPanel {
         repaint();
     }
     
-    public void setSelected(int selected) {
-        this.selected = selected;
+    public void setSelectedAtom(int selectedAtom) {
+        this.selectedAtom = selectedAtom;
     }
     
     public int getTarget() {
-        if (selected == -1) {
+        if (selectedAtom == -1) {
             return -1;
         } else {
-            return graph.getAtomTargetMap().get(selected);
+            return graph.getAtomTargetMap().get(selectedAtom);
         }
     }
     
@@ -55,9 +58,9 @@ public class GraphPanel extends JPanel {
         int center = w / 2;
         int axis = (2 * h) / 3;
        
-        selected = GraphRenderer.getSelected(
+        selectedAtom = GraphRenderer.getSelected(
                 x, y, graph, center, w, axis, isThumbnail);
-        return selected;
+        return selectedAtom;
     }
     
     public void paint(Graphics g) {
@@ -68,7 +71,7 @@ public class GraphPanel extends JPanel {
         int axis = (2 * h) / 3;
         if (graph != null) {
             GraphRenderer.paintDiagram(
-                    graph, g, center, w, axis, isThumbnail, selected);
+                graph, g, center, w, axis, isThumbnail, selectedAtom, selectedBond);
         } else {
             // XXX : left edge?
 //            GraphRenderer.paintBackground(g, 0, axis, w, h);
@@ -77,7 +80,7 @@ public class GraphPanel extends JPanel {
 
     public void clear() {
         this.graph = null;
-        this.selected = -1;
+        this.selectedAtom = -1;
     }
 
 }

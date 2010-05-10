@@ -45,7 +45,9 @@ public class GraphListCellRenderer extends JPanel implements ListCellRenderer {
             int h = getHeight();
             int center = w / 2;
             int axis = (2 * h) / 3;
-            GraphRenderer.paintDiagram(graph, g, center, w, axis, true, -1);
+            int selectedBond = graph.getAtomContainer().getBondCount() - 1;
+            GraphRenderer.paintDiagram(
+                    graph, g, center, w, axis, true, -1, selectedBond);
         }
     }
 

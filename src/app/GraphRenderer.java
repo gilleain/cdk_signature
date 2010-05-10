@@ -66,7 +66,7 @@ public class GraphRenderer {
             Graph graph, Graphics g, 
             int center, int width, int axis, 
             boolean isThumb,
-            int selected) {
+            int selectedAtom, int selectedBond) {
         int nodeRadius = (isThumb)? thumbNodeRadius : largeNodeRadius;
         
         IAtomContainer atomContainer = graph.getAtomContainer();
@@ -87,14 +87,18 @@ public class GraphRenderer {
             i += separation;
         }
         
+        int bondIndex = 0;
         for (IBond bond : atomContainer.bonds()) {
             Color color = Color.BLACK;
             int atom0 = atomContainer.getAtomNumber(bond.getAtom(0));
             int atom1 = atomContainer.getAtomNumber(bond.getAtom(1)); 
-            if (atom0 == selected || atom1 == selected) {
+            if (atom0 == selectedAtom || atom1 == selectedAtom) {
                 color = Color.RED;
             }
-            paintBond(g, bond, color, atomContainer, nodeRadius, nodePositions, axis);
+            boolean isSelected = bondIndex == selectedBond;
+            paintBond(g, bond, color, atomContainer, 
+                    nodeRadius, nodePositions, axis, isSelected);
+            bondIndex++;
         }
         
         if (!isThumb) {
@@ -109,7 +113,7 @@ public class GraphRenderer {
             List<Integer> atomTargetMap = graph.getAtomTargetMap();
             for (IAtom atom : atomContainer.atoms()) {
                 int xPos = nodePositions.get(atom);
-                if (selected != -1 && selected == count) {
+                if (selectedAtom != -1 && selectedAtom == count) {
                     paintSelectionElement(g, xPos, axis, nodeRadius * 2);
                 }
                 paintText(g, String.valueOf(count), xPos, numberTrackAxis);
@@ -153,7 +157,7 @@ public class GraphRenderer {
             Graphics g, IBond bond, Color color, IAtomContainer atomContainer,
             int nodeRadius,
             Map<IAtom, Integer> nodePositions, 
-            int axis) {
+            int axis, boolean isSelected) {
         IAtom atomA = bond.getAtom(0);
         IAtom atomB = bond.getAtom(1);
         int posA = atomContainer.getAtomNumber(atomA);
@@ -173,7 +177,11 @@ public class GraphRenderer {
 //            g.setColor(Color.RED);
 //        }
         Color savedColor = g.getColor();
-        g.setColor(color);
+        if (isSelected) {
+            g.setColor(Color.BLUE);
+        } else {
+            g.setColor(color);
+        }
         g.drawArc(leftEnd, y, arcWidth, arcHeight, 180, -180);
         g.setColor(savedColor);
     }

@@ -39,7 +39,7 @@ public class TestGraphRenderer extends JPanel {
             int h = getHeight();
             int center = w / 2;
             int axis = (2 * h) / 3;
-            GraphRenderer.paintDiagram(graph, g, center, w, axis, false, 2);
+            GraphRenderer.paintDiagram(graph, g, center, w, axis, false, 2, 3);
         }
     }
     
