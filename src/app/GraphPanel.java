@@ -75,4 +75,9 @@ public class GraphPanel extends JPanel {
         }
     }
 
+    public void clear() {
+        this.graph = null;
+        this.selected = -1;
+    }
+
 }

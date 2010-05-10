@@ -117,6 +117,11 @@ public class Debugger extends JFrame
             run(formula, signatures, counts);
         } else if (e.getActionCommand().equals("CLEAR")) {
             thumbViewer.clear();
+            mainGraphPanel.clear();
+            targetTreePanel.clear();
+            actualTreePanel.clear();
+            molPanel.clear();
+            repaint();
         }
     }
 
@@ -156,8 +161,10 @@ public class Debugger extends JFrame
 
     public void valueChanged(ListSelectionEvent e) {
         Graph selected = thumbViewer.getSelected();
-        mainGraphPanel.setGraph(selected);
-        molPanel.setMoleculeFromGraph(selected);
+        if (selected != null) {
+            mainGraphPanel.setGraph(selected);
+            molPanel.setMoleculeFromGraph(selected);
+        }
     }
     
 

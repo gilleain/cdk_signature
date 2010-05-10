@@ -172,5 +172,9 @@ public class MoleculePanel extends JPanel {
 
         }
     }
+
+    public void clear() {
+        this.molecule = null;
+    }
     
 }
