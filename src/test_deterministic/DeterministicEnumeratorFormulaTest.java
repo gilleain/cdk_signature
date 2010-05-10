@@ -141,6 +141,11 @@ public class DeterministicEnumeratorFormulaTest extends
     }
     
     @Test
+    public void testC5H10() {
+        DeterministicEnumeratorFormulaTest.testFormula("C5H10", 1);
+    }
+    
+    @Test
     public void testC5H12() {
         DeterministicEnumeratorFormulaTest.testFormula("C5H12", 1);
     }

@@ -106,9 +106,9 @@ public class MoleculePanel extends JPanel {
             for (IAtom atom : clonedContainer.atoms()) {
                 if (clonedContainer.getConnectedAtomsCount(atom) == 0) {
 //                    clonedContainer.removeAtom(atom);
-                    System.out.println("removing atom " + i);
+//                    System.out.println("removing atom " + i);
                 } else {
-                    System.out.println("keeping atom " + i);
+//                    System.out.println("keeping atom " + i);
                     keptAtoms.add(atom);
                 }
                 i++;

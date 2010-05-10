@@ -479,9 +479,11 @@ public class Graph {
     public Orbit getUnsaturatedOrbit() {
         MoleculeSignature signature = 
             new MoleculeSignature(this.atomContainer);
-        List<Orbit> orbits = signature.calculateOrbits();
-        Collections.reverse(orbits);
+//        List<Orbit> orbits = signature.calculateOrbits();
+        this.orbits = signature.calculateOrbits();
+//        Collections.reverse(orbits);
         sort(orbits);
+        System.out.println(orbits);
         for (Orbit o : orbits) {
             if (isSaturated(o)) {
                 continue;

@@ -174,21 +174,22 @@ public class Debugger extends JFrame
         if (selected != null) {
             mainGraphPanel.setGraph(selected);
             molPanel.setMoleculeFromGraph(selected);
+            System.out.println(selected.getOrbits());
         }
     }
     
 
     public void mouseClicked(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-        int selected = mainGraphPanel.select(x, y);
-        int target = mainGraphPanel.getTarget();
-        if (target != -1) {
-            displayTargetSignature(target);
-            molPanel.selectAtom(selected);
-            displayActualSignature(selected);
-        }
-        repaint();
+//        int x = e.getX();
+//        int y = e.getY();
+//        int selected = mainGraphPanel.select(x, y);
+//        int target = mainGraphPanel.getTarget();
+//        if (target != -1) {
+//            displayTargetSignature(target);
+//            molPanel.selectAtom(selected);
+//            displayActualSignature(selected);
+//        }
+//        repaint();
     }
     
     public void displayTargetSignature(int atomIndex) {
@@ -203,25 +204,24 @@ public class Debugger extends JFrame
         actualTreePanel.setTree(AbstractVertexSignature.parse(sig));
     }
 
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
+    public void mouseEntered(MouseEvent e) {   }
 
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
+    public void mouseExited(MouseEvent e) {}
 
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+        int x = e.getX();
+        int y = e.getY();
+        int selected = mainGraphPanel.select(x, y);
+        int target = mainGraphPanel.getTarget();
+        if (target != -1) {
+            displayTargetSignature(target);
+            molPanel.selectAtom(selected);
+            displayActualSignature(selected);
+        }
+        repaint();
     }
 
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
+    public void mouseReleased(MouseEvent e) {}
 
 
     public static void main(String[] args) {
