@@ -312,12 +312,14 @@ public class TargetMolecularSignature {
             }
             buffer.append(" + ");
         }
-        TargetAtomicSignature signature = this.signatures.get(l - 1);
-        int count = signature.getCount();
-        if (count > 1) {
-            buffer.append(String.valueOf(count) + signature.toString());
-        } else {
-            buffer.append(signature.toString());
+        if (signatures.size() > 0) {
+            TargetAtomicSignature signature = this.signatures.get(l - 1);
+            int count = signature.getCount();
+            if (count > 1) {
+                buffer.append(String.valueOf(count) + signature.toString());
+            } else {
+                buffer.append(signature.toString());
+            }
         }
         return buffer.toString();
     }
