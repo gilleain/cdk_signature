@@ -45,8 +45,14 @@ public class MoleculeFromSignatureBuilder extends AbstractGraphBuilder {
 
     @Override
     public void makeEdge(int vertexIndex1, int vertexIndex2,
-            String vertexSymbol1, String vertexSymbol2) {
-        this.container.addBond(vertexIndex1, vertexIndex2, IBond.Order.SINGLE);
+            String vertexSymbol1, String vertexSymbol2, String edgeLabel) {
+        if (edgeLabel.equals("")) {
+            container.addBond(vertexIndex1, vertexIndex2, IBond.Order.SINGLE);
+        } else if (edgeLabel.equals("=")) {
+            container.addBond(vertexIndex1, vertexIndex2, IBond.Order.DOUBLE);
+        } else if (edgeLabel.equals("#")) {
+            container.addBond(vertexIndex1, vertexIndex2, IBond.Order.TRIPLE);
+        }
     }
 
     @Override
