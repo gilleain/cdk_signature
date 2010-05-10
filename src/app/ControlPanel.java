@@ -33,6 +33,8 @@ public class ControlPanel extends JPanel implements ActionListener {
     
     private JButton selectBondCreationListenerButton;
     
+    private JButton selectBondRejectionListenerButton;
+    
     private JButton selectOrbitSaturationListenerButton;
     
     private JButton clearButton;
@@ -41,12 +43,14 @@ public class ControlPanel extends JPanel implements ActionListener {
     
     private List<Integer> counts;
     
-    public enum ListenerType { BOND_CREATION, ATOM_SATURATION, ORBIT_SATURATION };
+    public enum ListenerType { 
+        BOND_CREATION, ATOM_SATURATION, ORBIT_SATURATION, BOND_REJECTION 
+    };
     
     private ListenerType selectedListenerType;
     
     public ControlPanel() {
-        setLayout(new GridLayout(1, 11));
+        setLayout(new GridLayout(2, 6));
         
         testValues = new JButton("Test");
         testValues.setActionCommand("TEST");
@@ -80,17 +84,22 @@ public class ControlPanel extends JPanel implements ActionListener {
         counterField = new JSpinner();
         add(counterField);
         
-        selectAtomSaturationListenerButton = new JButton("ATOM");
+        selectAtomSaturationListenerButton = new JButton("ATOM_SAT");
         selectAtomSaturationListenerButton.setActionCommand("SELECT_ATOM_SAT");
         selectAtomSaturationListenerButton.addActionListener(this);
         add(selectAtomSaturationListenerButton);
         
-        selectBondCreationListenerButton = new JButton("BOND");
+        selectBondCreationListenerButton = new JButton("BOND_ACC");
         selectBondCreationListenerButton.setActionCommand("SELECT_BOND_CRE");
         selectBondCreationListenerButton.addActionListener(this);
         add(selectBondCreationListenerButton);
         
-        selectOrbitSaturationListenerButton = new JButton("ORBIT");
+        selectBondRejectionListenerButton = new JButton("BOND_REJ");
+        selectBondRejectionListenerButton.setActionCommand("SELECT_BOND_REJ");
+        selectBondRejectionListenerButton.addActionListener(this);
+        add(selectBondRejectionListenerButton);
+        
+        selectOrbitSaturationListenerButton = new JButton("ORBIT_SAT");
         selectOrbitSaturationListenerButton.setActionCommand("SELECT_ORBIT_SAT");
         selectOrbitSaturationListenerButton.addActionListener(this);
         add(selectOrbitSaturationListenerButton);
@@ -147,6 +156,8 @@ public class ControlPanel extends JPanel implements ActionListener {
             selectedListenerType = ListenerType.ATOM_SATURATION;
         } else if (e.getActionCommand().equals("SELECT_BOND_CRE")) {
             selectedListenerType = ListenerType.BOND_CREATION;
+        } else if (e.getActionCommand().equals("SELECT_BOND_REJ")) {
+            selectedListenerType = ListenerType.BOND_REJECTION;
         } else if (e.getActionCommand().equals("SELECT_ORBIT_SAT")) {
             selectedListenerType = ListenerType.ORBIT_SATURATION;
         }

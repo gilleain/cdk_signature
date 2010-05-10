@@ -56,6 +56,11 @@ public class DeterministicEnumerator {
     private BondCreationListener bondCreationListener;
     
     /**
+     * Listener for debugging/visualization of bond rejection events.
+     */
+    private BondRejectionListener bondRejectionListener;
+    
+    /**
      * Listener for debugging/visualization of orbit saturation events.
      */
     private OrbitSaturationListener orbitSaturationListener;
@@ -94,6 +99,10 @@ public class DeterministicEnumerator {
     
     public void setBondCreationListener(BondCreationListener listener) {
         this.bondCreationListener = listener;
+    }
+    
+    public void setBondRejectionListener(BondRejectionListener listener) {
+        this.bondRejectionListener = listener;
     }
     
     public void setOrbitSaturationListener(OrbitSaturationListener listener) {
@@ -241,6 +250,11 @@ public class DeterministicEnumerator {
                                 new BondCreationEvent(g, copy));
                     }
                     saturateAtom(x, copy, s);
+                } else {
+                    if (bondRejectionListener != null) {
+                        bondRejectionListener.bondRejected(
+                                new BondRejectionEvent(copy));
+                    }
                 }
             }
         }

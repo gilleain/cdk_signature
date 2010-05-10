@@ -18,6 +18,8 @@ import org.openscience.cdk.deterministic.AtomSaturationEvent;
 import org.openscience.cdk.deterministic.AtomSaturationListener;
 import org.openscience.cdk.deterministic.BondCreationEvent;
 import org.openscience.cdk.deterministic.BondCreationListener;
+import org.openscience.cdk.deterministic.BondRejectionEvent;
+import org.openscience.cdk.deterministic.BondRejectionListener;
 import org.openscience.cdk.deterministic.DeterministicEnumerator;
 import org.openscience.cdk.deterministic.Graph;
 import org.openscience.cdk.deterministic.OrbitSaturationEvent;
@@ -31,7 +33,8 @@ import signature.display.ColoredTreePanel;
 
 public class Debugger extends JFrame 
     implements ActionListener, AtomSaturationListener, 
-               BondCreationListener, ListSelectionListener, MouseListener, OrbitSaturationListener {
+               BondCreationListener, ListSelectionListener, MouseListener,
+               OrbitSaturationListener, BondRejectionListener {
     
     private DeterministicEnumerator enumerator;
     
@@ -138,6 +141,8 @@ public class Debugger extends JFrame
             enumerator.setAtomSaturationListener(this);
         } else if (listenerType == ListenerType.BOND_CREATION) {
             enumerator.setBondCreationListener(this);
+        } else if (listenerType == ListenerType.BOND_REJECTION) {
+            enumerator.setBondRejectionListener(this);
         } else if (listenerType == ListenerType.ORBIT_SATURATION) {
             enumerator.setOrbitSaturationListener(this);
         }
@@ -151,6 +156,11 @@ public class Debugger extends JFrame
 
     public void bondAdded(BondCreationEvent bondCreationEvent) {
         thumbViewer.addGraph(bondCreationEvent.child);
+        thumbViewer.repaint();
+    }
+    
+    public void bondRejected(BondRejectionEvent bondRejectionEvent) {
+        thumbViewer.addGraph(bondRejectionEvent.graph);
         thumbViewer.repaint();
     }
 
