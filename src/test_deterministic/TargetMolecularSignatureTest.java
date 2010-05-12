@@ -1,11 +1,13 @@
-package test_signature;
+package test_deterministic;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
+import org.openscience.cdk.deterministic.TargetMolecularSignature;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.signature.TargetMolecularSignature;
+
+import test_signature.AbstractSignatureTest;
 
 public class TargetMolecularSignatureTest extends AbstractSignatureTest {
     

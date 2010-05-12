@@ -1,10 +1,11 @@
-package test_signature;
+package test_deterministic;
 
 import java.util.List;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.deterministic.TargetAtomicSignature;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
@@ -17,7 +18,8 @@ import org.openscience.cdk.templates.MoleculeFactory;
 
 import org.openscience.cdk.signature.AtomSignature;
 import org.openscience.cdk.signature.MoleculeSignature;
-import org.openscience.cdk.signature.TargetAtomicSignature;
+
+import test_signature.AbstractSignatureTest;
 
 public class TargetAtomicSignatureTest extends AbstractSignatureTest {
     

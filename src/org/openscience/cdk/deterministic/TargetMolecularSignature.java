@@ -1,4 +1,4 @@
-package org.openscience.cdk.signature;
+package org.openscience.cdk.deterministic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.signature.AtomSignature;
+import org.openscience.cdk.signature.MoleculeSignature;
 
 /**
  * A collection of {@link TargetAtomicSignature}s and counts of same. This is

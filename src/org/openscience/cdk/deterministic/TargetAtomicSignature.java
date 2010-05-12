@@ -1,4 +1,4 @@
-package org.openscience.cdk.signature;
+package org.openscience.cdk.deterministic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.signature.MoleculeSignature;
 
 /**
  * A target atomic signature records the structural context that an atom must 
