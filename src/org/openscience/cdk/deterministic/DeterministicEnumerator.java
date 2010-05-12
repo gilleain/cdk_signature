@@ -1,11 +1,14 @@
 package org.openscience.cdk.deterministic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
@@ -194,7 +197,7 @@ public class DeterministicEnumerator {
     }
     
     private void saturateOrbit(Orbit o, Graph g, ArrayList<Graph> s) {
-        System.out.println("Saturating orbit : " + o);
+//        System.out.println("Saturating orbit : " + o);
         if (o == null || o.isEmpty()) {
 //            System.out.println("orbit empty");
             if (orbitSaturationListener != null) {
@@ -210,6 +213,8 @@ public class DeterministicEnumerator {
             for (Graph h : saturateAtom(x, g)) {
                 if (h.height1SignatureMatches(x, hTau)) {
                     saturateOrbit(o, h, s);
+                } else {
+//                    System.out.println("H1SIG REJECT " + g);
                 }
             }
         }
@@ -221,6 +226,33 @@ public class DeterministicEnumerator {
         return new ArrayList<Graph>(atomSolutions.values());
     }
     
+    private String key(Graph g, int x) {
+        IAtomContainer container = g.getAtomContainer();
+        String k = "";
+        List<String> edgeStrings = new ArrayList<String>();
+        IAtom atomX = container.getAtom(x);
+        for (IBond bond : container.getConnectedBondsList(atomX)) {
+            IAtom connected;
+            if (bond.getAtom(0).equals(atomX)) {
+                connected = bond.getAtom(1);
+            } else {
+                connected = bond.getAtom(0);
+            }
+            int y = container.getAtomNumber(connected);
+            int o = bond.getOrder().ordinal();
+            if (x < y) {
+                edgeStrings.add(x + "-" + y + "(" + o + ")");
+            } else {
+                edgeStrings.add(y + "-" + x + "(" + o + ")");
+            }
+        }
+        Collections.sort(edgeStrings);
+        for (String edgeString : edgeStrings) {
+            k += edgeString + " ";
+        }
+        return k;
+    }
+    
     private void saturateAtom(int x, Graph g, Map<String, Graph> s) {
 //        System.out.println("saturating atom " + x + " in " + g);
         if (g.isSaturated(x)) {
@@ -229,21 +261,27 @@ public class DeterministicEnumerator {
                 atomSaturationListener.atomSaturated(
                         new AtomSaturationEvent(g, x));
             }
-            String sig = 
-                new AtomSignature(x, g.getAtomContainer()).toCanonicalString();
-            if (!s.containsKey(sig)) {
+//            String sig = 
+//                new AtomSignature(x, g.getAtomContainer()).toCanonicalString();
+            String sig = key(g, x);
+            if (s.containsKey(sig)) {
+//                System.out.println("DUP " + sig + " " + g);
+            } else {
                 s.put(sig, g);
             }
             return;
         } else {
-            List<Integer> unsaturatedAtoms = g.unsaturatedAtoms(x);
+//            List<Integer> unsaturatedAtoms = g.unsaturatedAtoms(x);
+//            List<Integer> unsaturatedAtoms = g.targetUnsaturatedAtoms(x);
+            List<Integer> unsaturatedAtoms = g.allUnsaturatedAtoms(x);
 //            System.out.println("trying all of " + unsaturatedAtoms);
             for (int y : unsaturatedAtoms) {
                 if (x == y) continue;
                 Graph copy = new Graph(g);
                 copy.bond(x, y);
                 
-                if (copy.check(x, y, hTau)) {
+                if (copy.check(x, y, hTau)
+                        && CanonicalChecker.edgesInOrder(g.getAtomContainer())) {
 //                    System.out.println("passed all tests");
                     if (bondCreationListener != null) {
                         bondCreationListener.bondAdded(

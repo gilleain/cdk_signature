@@ -361,8 +361,9 @@ public class DeterministicEnumeratorTargetSignatureTest extends
     }
     
     public static void main(String[] args) {
+        new DeterministicEnumeratorTargetSignatureTest().methylCycloButane();
 //        new DeterministicEnumeratorTargetSignatureTest().dimethylCycloButane();
-        new DeterministicEnumeratorTargetSignatureTest().mixedCarbonC7H16Test();
+//        new DeterministicEnumeratorTargetSignatureTest().mixedCarbonC7H16Test();
 //        new DeterministicEnumeratorTargetSignatureTest().degreeThreeTest();
     }
 

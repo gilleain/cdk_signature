@@ -94,23 +94,23 @@ public class Graph {
         String atomSignature = 
             new AtomSignature(x, 1, atomContainer).toCanonicalString();
         boolean equal = target.equals(atomSignature);
-        if (equal) {
-            System.out.println(
-                    "EQ  " + target + " and " 
-                    + atomSignature + "\tat " + x + " in " + this);
-        } else {
-            System.out.println(
-                    "NEQ " + target + " and " 
-                    + atomSignature + "\tat " + x + " in " + this);
-            
-        }
+//        if (equal) {
+//            System.out.println(
+//                    "EQ  " + target + " and " 
+//                    + atomSignature + "\tat " + x + " in " + this);
+//        } else {
+//            System.out.println(
+//                    "NEQ " + target + " and " 
+//                    + atomSignature + "\tat " + x + " in " + this);
+//            
+//        }
         return equal;
     }
 
     public boolean check(int x, int y, TargetMolecularSignature hTau) {
         boolean sSubgraphs = Util.saturatedSubgraph(x, atomContainer);
         if (sSubgraphs) {
-            System.out.println("saturated subgraphs");
+//            System.out.println("saturated subgraphs");
             return false;
         }
         
@@ -125,9 +125,9 @@ public class Graph {
 //            System.out.println("compatible " + isCompatible + " canonical " 
 //                    + isCanonical + "\t" + this);
             if (isCompatible) {
-                System.out.println("ACCEPTED " + this);
+//                System.out.println("ACCEPTED " + this);
             } else {
-                System.out.println("REJECTED " + this);
+//                System.out.println("REJECTED " + this);
             }
         } else {
 //            System.out.println("canonical " + isCanonical + "\t" + this);
@@ -148,26 +148,26 @@ public class Graph {
         int h = hTau.getHeight();
         int targetX1 = targets.get(x1);
         int targetX2 = targets.get(x2);
-        System.out.println(
-                "Checking compatibility of " + x1 + " and " + x2
-                + " targetX1 " + targetX1 + " targetX2 " + targetX2);
+//        System.out.println(
+//                "Checking compatibility of " + x1 + " and " + x2
+//                + " targetX1 " + targetX1 + " targetX2 " + targetX2);
         
         int n12 = hTau.compatibleTargetBonds(targetX2, targetX1);
         
         if (n12 == 0) {
-            System.out.println("n12 == 0 NO " + targetX1 + " " + targetX2);
+//            System.out.println("n12 == 0 NO " + targetX1 + " " + targetX2);
             return false;
         } else {
-            System.out.println("n12 != 0 " + targetX1 + " " + targetX2);
+//            System.out.println("n12 != 0 " + targetX1 + " " + targetX2);
         }
         int m12 = countExistingBondsOfType(x1, x2, h, hTau);
        
         boolean lessThanOrEqual = n12 - m12 >= 0;
         if (lessThanOrEqual) {
-            System.out.println("Existing(m12) " + m12 + " Compatible(n12) " + n12);
+//            System.out.println("Existing(m12) " + m12 + " Compatible(n12) " + n12);
         } else {
-            System.out.println(
-                    "Existing(m12) " + m12 + " Compatible(n12) " + n12 + " NO");
+//            System.out.println(
+//                    "Existing(m12) " + m12 + " Compatible(n12) " + n12 + " NO");
         }
         return n12 - m12 >= 0;
     }
@@ -188,11 +188,11 @@ public class Graph {
         String hMinusOneTauX2 = hTau.getTargetAtomicSignature(targetX2, h - 1);
         int m12 = 0;
         for (String hMinusOneTauY1 : getSignaturesOfBondedAtoms(x1, h - 1)) {
-            System.out.println(
-                  "Counting existing bonds "
-                    + hMinusOneTauX2 + " " + hMinusOneTauY1 
-                    + " height = " + h + " atomIndex1 = " + x1 +
-                    " atomIndex2 = " + x2);
+//            System.out.println(
+//                  "Counting existing bonds "
+//                    + hMinusOneTauX2 + " " + hMinusOneTauY1 
+//                    + " height = " + h + " atomIndex1 = " + x1 +
+//                    " atomIndex2 = " + x2);
             if (hMinusOneTauX2.equals(hMinusOneTauY1)) {
                 m12++;
             }
@@ -241,16 +241,16 @@ public class Graph {
         for (int i = 0; i < this.atomContainer.getAtomCount(); i++) {
             if (currentCount > 0) {
                 currentCount -= 1;
-                System.out.println("assigning " + 
-                        signature.getTargetAtomicSignature(currentTarget)
-                        + " to "  + i);
+//                System.out.println("assigning " + 
+//                        signature.getTargetAtomicSignature(currentTarget)
+//                        + " to "  + i);
                 this.targets.add(currentTarget);
             } else {
                 currentTarget += 1;
                 currentCount = signature.getCount(currentTarget) - 1;
-                System.out.println("assigning " + 
-                        signature.getTargetAtomicSignature(currentTarget)
-                        + " to "  + i);
+//                System.out.println("assigning " + 
+//                        signature.getTargetAtomicSignature(currentTarget)
+//                        + " to "  + i);
                 this.targets.add(currentTarget);
             }
         }
@@ -366,7 +366,6 @@ public class Graph {
      * @return a list of atom indices
      */
     public List<Integer> unsaturatedAtoms(int indexOfSaturatingAtom) {
-//      public List<Integer> unsaturatedAtoms(int indexOfSaturatingAtom) {
         MoleculeSignature signature = 
             new MoleculeSignature(this.atomContainer);
         List<Orbit> orbits = signature.calculateOrbits();
@@ -386,13 +385,46 @@ public class Graph {
                 atomIndex = atomIndices.get(indexIndex); 
                 if (atomIndex == indexOfSaturatingAtom ||
                         maximumAttachment(indexOfSaturatingAtom, atomIndex)) {
-//                    continue;
                     indexIndex++;
                 } else {
                     unsaturated.add(atomIndex);
                     break;
                 }
-//                indexIndex++;
+            }
+        }
+        return unsaturated;
+    }
+    
+    public List<Integer> targetUnsaturatedAtoms(int indexOfSaturatingAtom) {
+        List<Integer> unsaturated = new ArrayList<Integer>();
+        int currentTarget = -1;
+        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+            if (i == indexOfSaturatingAtom 
+                    || isSaturated(i) 
+                    || maximumAttachment(indexOfSaturatingAtom, i)) {
+                continue;
+            } else {
+                int target = targets.get(i);
+                if (currentTarget == -1 || target != currentTarget) {
+                    currentTarget = target;
+                    unsaturated.add(i);
+                } else {
+                    continue;
+                }
+            }
+        }
+        return unsaturated;
+    }
+    
+    public List<Integer> allUnsaturatedAtoms(int indexOfSaturatingAtom) {
+        List<Integer> unsaturated = new ArrayList<Integer>();
+        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+            if (i == indexOfSaturatingAtom 
+                    || isSaturated(i) 
+                    || maximumAttachment(indexOfSaturatingAtom, i)) {
+                continue;
+            } else {
+                unsaturated.add(i);
             }
         }
         return unsaturated;
@@ -483,7 +515,7 @@ public class Graph {
         this.orbits = signature.calculateOrbits();
 //        Collections.reverse(orbits);
         sort(orbits);
-        System.out.println(orbits);
+//        System.out.println(orbits);
         for (Orbit o : orbits) {
             if (isSaturated(o)) {
                 continue;
