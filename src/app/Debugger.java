@@ -24,7 +24,7 @@ import org.openscience.cdk.deterministic.DeterministicEnumerator;
 import org.openscience.cdk.deterministic.Graph;
 import org.openscience.cdk.deterministic.OrbitSaturationEvent;
 import org.openscience.cdk.deterministic.OrbitSaturationListener;
-import org.openscience.cdk.signature.TargetMolecularSignature;
+import org.openscience.cdk.deterministic.TargetMolecularSignature;
 
 import app.ControlPanel.ListenerType;
 

@@ -15,7 +15,6 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.signature.AtomSignature;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
-import org.openscience.cdk.signature.TargetMolecularSignature;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 /**

@@ -16,7 +16,6 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.signature.AtomSignature;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
-import org.openscience.cdk.signature.TargetMolecularSignature;
 
 /**
  * The graph maintains its underlying atom container as well as a list of the
