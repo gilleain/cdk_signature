@@ -19,12 +19,9 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
-import org.openscience.cdk.renderer.generators.BoundsGenerator;
 import org.openscience.cdk.renderer.generators.IAtomContainerGenerator;
-import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 
@@ -43,7 +40,14 @@ public class MoleculePanel extends JPanel {
     private BasicAtomGenerator basicAtomGenerator;
     
     public MoleculePanel(int panelWidth, int panelHeight) {
-        renderer = new AtomContainerRenderer(getGenerators(), new AWTFontManager());
+        this(panelWidth, panelHeight, new ArrayList<IAtomContainerGenerator>());
+    }
+    
+    public MoleculePanel(int panelWidth, int panelHeight, 
+            List<IAtomContainerGenerator> initialGenerators) {
+        initialGenerators.addAll(getGenerators());
+        renderer = new AtomContainerRenderer(
+                initialGenerators, new AWTFontManager());
         setRenderingParameters();
         sdg = new StructureDiagramGenerator();
         this.setPreferredSize(new Dimension(panelWidth, panelHeight));
@@ -76,16 +80,6 @@ public class MoleculePanel extends JPanel {
     private List<IAtomContainerGenerator> getGenerators() {
         List<IAtomContainerGenerator> generators = 
             new ArrayList<IAtomContainerGenerator>();
-        generators.add(new IAtomContainerGenerator() {
-            public IRenderingElement generate(IAtomContainer ac, RendererModel m) {
-                return new BoundsGenerator().generate((IMolecule)ac, m);
-            }
-
-            public List<IGeneratorParameter<?>> getParameters() {
-                return new ArrayList<IGeneratorParameter<?>>();
-            }
-
-        });
 //        generators.add(new RingGenerator());
 //        generators.add(new BasicBondGenerator());
         generators.add(new TmpBondGenerator());
@@ -146,6 +140,10 @@ public class MoleculePanel extends JPanel {
         repaint();
     }
 
+    public void setMoleculeWithoutLayout(IMolecule molecule) {
+        this.molecule = molecule;
+        repaint();
+    }
     
     private IMolecule diagramGenerate(IMolecule molecule) {
         this.sdg.setMolecule(molecule, true);
