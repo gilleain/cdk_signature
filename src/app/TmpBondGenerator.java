@@ -35,12 +35,16 @@ public class TmpBondGenerator implements IAtomContainerGenerator {
             IAtom b = bond.getAtom(1);
             Point2d pA = a.getPoint2d();
             Point2d pB = b.getPoint2d();
-            double w = 
-                model.getRenderingParameter(BondWidth.class).getValue() 
-                / model.getScale();
             Color color = Color.BLACK;
             if (selectedContainer != null && selectedContainer.contains(bond)) {
                 color = Color.RED;
+            }
+            double mw = model.getRenderingParameter(BondWidth.class).getValue(); 
+            double w;
+            if (bond.getOrder() == IBond.Order.DOUBLE) {
+                w =  (mw / model.getScale()) * 3;
+            } else {
+                w =  mw / model.getScale();
             }
             bondGroup.add(new LineElement(pA.x, pA.y, pB.x, pB.y, w, color));
         }
