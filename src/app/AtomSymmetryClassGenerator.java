@@ -84,7 +84,9 @@ public class AtomSymmetryClassGenerator implements IAtomContainerGenerator {
     public IRenderingElement generate(IAtomContainer atomContainer,
             RendererModel model) {
         ElementGroup elements = new ElementGroup();
-        double atomHighlightRadius = 0.15;
+//        double atomHighlightRadius = 0.15;
+        double atomHighlightOnScreenRadius = 8;
+        double atomHighlightRadius = atomHighlightOnScreenRadius / model.getScale();
         for (Orbit o : orbitColorMap.keySet()) {
             Color color = orbitColorMap.get(o);
             System.out.println("setting color " + color);

@@ -3,7 +3,6 @@ package app;
 import java.awt.BorderLayout;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +18,6 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLReader;
-import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.renderer.generators.IAtomContainerGenerator;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
@@ -62,10 +60,8 @@ public class SignatureClassViewer extends JFrame implements ListSelectionListene
     
     public void loadFile(String filename)  {
         try {
-            ReaderFactory factory = new ReaderFactory();
             ISimpleChemObjectReader reader =
                 new MDLReader(new FileReader(filename));
-//                factory.createReader(new FileReader(filename));
             if (reader == null) return;
             IMolecule molecule = reader.read(new Molecule());
             System.out.println("read");
@@ -84,9 +80,6 @@ public class SignatureClassViewer extends JFrame implements ListSelectionListene
             
             
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (CDKException e) {
@@ -116,7 +109,8 @@ public class SignatureClassViewer extends JFrame implements ListSelectionListene
 //        new SignatureClassViewer(args);
         new SignatureClassViewer(new String[] {
 //        "/Users/maclean/bucky_proper_laidout.mol"});
-        "/Users/maclean/Downloads/c70.mol"});
+        "/Users/maclean/grinberg.mol"});
+//    "/Users/maclean/Downloads/c70.mol"});
 //        "/Users/maclean/buckyball.mol"});
     }
 
