@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.openscience.cdk.deterministic.DeterministicEnumerator2;
-import org.openscience.cdk.deterministic.FragmentGraph;
+import org.openscience.cdk.structgen.deterministic.DeterministicEnumerator2;
+import org.openscience.cdk.structgen.deterministic.FragmentGraph;
 
 public class DeterministicEnumerator2Test {
     

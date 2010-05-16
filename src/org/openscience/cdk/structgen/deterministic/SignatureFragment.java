@@ -1,4 +1,4 @@
-package org.openscience.cdk.deterministic;
+package org.openscience.cdk.structgen.deterministic;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;

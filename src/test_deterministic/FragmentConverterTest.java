@@ -3,11 +3,11 @@ package test_deterministic;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.openscience.cdk.deterministic.FragmentConverter;
-import org.openscience.cdk.deterministic.TargetMolecularSignature;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.structgen.deterministic.FragmentConverter;
+import org.openscience.cdk.structgen.deterministic.TargetMolecularSignature;
 
 public class FragmentConverterTest extends AbstractDeterministicTest {
     

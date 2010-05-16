@@ -1,4 +1,4 @@
-package org.openscience.cdk.deterministic;
+package org.openscience.cdk.structgen.deterministic;
 
 /**
  * A bond has been rejected by the generator. 

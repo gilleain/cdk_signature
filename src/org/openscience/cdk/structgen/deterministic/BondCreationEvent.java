@@ -1,4 +1,4 @@
-package org.openscience.cdk.deterministic;
+package org.openscience.cdk.structgen.deterministic;
 
 /**
  * A singular event of creating a bond.

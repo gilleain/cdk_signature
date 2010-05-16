@@ -1,4 +1,4 @@
-package org.openscience.cdk.deterministic;
+package org.openscience.cdk.structgen.deterministic;
 
 /**
  * Listen to bond rejection events - bonds will be rejected if they are not

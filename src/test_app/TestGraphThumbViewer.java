@@ -7,9 +7,9 @@ import javax.swing.JPanel;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.deterministic.Graph;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.structgen.deterministic.Graph;
 
 import app.GraphThumbViewer;
 

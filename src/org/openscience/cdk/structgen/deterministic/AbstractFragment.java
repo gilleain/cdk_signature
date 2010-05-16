@@ -1,4 +1,4 @@
-package org.openscience.cdk.deterministic;
+package org.openscience.cdk.structgen.deterministic;
 
 /**
  * Both element and molecule fragments keep track of how many there are left to

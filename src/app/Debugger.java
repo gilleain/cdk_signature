@@ -14,17 +14,17 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.openscience.cdk.deterministic.AtomSaturationEvent;
-import org.openscience.cdk.deterministic.AtomSaturationListener;
-import org.openscience.cdk.deterministic.BondCreationEvent;
-import org.openscience.cdk.deterministic.BondCreationListener;
-import org.openscience.cdk.deterministic.BondRejectionEvent;
-import org.openscience.cdk.deterministic.BondRejectionListener;
-import org.openscience.cdk.deterministic.DeterministicEnumerator;
-import org.openscience.cdk.deterministic.Graph;
-import org.openscience.cdk.deterministic.OrbitSaturationEvent;
-import org.openscience.cdk.deterministic.OrbitSaturationListener;
-import org.openscience.cdk.deterministic.TargetMolecularSignature;
+import org.openscience.cdk.structgen.deterministic.AtomSaturationEvent;
+import org.openscience.cdk.structgen.deterministic.AtomSaturationListener;
+import org.openscience.cdk.structgen.deterministic.BondCreationEvent;
+import org.openscience.cdk.structgen.deterministic.BondCreationListener;
+import org.openscience.cdk.structgen.deterministic.BondRejectionEvent;
+import org.openscience.cdk.structgen.deterministic.BondRejectionListener;
+import org.openscience.cdk.structgen.deterministic.DeterministicEnumerator;
+import org.openscience.cdk.structgen.deterministic.Graph;
+import org.openscience.cdk.structgen.deterministic.OrbitSaturationEvent;
+import org.openscience.cdk.structgen.deterministic.OrbitSaturationListener;
+import org.openscience.cdk.structgen.deterministic.TargetMolecularSignature;
 
 import app.ControlPanel.ListenerType;
 

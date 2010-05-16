@@ -4,8 +4,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import org.openscience.cdk.deterministic.TargetMolecularSignature;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.structgen.deterministic.TargetMolecularSignature;
 
 import test_signature.AbstractSignatureTest;
 

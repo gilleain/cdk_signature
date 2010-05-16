@@ -9,7 +9,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import org.openscience.cdk.deterministic.Graph;
+import org.openscience.cdk.structgen.deterministic.Graph;
 
 public class GraphListCellRenderer extends JPanel implements ListCellRenderer {
     

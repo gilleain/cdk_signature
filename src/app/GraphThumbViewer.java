@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionListener;
 
-import org.openscience.cdk.deterministic.Graph;
+import org.openscience.cdk.structgen.deterministic.Graph;
 
 public class GraphThumbViewer extends JPanel {
     

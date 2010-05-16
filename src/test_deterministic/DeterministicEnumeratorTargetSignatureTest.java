@@ -3,14 +3,14 @@ package test_deterministic;
 import java.util.List;
 
 import org.junit.Test;
-import org.openscience.cdk.deterministic.DeterministicEnumerator;
-import org.openscience.cdk.deterministic.FragmentConverter;
-import org.openscience.cdk.deterministic.TargetMolecularSignature;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.signature.MoleculeSignature;
+import org.openscience.cdk.structgen.deterministic.DeterministicEnumerator;
+import org.openscience.cdk.structgen.deterministic.FragmentConverter;
+import org.openscience.cdk.structgen.deterministic.TargetMolecularSignature;
 
 public class DeterministicEnumeratorTargetSignatureTest extends 
                 AbstractDeterministicTest {

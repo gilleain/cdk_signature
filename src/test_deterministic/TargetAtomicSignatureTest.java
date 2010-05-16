@@ -5,7 +5,6 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.deterministic.TargetAtomicSignature;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
@@ -14,6 +13,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.structgen.deterministic.TargetAtomicSignature;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import org.openscience.cdk.signature.AtomSignature;

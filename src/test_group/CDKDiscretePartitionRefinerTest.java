@@ -5,7 +5,6 @@ import java.util.Arrays;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.deterministic.CanonicalChecker;
 import org.openscience.cdk.graph.AtomContainerAtomPermutor;
 //import org.openscience.cdk.graph.Permutor;
 import org.openscience.cdk.group.CDKDiscretePartitionRefiner;
@@ -16,6 +15,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.structgen.deterministic.CanonicalChecker;
 
 
 public class CDKDiscretePartitionRefinerTest {

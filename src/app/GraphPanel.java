@@ -6,7 +6,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import org.openscience.cdk.deterministic.Graph;
+import org.openscience.cdk.structgen.deterministic.Graph;
 
 public class GraphPanel extends JPanel {
     

@@ -3,11 +3,11 @@ package test_deterministic;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.openscience.cdk.deterministic.FragmentConverter;
-import org.openscience.cdk.deterministic.Graph;
-import org.openscience.cdk.deterministic.TargetMolecularSignature;
-import org.openscience.cdk.deterministic.Util;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.structgen.deterministic.FragmentConverter;
+import org.openscience.cdk.structgen.deterministic.Graph;
+import org.openscience.cdk.structgen.deterministic.TargetMolecularSignature;
+import org.openscience.cdk.structgen.deterministic.Util;
 
 public class GraphTest extends AbstractDeterministicTest {
 
