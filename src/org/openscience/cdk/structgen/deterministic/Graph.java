@@ -429,6 +429,18 @@ public class Graph {
         return unsaturated;
     }
     
+    public List<Integer> allUnsaturatedAtoms() {
+        List<Integer> unsaturated = new ArrayList<Integer>();
+        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+            if (isSaturated(i)) {
+                continue;
+            } else {
+                unsaturated.add(i);
+            }
+        }
+        return unsaturated;
+    }
+    
     public boolean maximumAttachment(int atomIndexA, int atomIndexB) {
         IAtom a = atomContainer.getAtom(atomIndexA);
         IAtom b = atomContainer.getAtom(atomIndexB);
