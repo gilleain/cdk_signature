@@ -92,8 +92,8 @@ public static SmilesGenerator smilesGenerator = new SmilesGenerator();
     public static void main(String[] args) {
 //        new RandomSignatureStructureGeneratorTest().mixedCarbonC6H14Test();
 //        new RandomSignatureStructureGeneratorTest().mixedCarbonC7H16Test();
-//        new RandomSignatureStructureGeneratorTest().twistaneTest();
+        new RandomSignatureStructureGeneratorTest().twistaneTest();
 //        new RandomSignatureStructureGeneratorTest().degreeThreeDodecahedraneTest();
-        new RandomSignatureStructureGeneratorTest().degreeThreeHeight2Test();
+//        new RandomSignatureStructureGeneratorTest().degreeThreeHeight2Test();
     }
 }

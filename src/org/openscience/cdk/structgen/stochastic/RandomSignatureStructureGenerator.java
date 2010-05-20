@@ -1,5 +1,6 @@
 package org.openscience.cdk.structgen.stochastic;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -39,15 +40,40 @@ public class RandomSignatureStructureGenerator {
         graph.assignAtomsToTarget(tms);
         boolean notFullyConnected = true;
         boolean notFullySaturated = true;
-        while (notFullyConnected && notFullySaturated) {
+        List<Integer> previousUnsaturated = new ArrayList<Integer>();
+        boolean notStuck = true;
+        int stuckLimit = 10;
+        int stuckCount = 0;
+        while (notFullyConnected && notFullySaturated && notStuck) {
             int x = randomIndex(graph);
             int y = randomIndex(graph);
 
             graph = makeRandomBond(x, y, graph);
             notFullyConnected = !Util.isConnected(graph.getAtomContainer());
-            notFullySaturated = graph.allUnsaturatedAtoms().size() > 0;
+            List<Integer> currentUnsaturated = graph.allUnsaturatedAtoms();
+            notFullySaturated = currentUnsaturated.size() > 0;
+            boolean eq = listsEqual(previousUnsaturated, currentUnsaturated);
+            if (eq) {
+                stuckCount++;
+            } else {
+                stuckCount = 0;
+                previousUnsaturated = currentUnsaturated;
+            }
+            notStuck = stuckCount < stuckLimit;
         }
         return graph.getAtomContainer();
+    }
+    
+    private boolean listsEqual(List<Integer> a, List<Integer> b) {
+        if (a.size() != b.size()) return false;
+        for (int i = 0; i < a.size(); i++) {
+            if (a.get(i) == b.get(i)) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
     
     private Graph makeRandomBond(int x, int y, Graph graph) {
