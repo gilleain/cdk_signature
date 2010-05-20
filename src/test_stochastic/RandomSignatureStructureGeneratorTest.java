@@ -89,11 +89,24 @@ public static SmilesGenerator smilesGenerator = new SmilesGenerator();
         genStructure(tms, formulaString);
     }
     
+    @Test
+    public void degreeThreeCubaneCuneaneTest() {
+        IAtomContainer degreeThreeFragment = 
+            AbstractDeterministicTest.makeDegreeThreeFragment();
+        int count = 8;
+        TargetMolecularSignature tms = 
+            FragmentConverter.convert(degreeThreeFragment, count);
+        System.out.println(tms);
+        String formulaString = "C8H8";
+        genStructure(tms, formulaString);
+    }
+    
     public static void main(String[] args) {
 //        new RandomSignatureStructureGeneratorTest().mixedCarbonC6H14Test();
 //        new RandomSignatureStructureGeneratorTest().mixedCarbonC7H16Test();
-        new RandomSignatureStructureGeneratorTest().twistaneTest();
+//        new RandomSignatureStructureGeneratorTest().twistaneTest();
 //        new RandomSignatureStructureGeneratorTest().degreeThreeDodecahedraneTest();
 //        new RandomSignatureStructureGeneratorTest().degreeThreeHeight2Test();
+        new RandomSignatureStructureGeneratorTest().degreeThreeCubaneCuneaneTest();
     }
 }
