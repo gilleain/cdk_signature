@@ -23,7 +23,10 @@ import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.IAtomContainerGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
+import org.openscience.cdk.signature.MoleculeFromSignatureBuilder;
 import org.openscience.cdk.structgen.deterministic.Graph;
+
+import signature.AbstractVertexSignature;
 
 public class MoleculePanel extends JPanel {
     
@@ -87,6 +90,14 @@ public class MoleculePanel extends JPanel {
         generators.add(basicAtomGenerator);
         
         return generators;
+    }
+    
+    public void setMoleculeFromSignature(String signature) {
+        MoleculeFromSignatureBuilder builder = new MoleculeFromSignatureBuilder();
+        builder.makeFromColoredTree(AbstractVertexSignature.parse(signature));
+        IAtomContainer container = builder.getAtomContainer();
+        setMolecule(
+                container.getBuilder().newInstance(IMolecule.class, container));
     }
     
     public void setMoleculeFromGraph(Graph graph) {
