@@ -101,12 +101,27 @@ public static SmilesGenerator smilesGenerator = new SmilesGenerator();
         genStructure(tms, formulaString);
     }
     
+    @Test
+    public void pineneTest() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(1);
+        tms.add("[C]([C][C][C][C])", 1);    // four carbons
+        tms.add("[C]([C]=[C][H])", 1);      // double bond, carbon and hydrogen
+        tms.add("[C]([C][C]=[C])", 1);      // double bond, two carbons
+        tms.add("[C]([C][C][C][H])", 2);    // CH
+        tms.add("[C]([C][C][H][H])", 2);    // CH2
+        tms.add("[C]([C][H][H][H])", 3);    // CH3
+        tms.add("[H]([C])", 16);
+        String formulaString = "C10H16";
+        genStructure(tms, formulaString);
+    }
+    
     public static void main(String[] args) {
 //        new RandomSignatureStructureGeneratorTest().mixedCarbonC6H14Test();
 //        new RandomSignatureStructureGeneratorTest().mixedCarbonC7H16Test();
 //        new RandomSignatureStructureGeneratorTest().twistaneTest();
 //        new RandomSignatureStructureGeneratorTest().degreeThreeDodecahedraneTest();
 //        new RandomSignatureStructureGeneratorTest().degreeThreeHeight2Test();
-        new RandomSignatureStructureGeneratorTest().degreeThreeCubaneCuneaneTest();
+//        new RandomSignatureStructureGeneratorTest().degreeThreeCubaneCuneaneTest();
+        new RandomSignatureStructureGeneratorTest().pineneTest();
     }
 }

@@ -41,10 +41,9 @@ public class RandomSignatureStructureGenerator {
         boolean notFullyConnected = true;
         boolean notFullySaturated = true;
         List<Integer> previousUnsaturated = new ArrayList<Integer>();
-        boolean notStuck = true;
         int stuckLimit = 10;
         int stuckCount = 0;
-        while (notFullyConnected && notFullySaturated && notStuck) {
+        while (notFullyConnected && notFullySaturated) {
             int x = randomIndex(graph);
             int y = randomIndex(graph);
 
@@ -59,9 +58,22 @@ public class RandomSignatureStructureGenerator {
                 stuckCount = 0;
                 previousUnsaturated = currentUnsaturated;
             }
-            notStuck = stuckCount < stuckLimit;
+            if (stuckCount >= stuckLimit) {
+                removeRandomBond(graph);
+                stuckCount = 0;
+            }
         }
         return graph.getAtomContainer();
+    }
+    
+    private void removeRandomBond(Graph graph) {
+        boolean bondNotRemoved = true;
+        int n = graph.getAtomContainer().getAtomCount();
+        while (bondNotRemoved) {
+            int x = random.nextInt(n);
+            int y = random.nextInt(n);
+            bondNotRemoved = !graph.removeBond(x, y); 
+        }
     }
     
     private boolean listsEqual(List<Integer> a, List<Integer> b) {

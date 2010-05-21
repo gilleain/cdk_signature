@@ -494,6 +494,28 @@ public class Graph {
             atomContainer.addBond(x, y, IBond.Order.SINGLE);
         }
     }
+    
+    public boolean removeBond(int x, int y) {
+        IAtom a = atomContainer.getAtom(x);
+        IAtom b = atomContainer.getAtom(y);
+        System.out.println(
+                String.format("debonding %d and %d (%s-%s)",
+                        x, y, a.getSymbol(),b.getSymbol()));
+        IBond existingBond = this.atomContainer.getBond(a, b);
+        if (existingBond != null) {
+            IBond.Order o = existingBond.getOrder(); 
+            if (o == IBond.Order.SINGLE) {
+                atomContainer.removeBond(existingBond);
+            } else if (o == IBond.Order.DOUBLE) {
+                existingBond.setOrder(IBond.Order.SINGLE);
+            } else if (o == IBond.Order.TRIPLE) {
+                existingBond.setOrder(IBond.Order.DOUBLE);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Get the list of orbits (the equivalence classes of atoms).
