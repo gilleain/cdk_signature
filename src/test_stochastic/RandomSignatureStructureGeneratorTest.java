@@ -121,7 +121,7 @@ public static SmilesGenerator smilesGenerator = new SmilesGenerator();
 //        new RandomSignatureStructureGeneratorTest().twistaneTest();
 //        new RandomSignatureStructureGeneratorTest().degreeThreeDodecahedraneTest();
 //        new RandomSignatureStructureGeneratorTest().degreeThreeHeight2Test();
-//        new RandomSignatureStructureGeneratorTest().degreeThreeCubaneCuneaneTest();
-        new RandomSignatureStructureGeneratorTest().pineneTest();
+        new RandomSignatureStructureGeneratorTest().degreeThreeCubaneCuneaneTest();
+//        new RandomSignatureStructureGeneratorTest().pineneTest();
     }
 }

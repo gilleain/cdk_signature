@@ -43,7 +43,7 @@ public class RandomSignatureStructureGenerator {
         List<Integer> previousUnsaturated = new ArrayList<Integer>();
         int stuckLimit = 10;
         int stuckCount = 0;
-        while (notFullyConnected && notFullySaturated) {
+        while (notFullyConnected || notFullySaturated) {
             int x = randomIndex(graph);
             int y = randomIndex(graph);
 
