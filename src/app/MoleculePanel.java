@@ -49,6 +49,8 @@ public class MoleculePanel extends JPanel {
     public int moleculeHeight;
 
     private ExtendedAtomGenerator extendedAtomGenerator;
+
+    private NumberingGenerator numberingGenerator;
     
     public MoleculePanel(int panelWidth, int panelHeight) {
         this(panelWidth, panelHeight, new ArrayList<IAtomContainerGenerator>());
@@ -63,6 +65,11 @@ public class MoleculePanel extends JPanel {
         sdg = new StructureDiagramGenerator();
         this.setPreferredSize(new Dimension(panelWidth, panelHeight));
         this.setBackground(Color.WHITE);
+    }
+    
+    public void toggleShowNumbers() {
+        numberingGenerator.on = !numberingGenerator.on;
+        repaint();
     }
     
     public void selectAtom(int atomIndex) {
@@ -98,12 +105,10 @@ public class MoleculePanel extends JPanel {
         generators.add(new BasicSceneGenerator());
         generators.add(new TmpBondGenerator());
         extendedAtomGenerator = new ExtendedAtomGenerator();
-//        for (IGeneratorParameter p : basicAtomGenerator.getParameters()) {
-//            if (p instanceof BasicAtomGenerator.ShowExplicitHydrogens) {
-//                p.setValue(false);
-//            }
-//        }
         generators.add(extendedAtomGenerator);
+        
+        numberingGenerator = new NumberingGenerator();
+        generators.add(numberingGenerator);
         
         return generators;
     }

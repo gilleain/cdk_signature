@@ -59,6 +59,50 @@ public class AbstractSignatureTest {
              numberOfAtoms, numberOfAtoms + (ringSize - 1), IBond.Order.SINGLE);
     }
     
+    public static IMolecule makeBowtieane() {
+        IMolecule mol = builder.newInstance(IMolecule.class);
+        addCarbons(mol, 10);
+        mol.addBond(0, 1, IBond.Order.SINGLE);
+//        mol.addBond(0, 4, IBond.Order.SINGLE);  // this makes the graph 3-reg
+        mol.addBond(0, 7, IBond.Order.SINGLE);
+        mol.addBond(1, 2, IBond.Order.SINGLE);
+        mol.addBond(1, 8, IBond.Order.SINGLE);
+        mol.addBond(2, 3, IBond.Order.SINGLE);
+        mol.addBond(2, 6, IBond.Order.SINGLE);
+        mol.addBond(3, 4, IBond.Order.SINGLE);
+        mol.addBond(3, 9, IBond.Order.SINGLE);
+        mol.addBond(4, 5, IBond.Order.SINGLE);
+        mol.addBond(5, 6, IBond.Order.SINGLE);
+        mol.addBond(5, 9, IBond.Order.SINGLE);
+        mol.addBond(6, 7, IBond.Order.SINGLE);
+        mol.addBond(7, 8, IBond.Order.SINGLE);
+        mol.addBond(8, 9, IBond.Order.SINGLE);
+        
+        return mol;
+    }
+    
+    public static IMolecule makeBowtieaneA() {
+        IMolecule mol = builder.newInstance(IMolecule.class);
+        addCarbons(mol, 10);
+        mol.addBond(0, 1, IBond.Order.SINGLE);
+        mol.addBond(0, 3, IBond.Order.SINGLE);  
+        mol.addBond(0, 7, IBond.Order.SINGLE);
+        mol.addBond(1, 2, IBond.Order.SINGLE);
+        mol.addBond(1, 9, IBond.Order.SINGLE);
+        mol.addBond(2, 3, IBond.Order.SINGLE);
+        mol.addBond(2, 5, IBond.Order.SINGLE); // this makes the graph 3-reg
+        mol.addBond(3, 4, IBond.Order.SINGLE);
+        mol.addBond(4, 8, IBond.Order.SINGLE);
+        mol.addBond(4, 9, IBond.Order.SINGLE);
+        mol.addBond(5, 6, IBond.Order.SINGLE);
+        mol.addBond(5, 8, IBond.Order.SINGLE);
+        mol.addBond(6, 7, IBond.Order.SINGLE);
+        mol.addBond(6, 9, IBond.Order.SINGLE);
+        mol.addBond(7, 8, IBond.Order.SINGLE);
+        
+        return mol;
+    }
+    
     public static IMolecule makeRhLikeStructure(int pCount, int ringCount) {
         IMolecule ttpr = builder.newInstance(IMolecule.class);
         ttpr.addAtom(builder.newInstance(IAtom.class, "Rh"));

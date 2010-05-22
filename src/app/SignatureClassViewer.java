@@ -1,6 +1,9 @@
 package app;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -8,7 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -22,7 +28,9 @@ import org.openscience.cdk.renderer.generators.IAtomContainerGenerator;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 
-public class SignatureClassViewer extends JFrame implements ListSelectionListener {
+public class SignatureClassViewer extends JFrame 
+                                  implements ActionListener, 
+                                             ListSelectionListener {
     
     private MoleculePanel moleculePanel;
     
@@ -32,6 +40,10 @@ public class SignatureClassViewer extends JFrame implements ListSelectionListene
     
     private AtomSymmetryClassGenerator atomSymmetryClassGenerator;
     
+    private JButton loadButton;
+    
+    private JButton showNumbersButton;
+    
     public SignatureClassViewer(String[] args) {
         setLayout(new BorderLayout());
         
@@ -40,8 +52,23 @@ public class SignatureClassViewer extends JFrame implements ListSelectionListene
         atomSymmetryClassGenerator = new AtomSymmetryClassGenerator();
         initialGenerators.add(atomSymmetryClassGenerator);
         
+        JPanel leftPanel = new JPanel(new BorderLayout());
+        JPanel buttonPanel = new JPanel();
+        loadButton = new JButton("Load Molecule");
+        loadButton.setActionCommand("LOAD");
+        loadButton.addActionListener(this);
+        buttonPanel.add(loadButton);
+        
+        showNumbersButton = new JButton("Toggle Numbers");
+        showNumbersButton.setActionCommand("TOGNUM");
+        showNumbersButton.addActionListener(this);
+        buttonPanel.add(showNumbersButton);
+        
+        leftPanel.add(buttonPanel, BorderLayout.NORTH);
+        
         moleculePanel = new MoleculePanel(700, 700, initialGenerators);
-        add(moleculePanel, BorderLayout.CENTER);
+        leftPanel.add(moleculePanel, BorderLayout.CENTER);
+        add(leftPanel, BorderLayout.CENTER);
         
         treeThumbViewer = new TreeThumbViewer(700, 700);
         add(treeThumbViewer, BorderLayout.EAST);
@@ -58,10 +85,10 @@ public class SignatureClassViewer extends JFrame implements ListSelectionListene
         setVisible(true);
     }
     
-    public void loadFile(String filename)  {
+    public void loadFile(File file) {
         try {
             ISimpleChemObjectReader reader =
-                new MDLReader(new FileReader(filename));
+                new MDLReader(new FileReader(file));
             if (reader == null) return;
             IMolecule molecule = reader.read(new Molecule());
             System.out.println("read");
@@ -85,13 +112,18 @@ public class SignatureClassViewer extends JFrame implements ListSelectionListene
         } catch (CDKException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } 
+        }
+    }
+    
+    public void loadFile(String filename)  {
+        loadFile(new File(filename));
     }
     
     public void makeSignatures(IMolecule molecule) {
         MoleculeSignature molSig = new MoleculeSignature(molecule);
         List<Orbit> orbits = molSig.calculateOrbits();
         orbitMap.clear();
+        treeThumbViewer.clear();
         for (Orbit o : orbits) {
             String sig = o.getLabel();
             treeThumbViewer.addSignature(sig);
@@ -105,13 +137,16 @@ public class SignatureClassViewer extends JFrame implements ListSelectionListene
     }
     
     
-    public static void main(String[] args) {
-//        new SignatureClassViewer(args);
-        new SignatureClassViewer(new String[] {
-//        "/Users/maclean/bucky_proper_laidout.mol"});
-        "/Users/maclean/grinberg.mol"});
-//    "/Users/maclean/Downloads/c70.mol"});
-//        "/Users/maclean/buckyball.mol"});
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("LOAD")) {
+            JFileChooser fileChooser = new JFileChooser(".");
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                loadFile(fileChooser.getSelectedFile());
+            }
+        } else if (e.getActionCommand().equals("TOGNUM")) {
+            moleculePanel.toggleShowNumbers();
+        }
     }
 
     public void valueChanged(ListSelectionEvent e) {
@@ -122,6 +157,15 @@ public class SignatureClassViewer extends JFrame implements ListSelectionListene
             selectedOrbits.add(orbitMap.get(selected));
         }
         displaySelectedOrbits(selectedOrbits);
+    }
+
+    public static void main(String[] args) {
+//        new SignatureClassViewer(args);
+        new SignatureClassViewer(new String[] {
+//        "/Users/maclean/bucky_proper_laidout.mol"});
+        "/Users/maclean/grinberg.mol"});
+//    "/Users/maclean/Downloads/c70.mol"});
+//        "/Users/maclean/buckyball.mol"});
     }
 
 }

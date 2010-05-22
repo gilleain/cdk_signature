@@ -20,6 +20,15 @@ public class SignatureQuotientGraphTest extends AbstractSignatureTest {
     }
     
     @Test
+    public void testBowtieane() {
+//        IMolecule bowtie = AbstractSignatureTest.makeBowtieane();
+        IMolecule bowtie = AbstractSignatureTest.makeBowtieaneA();
+        SignatureQuotientGraph qGraph = new SignatureQuotientGraph(bowtie);
+//        checkParameters(qGraph, 4, 5, 2); // non-3-regular
+        checkParameters(qGraph, 3, 4, 2); // 3-regular
+    }
+    
+    @Test
     public void testCubane() {
         IMolecule cubane = AbstractSignatureTest.makeCubane();
         SignatureQuotientGraph qGraph = new SignatureQuotientGraph(cubane);
