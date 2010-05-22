@@ -144,9 +144,18 @@ public class MoleculePanel extends JPanel {
     }
     
     public void setMolecule(IMolecule molecule) {
-        this.molecule = diagramGenerate(molecule);
-        for (int i = 0; i < molecule.getAtomCount(); i++) {
-            this.molecule.getAtom(i).setFormalCharge(0);
+        if (ConnectivityChecker.isConnected(molecule)) {
+            this.molecule = diagramGenerate(molecule);
+        } else {
+            IMoleculeSet molecules = 
+                ConnectivityChecker.partitionIntoMolecules(molecule);
+            this.molecule = diagramGenerate(molecules.getMolecule(0));
+        }
+        for (int i = 0; i < this.molecule.getAtomCount(); i++) {
+            IAtom a = this.molecule.getAtom(i);
+            if (a != null) {
+                a.setFormalCharge(0);
+            }
         }
         System.out.println("Setting molecule " + new Graph(molecule));
         repaint();

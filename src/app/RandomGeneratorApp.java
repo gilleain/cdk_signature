@@ -38,7 +38,7 @@ public class RandomGeneratorApp extends JFrame implements ActionListener {
                 molPanel, 
                 JScrollPane.VERTICAL_SCROLLBAR_NEVER, 
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scrollPane.setPreferredSize(new Dimension(750, 280));
+        scrollPane.setPreferredSize(new Dimension(1000, 280));
         add(scrollPane, BorderLayout.CENTER);
         
         buttonPanel = new JPanel();
@@ -46,19 +46,28 @@ public class RandomGeneratorApp extends JFrame implements ActionListener {
         goButton.addActionListener(this);
         
         countSelector = new JSpinner();
-        countSelector.setValue(new Integer(3));
+        countSelector.setValue(new Integer(4));
         
         buttonPanel.add(goButton);
         buttonPanel.add(countSelector);
         
         add(buttonPanel, BorderLayout.SOUTH);
         
-        String formulaString = "C4H8";
+//        String formulaString = "C4H8";
+//        TargetMolecularSignature tms = new TargetMolecularSignature(1);
+//        tms.add("[H]([C])", 8);
+//        tms.add("[C]([C][C][C][H])", 1);
+//        tms.add("[C]([C][C][H][H])", 1);
+//        tms.add("[C]([C][H][H][H])", 2);
         TargetMolecularSignature tms = new TargetMolecularSignature(1);
-        tms.add("[H]([C])", 8);
-        tms.add("[C]([C][C][C][H])", 1);
-        tms.add("[C]([C][C][H][H])", 1);
-        tms.add("[C]([C][H][H][H])", 2);
+        tms.add("[C]([C][C][C][C])", 1);    // four carbons
+        tms.add("[C]([C]=[C][H])", 1);      // double bond, carbon and hydrogen
+        tms.add("[C]([C][C]=[C])", 1);      // double bond, two carbons
+        tms.add("[C]([C][C][C][H])", 2);    // CH
+        tms.add("[C]([C][C][H][H])", 2);    // CH2
+        tms.add("[C]([C][H][H][H])", 3);    // CH3
+        tms.add("[H]([C])", 16);
+        String formulaString = "C10H16";
         generator = new RandomSignatureStructureGenerator(formulaString, tms);
         
         pack();

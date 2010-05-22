@@ -48,6 +48,7 @@ public class RandomSignatureStructureGenerator {
         while (notFullyConnected || notFullySaturated) {
             int x = randomIndex(graph);
             int y = randomIndex(graph);
+            if (x == -1 || y == -1) break;
 
             graph = makeRandomBond(x, y, graph);
             notFullyConnected = !Util.isConnected(graph.getAtomContainer());
@@ -131,6 +132,7 @@ public class RandomSignatureStructureGenerator {
     private int randomIndex(Graph graph) {
         List<Integer> unsaturated = graph.allUnsaturatedAtoms();
         System.out.println(unsaturated + " " + graph);
+        if (unsaturated.size() == 0) return -1;
         return unsaturated.get(random.nextInt(unsaturated.size()));
     }
 
