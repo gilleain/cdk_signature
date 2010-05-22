@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,9 +173,12 @@ public class MoleculePanel extends JPanel {
         if (molecule != null) {
             Graphics2D g2 = (Graphics2D) g;
             try {
-                renderer.setup(molecule, getBounds());
+                Rectangle b = new Rectangle(getWidth(), getHeight());
+//                renderer.setup(molecule, getBounds());
+                renderer.setup(molecule, b);
                 renderer.paintMolecule(
-                        molecule, new AWTDrawVisitor(g2), getBounds(), false);
+//                        molecule, new AWTDrawVisitor(g2), getBounds(), false);
+                        molecule, new AWTDrawVisitor(g2), b, false);
             } catch (NullPointerException npe) {
                 npe.printStackTrace();
             }

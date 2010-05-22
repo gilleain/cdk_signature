@@ -8,7 +8,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.signature.AtomSignature;
 import org.openscience.cdk.structgen.deterministic.Graph;
+import org.openscience.cdk.structgen.deterministic.TargetAtomicSignature;
 import org.openscience.cdk.structgen.deterministic.TargetMolecularSignature;
 import org.openscience.cdk.structgen.deterministic.Util;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -61,6 +63,31 @@ public class RandomSignatureStructureGenerator {
             if (stuckCount >= stuckLimit) {
                 removeRandomBond(graph);
                 stuckCount = 0;
+            }
+            IAtomContainer atomContainer = graph.getAtomContainer();
+            int failPoint = -1;
+            for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+                if (graph.isSaturated(i)) {
+                    TargetAtomicSignature tas =graph.getTasForAtom(i, tms);
+                    AtomSignature atomSig = 
+                        new AtomSignature(i, tas.getHeight(), atomContainer);
+                    String tasString = tas.toCanonicalSignatureString();
+                    String aSigString = atomSig.toCanonicalString();
+                    if (tasString.equals(aSigString)) {
+                        continue;
+                    } else {
+                        System.out.println(tasString + " != " + aSigString);
+                        failPoint = i;
+                        break;
+                    }
+                }
+            }
+            
+            
+            if (failPoint == -1) {
+                continue;
+            } else {
+                graph.removeBond(failPoint, 0); // XXX
             }
         }
         return graph.getAtomContainer();

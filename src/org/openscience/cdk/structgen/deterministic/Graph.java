@@ -87,6 +87,31 @@ public class Graph {
         }
     }
     
+    public TargetAtomicSignature getTasForAtom(
+            int i, TargetMolecularSignature tms) {
+        return tms.getTargetAtomicSignature(targets.get(i));
+    }
+    
+    public boolean tmsMatchesAllSaturated(TargetMolecularSignature tms) {
+        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+            if (isSaturated(i)) {
+                TargetAtomicSignature tas = 
+                    tms.getTargetAtomicSignature(targets.get(i));
+                AtomSignature atomSig = 
+                    new AtomSignature(i, tms.getHeight(), atomContainer);
+                String tasString = tas.toCanonicalSignatureString();
+                String aSigString = atomSig.toCanonicalString();
+                if (tasString.equals(aSigString)) {
+                    continue;
+                } else {
+                    System.out.println(tasString + " != " + aSigString);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     public boolean height1SignatureMatches(int x, TargetMolecularSignature tms) {
         if (targets.size() == 0) return true;   // TODO
         String target = tms.getTargetAtomicSignature(targets.get(x), 1);

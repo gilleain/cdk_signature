@@ -2,10 +2,13 @@ package test_stochastic;
 
 import org.junit.Test;
 import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.structgen.deterministic.FragmentConverter;
 import org.openscience.cdk.structgen.deterministic.TargetMolecularSignature;
@@ -102,6 +105,42 @@ public static SmilesGenerator smilesGenerator = new SmilesGenerator();
     }
     
     @Test
+    public void cubaneHeight2Test() {
+        IMolecule mol = builder.newInstance(IMolecule.class);
+        for (int i = 0; i < 8; i++) { mol.addAtom(builder.newInstance(IAtom.class,"C")); }
+        mol.addBond(0, 1, IBond.Order.SINGLE);
+        mol.addBond(0, 3, IBond.Order.SINGLE);
+        mol.addBond(0, 7, IBond.Order.SINGLE);
+        mol.addBond(1, 2, IBond.Order.SINGLE);
+        mol.addBond(1, 6, IBond.Order.SINGLE);
+        mol.addBond(2, 3, IBond.Order.SINGLE); 
+        mol.addBond(2, 5, IBond.Order.SINGLE); 
+        mol.addBond(3, 4, IBond.Order.SINGLE);
+        mol.addBond(4, 5, IBond.Order.SINGLE);
+        mol.addBond(4, 7, IBond.Order.SINGLE);
+        mol.addBond(5, 6, IBond.Order.SINGLE);
+        mol.addBond(6, 7, IBond.Order.SINGLE);
+        for (int i = 0; i < 8; i++) { 
+            mol.addAtom(builder.newInstance(IAtom.class,"H"));
+            mol.addBond(i, 8 + i, IBond.Order.SINGLE);
+            System.out.println("bonding " + i + " and " + 2 * (i + 1));
+        }
+//        System.out.println(AbstractDeterministicTest.toSmiles(mol));
+        
+        MoleculeSignature molSig = new MoleculeSignature(mol);
+        String height2CSig = molSig.signatureStringForVertex(0, 2);
+        String height2HSig = molSig.signatureStringForVertex(8, 2);
+        System.out.println(height2CSig);
+        System.out.println(height2HSig);
+        
+        TargetMolecularSignature tms = new TargetMolecularSignature(2);
+        tms.add(height2CSig, 8);
+        tms.add(height2HSig, 8);
+        String formulaString = "C8H8";
+        genStructure(tms, formulaString);
+    }
+    
+    @Test
     public void pineneTest() {
         TargetMolecularSignature tms = new TargetMolecularSignature(1);
         tms.add("[C]([C][C][C][C])", 1);    // four carbons
@@ -115,13 +154,32 @@ public static SmilesGenerator smilesGenerator = new SmilesGenerator();
         genStructure(tms, formulaString);
     }
     
+    
+    @Test
+    public void multipleBondedRingHeight2Test() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(2);
+        String a = "[C](=[C]([C][H])[C](=[C][H])[H])"; 
+        String b = "[C]([C]([C]=[C])=[C]([C][H])[H])";
+        String c = "[C](=[C]([C][C])[C](=[C][H])[C](=[C][H]))";
+        String h = "[H]([C]([C]=[C]))";
+        
+        tms.add(a, 4);
+        tms.add(b, 4);
+        tms.add(c, 4);
+        tms.add(h, 8);
+        String formulaString = "C10H8";
+        genStructure(tms, formulaString);
+    }
+    
     public static void main(String[] args) {
 //        new RandomSignatureStructureGeneratorTest().mixedCarbonC6H14Test();
 //        new RandomSignatureStructureGeneratorTest().mixedCarbonC7H16Test();
 //        new RandomSignatureStructureGeneratorTest().twistaneTest();
 //        new RandomSignatureStructureGeneratorTest().degreeThreeDodecahedraneTest();
 //        new RandomSignatureStructureGeneratorTest().degreeThreeHeight2Test();
-        new RandomSignatureStructureGeneratorTest().degreeThreeCubaneCuneaneTest();
+//        new RandomSignatureStructureGeneratorTest().degreeThreeCubaneCuneaneTest();
+        new RandomSignatureStructureGeneratorTest().cubaneHeight2Test();
 //        new RandomSignatureStructureGeneratorTest().pineneTest();
+//        new RandomSignatureStructureGeneratorTest().multipleBondedRingHeight2Test();
     }
 }
