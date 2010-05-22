@@ -21,7 +21,14 @@ import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
+import org.openscience.cdk.renderer.generators.ExtendedAtomGenerator;
 import org.openscience.cdk.renderer.generators.IAtomContainerGenerator;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator.CompactAtom;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator.CompactShape;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator.ShowExplicitHydrogens;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.BackGroundColor;
+import org.openscience.cdk.renderer.generators.ExtendedAtomGenerator.ShowImplicitHydrogens;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.signature.MoleculeFromSignatureBuilder;
@@ -41,7 +48,7 @@ public class MoleculePanel extends JPanel {
     
     public int moleculeHeight;
 
-    private BasicAtomGenerator basicAtomGenerator;
+    private ExtendedAtomGenerator extendedAtomGenerator;
     
     public MoleculePanel(int panelWidth, int panelHeight) {
         this(panelWidth, panelHeight, new ArrayList<IAtomContainerGenerator>());
@@ -66,14 +73,16 @@ public class MoleculePanel extends JPanel {
     
     private void setRenderingParameters() {
         RendererModel model = renderer.getRenderer2DModel();
-        model.setDrawNumbers(true);
-        model.getRenderingParameter(
-                BasicAtomGenerator.CompactShape.class).setValue(
+//        model.setDrawNumbers(true);
+        model.setDrawNumbers(false);
+        
+        model.getRenderingParameter(CompactShape.class).setValue(
                         BasicAtomGenerator.Shape.OVAL);
-        model.getRenderingParameter(
-                BasicAtomGenerator.CompactAtom.class).setValue(true);
-        model.getRenderingParameter(
-                BasicAtomGenerator.KekuleStructure.class).setValue(true);
+        model.getRenderingParameter(CompactAtom.class).setValue(true);
+//        model.getRenderingParameter(KekuleStructure.class).setValue(true);
+        model.getRenderingParameter(ShowExplicitHydrogens.class).setValue(false);
+        model.getRenderingParameter(ShowImplicitHydrogens.class).setValue(false);
+        model.getRenderingParameter(BackGroundColor.class).setValue(Color.blue);
 //        for (IGeneratorParameter p : model.getRenderingParameters()) {
 //            System.out.println(p.getClass().getSimpleName() + " " + p.getValue());
 //        }
@@ -86,9 +95,15 @@ public class MoleculePanel extends JPanel {
             new ArrayList<IAtomContainerGenerator>();
 //        generators.add(new RingGenerator());
 //        generators.add(new BasicBondGenerator());
+        generators.add(new BasicSceneGenerator());
         generators.add(new TmpBondGenerator());
-        basicAtomGenerator = new BasicAtomGenerator(); 
-        generators.add(basicAtomGenerator);
+        extendedAtomGenerator = new ExtendedAtomGenerator();
+//        for (IGeneratorParameter p : basicAtomGenerator.getParameters()) {
+//            if (p instanceof BasicAtomGenerator.ShowExplicitHydrogens) {
+//                p.setValue(false);
+//            }
+//        }
+        generators.add(extendedAtomGenerator);
         
         return generators;
     }
