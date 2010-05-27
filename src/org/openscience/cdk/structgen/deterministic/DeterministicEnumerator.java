@@ -210,11 +210,11 @@ public class DeterministicEnumerator {
 //            System.out.println("first atom " + x);
             
             for (Graph h : saturateAtom(x, g)) {
-                if (h.height1SignatureMatches(x, hTau)) {
+//                if (h.height1SignatureMatches(x, hTau)) {
                     saturateOrbit(o, h, s);
-                } else {
+//                } else {
 //                    System.out.println("H1SIG REJECT " + g);
-                }
+//                }
             }
         }
     }
@@ -253,7 +253,7 @@ public class DeterministicEnumerator {
     }
     
     private void saturateAtom(int x, Graph g, Map<String, Graph> s) {
-//        System.out.println("saturating atom " + x + " in " + g);
+        System.out.println("saturating atom " + x + " in " + g);
         if (g.isSaturated(x)) {
 //            System.out.println(x + " is already saturated");
             if (atomSaturationListener != null) {
@@ -262,17 +262,18 @@ public class DeterministicEnumerator {
             }
 //            String sig = 
 //                new AtomSignature(x, g.getAtomContainer()).toCanonicalString();
-            String sig = key(g, x);
-            if (s.containsKey(sig)) {
-//                System.out.println("DUP " + sig + " " + g);
-            } else {
-                s.put(sig, g);
-            }
-            return;
+//            String sig = key(g, x);
+//            if (s.containsKey(sig)) {
+////                System.out.println("DUP " + sig + " " + g);
+//            } else {
+//                s.put(sig, g);
+//            }
+//            return;
+            s.put(g.toString(), g);
         } else {
-//            List<Integer> unsaturatedAtoms = g.unsaturatedAtoms(x);
+            List<Integer> unsaturatedAtoms = g.unsaturatedAtoms(x);
 //            List<Integer> unsaturatedAtoms = g.targetUnsaturatedAtoms(x);
-            List<Integer> unsaturatedAtoms = g.allUnsaturatedAtoms(x);
+//            List<Integer> unsaturatedAtoms = g.allUnsaturatedAtoms(x);
 //            System.out.println("trying all of " + unsaturatedAtoms);
             for (int y : unsaturatedAtoms) {
                 if (x == y) continue;

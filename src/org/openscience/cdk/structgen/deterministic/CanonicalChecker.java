@@ -21,10 +21,67 @@ import org.openscience.cdk.signature.MoleculeFromSignatureBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 
+import signature.AbstractVertexSignature;
+
 public class CanonicalChecker {
     
     private static CDKDiscretePartitionRefiner discreteRefiner = 
         new CDKDiscretePartitionRefiner(true);
+    
+    public static AbstractVertexSignature getCanonicalSignature(
+            IAtomContainer graph) {
+        MoleculeSignature signature = new MoleculeSignature(graph);
+        AbstractVertexSignature canonicalSignature = null;
+        String canonicalString = null;
+        for (int i = 0; i < signature.getVertexCount(); i++) {
+            if (graph.getConnectedAtomsCount(graph.getAtom(i)) == 0) continue;
+            AbstractVertexSignature avs = signature.signatureForVertex(i);
+            String sigString = avs.toCanonicalString();
+            if (canonicalString == null || 
+                    sigString.compareTo(canonicalString) < 0) {
+                canonicalSignature = avs;
+                canonicalString = sigString;
+                System.out.println(
+                       "setting canonical sig " + i + " to " + canonicalString);
+            }
+        }
+        return canonicalSignature;
+    }
+    
+    public static int[] getLabels(IAtomContainer graph) {
+        AbstractVertexSignature canon = getCanonicalSignature(graph);
+        int n = graph.getAtomCount();
+        CanonicalDAGVisitor cdv = new CanonicalDAGVisitor(n);
+        canon.accept(cdv);
+        int[] labels = new int[n];
+        Arrays.fill(labels, -1);
+        int x = 0;
+        for (int i = 0; i < n; i++) {
+            if (graph.getConnectedAtomsCount(graph.getAtom(i)) == 0) continue;
+            int j = canon.getOriginalVertexIndex(cdv.labels[x]); 
+            System.out.print(x + "->" + cdv.labels[x] + "->" + j + " ");
+            labels[j] = x;
+            x++;
+        }
+        System.out.println();
+        System.out.println(Arrays.toString(cdv.labels) + " " + Arrays.toString(labels));
+        return labels;
+    }
+    
+    public static boolean permutationInOrder(int[] permutation) {
+        if (permutation.length < 1) return true;
+        int prev = permutation[0];
+        for (int i = 1; i < permutation.length; i++) {
+            if (permutation[i] == -1) continue;
+            if (permutation[i] < prev) return false;
+            prev = permutation[i];
+        }
+        return true;
+    }
+    
+    public static boolean isCanonicalByVisitor(IAtomContainer atomContainer) {
+        return permutationInOrder(getLabels(atomContainer));
+    }
     
     public static boolean isCanonicalByReconstruction(IAtomContainer atomContainer) {
         MoleculeSignature moleculeSignature = new MoleculeSignature(atomContainer);
@@ -111,7 +168,6 @@ public class CanonicalChecker {
     }
     
     public static void isCanonicalTest(IAtomContainer atomContainer) {
-        int n = atomContainer.getAtomCount();
         CDKDiscretePartitionRefiner refiner = new CDKDiscretePartitionRefiner();
         AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(atomContainer);
         while (permutor.hasNext()) {
