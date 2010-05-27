@@ -160,12 +160,7 @@ public class SignatureClassViewer extends JFrame
     }
 
     public static void main(String[] args) {
-//        new SignatureClassViewer(args);
-        new SignatureClassViewer(new String[] {
-//        "/Users/maclean/bucky_proper_laidout.mol"});
-        "/Users/maclean/grinberg.mol"});
-//    "/Users/maclean/Downloads/c70.mol"});
-//        "/Users/maclean/buckyball.mol"});
+        new SignatureClassViewer(args);
     }
 
 }
