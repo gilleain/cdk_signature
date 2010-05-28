@@ -82,10 +82,10 @@ public class DeterministicEnumerator2 {
                 child.bond(label, atomIndex, builder);
 //                if (CanonicalChecker.isCanonicalByRefinement(graph)) {
                 if (isCanonical(child)) {
-                    System.out.println("saturating atom " + atomIndex + " in graph " + graph + " canonical extension with " + label);
+                    System.out.println("saturating atom " + atomIndex + " in graph " + graph + " canonical extension with " + label  + " " + child);
                     saturateAtom(atomIndex, child, graphs);
                 } else {
-                    System.out.println("saturating atom " + atomIndex + " in graph " + graph + " rejected extension with " + label);
+                    System.out.println("saturating atom " + atomIndex + " in graph " + graph + " rejected extension with " + label + " " + child);
                 }
             }
             
@@ -97,10 +97,10 @@ public class DeterministicEnumerator2 {
                     FragmentGraph child = new FragmentGraph(graph);
                     child.bond(atomIndex, otherAtomIndex, builder);
                     if (isCanonical(child)) {
-                        System.out.println("saturating atom " + atomIndex + " in graph " + graph + " canonical cyclisation to " + otherAtomIndex);
+                        System.out.println("saturating atom " + atomIndex + " in graph " + graph + " canonical cyclisation to " + otherAtomIndex + " " + child);
                         saturateAtom(atomIndex, child, graphs);
                     } else {
-                        System.out.println("saturating atom " + atomIndex + " in graph " + graph + " rejected cyclisation to " + otherAtomIndex);
+                        System.out.println("saturating atom " + atomIndex + " in graph " + graph + " rejected cyclisation to " + otherAtomIndex + " " + child);
                     }
                 }
             }
@@ -108,8 +108,10 @@ public class DeterministicEnumerator2 {
     }
     
     private boolean isCanonical(FragmentGraph graph) {
-        return CanonicalChecker.isCanonicalWithColorPartition(
-              graph.getAtomContainer());
+        return AlternateCanonicalChecker.isCanonicalByVisitor(
+                graph.getAtomContainer());
+//        return CanonicalChecker.isCanonicalWithColorPartition(
+//              graph.getAtomContainer());
 //        return CanonicalChecker.isCanonicalWithSignaturePartition(
 //                graph.getAtomContainer());
 //        return CanonicalChecker.isCanonicalByReconstruction(
