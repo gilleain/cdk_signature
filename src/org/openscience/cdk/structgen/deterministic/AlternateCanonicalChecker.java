@@ -69,47 +69,9 @@ public class AlternateCanonicalChecker {
         return visited;
     }
 
-    public static AbstractVertexSignature getCanonicalSignature(
-            IAtomContainer graph) {
-        MoleculeSignature signature = new MoleculeSignature(graph);
-        AbstractVertexSignature canonicalSignature = null;
-        String canonicalString = null;
-        for (int i = 0; i < signature.getVertexCount(); i++) {
-            if (graph.getConnectedAtomsCount(graph.getAtom(i)) == 0) continue;
-            AbstractVertexSignature avs = signature.signatureForVertex(i);
-            String sigString = avs.toCanonicalString();
-            if (canonicalString == null || 
-                    sigString.compareTo(canonicalString) < 0) {
-                canonicalSignature = avs;
-                canonicalString = sigString;
-//                System.out.println(
-//                       "setting canonical sig " + i + " to " + canonicalString);
-            }
-        }
-        return canonicalSignature;
-    }
-    
     public static int[] getLabels(IAtomContainer graph) {
-        AbstractVertexSignature canon = getCanonicalSignature(graph);
-        int n = canon.getVertexCount();
-        CanonicalDAGVisitor cdv = new CanonicalDAGVisitor(n);
-        canon.accept(cdv);
-        int[] labels = new int[n];
-        Arrays.fill(labels, -1);
-        int internalIndex = 0;
-        for (int atomIndex = 0; atomIndex < n; atomIndex++) {
-            if (graph.getConnectedAtomsCount(graph.getAtom(atomIndex)) == 0) {
-                continue;
-            }
-            int externalIndex = canon.getOriginalVertexIndex(internalIndex); 
-            System.out.print(internalIndex + "->" 
-                    + cdv.labels[internalIndex] + "->" + externalIndex + " ");
-            labels[externalIndex] = cdv.labels[internalIndex];
-            internalIndex++;
-        }
-//        System.out.println();
-        System.out.println(Arrays.toString(cdv.labels) 
-                + " " + Arrays.toString(labels));
+        int[] labels = new MoleculeSignature(graph).getCanonicalLabels();
+        System.out.println(Arrays.toString(labels));
         return labels;
     }
     
