@@ -1,9 +1,11 @@
 package org.openscience.cdk.structgen.deterministic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
@@ -213,6 +215,20 @@ public class FragmentGraph {
         return labels;
     }
     
+    public String getFirstUnusedLabel() {
+        Set<String> keys = fragments.keySet();
+        List<String> keyList = new ArrayList<String>(keys);
+        Collections.sort(keyList);
+        for (String label : keyList) {
+            if (fragments.get(label).isEmpty()) {
+                continue;
+            } else {
+                return label;
+            }
+        }
+        return null;
+    }
+    
     /**
      * Get the list of atoms to be saturated.
      * 
@@ -283,6 +299,38 @@ public class FragmentGraph {
         }
         return true;
     }
+    
+    public String toBondSortedString() {
+        StringBuffer sb = new StringBuffer();
+        int i = 0;
+        for (IAtom atom : this.atomContainer.atoms()) {
+            sb.append(atom.getSymbol()).append(i);
+            i++;
+        }
+        sb.append(" { ");
+        List<String> bondStrings = new ArrayList<String>();
+        for (IBond bond : this.atomContainer.bonds()) {
+            StringBuffer bondString = new StringBuffer();
+            int l = this.atomContainer.getAtomNumber(bond.getAtom(0));
+            int r = this.atomContainer.getAtomNumber(bond.getAtom(1));
+            if (l < r) {
+                bondString.append(l).append("-").append(r);
+            } else {
+                bondString.append(r).append("-").append(l);
+            }
+            int o = bond.getOrder().ordinal() + 1;
+            bondString.append("(").append(o).append(") ");
+            bondStrings.add(bondString.toString());
+        }
+        Collections.sort(bondStrings);
+        for (String bondString : bondStrings) { sb.append(bondString); }
+        sb.append("} ");
+        for (String label : labels) { sb.append(label); }
+        sb.append(" ");
+        for (String label : fragments.keySet()) { sb.append(fragments.get(label)); }
+        return sb.toString();
+    }
+
    
     public String toString() {
         StringBuffer sb = new StringBuffer();
@@ -308,6 +356,10 @@ public class FragmentGraph {
         sb.append(" ");
         for (String label : fragments.keySet()) { sb.append(fragments.get(label)); }
         return sb.toString();
+    }
+
+    public int getVertexCount() {
+        return atomContainer.getAtomCount();
     }
 
 }

@@ -70,7 +70,22 @@ public class AlternateCanonicalChecker {
     }
 
     public static int[] getLabels(IAtomContainer graph) {
-        int[] labels = new MoleculeSignature(graph).getCanonicalLabels();
+//        int[] labels = new MoleculeSignature(graph).getCanonicalLabels();
+        MoleculeSignature molSig = new MoleculeSignature(graph);
+        int n = graph.getAtomCount();
+        AbstractVertexSignature canonicalSignature = null;
+        String canonicalSignatureString = null;
+        for (int i = 0; i < n; i++) {
+            AbstractVertexSignature signatureForVertexI = 
+                molSig.signatureForVertex(i);
+            String signatureString = signatureForVertexI.toCanonicalString();
+            if (canonicalSignature == null ||
+                    signatureString.compareTo(canonicalSignatureString) > 0) {
+                canonicalSignature = signatureForVertexI;
+                canonicalSignatureString = signatureString;
+            }
+        }
+        int[] labels = canonicalSignature.getCanonicalLabelling(n);
         System.out.println(Arrays.toString(labels));
         return labels;
     }

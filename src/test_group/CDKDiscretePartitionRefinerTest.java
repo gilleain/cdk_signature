@@ -104,7 +104,7 @@ public class CDKDiscretePartitionRefinerTest {
         atomContainer.addBond(4, 12, IBond.Order.SINGLE);
         
 //        boolean isCanon = isCanonical(atomContainer);
-        boolean isCanon = CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
+        boolean isCanon = CanonicalChecker.isCanonicalWithCompactSignaturePartition(atomContainer);
         System.out.println(isCanon);
     }
     
@@ -528,7 +528,7 @@ public class CDKDiscretePartitionRefinerTest {
         while (permutor.hasNext()) {
             IAtomContainer permutation = permutor.next();
 //            boolean canon = isCanonical(permutation);
-            boolean canon = CanonicalChecker.isCanonicalWithSignaturePartition(permutation);
+            boolean canon = CanonicalChecker.isCanonicalWithCompactSignaturePartition(permutation);
 //            if (!canon) continue;
             boolean aut = isAutomorphic(container, permutation);
 //            System.out.println("permutation is canonical? " 

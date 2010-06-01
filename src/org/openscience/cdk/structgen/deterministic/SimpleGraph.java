@@ -125,7 +125,7 @@ public class SimpleGraph {
         }
         
 //        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
-        boolean isCanonical = CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
+        boolean isCanonical = CanonicalChecker.isCanonicalWithCompactSignaturePartition(atomContainer);
         System.out.println(isCanonical + "\t" + this);
         return isCanonical;
 //        return true;
@@ -133,7 +133,7 @@ public class SimpleGraph {
     
     public boolean isCanonical() {
 //        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
-        boolean isCanonical = CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
+        boolean isCanonical = CanonicalChecker.isCanonicalWithCompactSignaturePartition(atomContainer);
         System.out.println(isCanonical + "\t" + this);
         return isCanonical;
     }

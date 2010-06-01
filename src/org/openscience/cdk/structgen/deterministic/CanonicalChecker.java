@@ -292,7 +292,7 @@ public class CanonicalChecker {
     }
     
     public static boolean isCanonical(IAtomContainer atomContainer) {
-        return new CDKDiscretePartitionRefiner(false).isCanonical(atomContainer);
+        return new CDKDiscretePartitionRefiner(false, true).isCanonical(atomContainer);
     }
     
     public static boolean isCanonicalWithGaps(IAtomContainer atomContainer) {
@@ -363,6 +363,17 @@ public class CanonicalChecker {
     
     public static boolean isCanonicalWithSignaturePartition(
             IAtomContainer atomContainer) {
+        Partition initial = CanonicalChecker.signaturePartition(atomContainer);
+        if (initial.size() < 2) return true;
+        System.out.println(initial);
+        CDKDiscretePartitionRefiner refiner = 
+            new CDKDiscretePartitionRefiner(true);
+        refiner.refine(initial, atomContainer);
+        return refiner.firstIsIdentity();
+    }
+    
+    public static boolean isCanonicalWithCompactSignaturePartition(
+            IAtomContainer atomContainer) {
         Partition initial = 
             CanonicalChecker.compactSignaturePartition(atomContainer);
         
@@ -400,10 +411,12 @@ public class CanonicalChecker {
         for (int color : colorBlocks.keySet()) {
             initial.addCell(colorBlocks.get(color));
         }
+        if (initial.size() == 0) return true;
         
         CDKDiscretePartitionRefiner refiner = 
 //            new CDKDiscretePartitionRefiner(true, false);   // XXX turning off bond orders!
-            new CDKDiscretePartitionRefiner(true, true);   
+            new CDKDiscretePartitionRefiner(false, true);
+//            new CDKDiscretePartitionRefiner(true, true);   
         refiner.refine(initial, atomContainer);
         return refiner.firstIsIdentity();
     }

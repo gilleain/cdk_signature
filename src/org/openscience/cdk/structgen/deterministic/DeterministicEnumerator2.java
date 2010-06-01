@@ -108,10 +108,10 @@ public class DeterministicEnumerator2 {
     }
     
     private boolean isCanonical(FragmentGraph graph) {
-        return AlternateCanonicalChecker.isCanonicalByVisitor(
-                graph.getAtomContainer());
-//        return CanonicalChecker.isCanonicalWithColorPartition(
-//              graph.getAtomContainer());
+//        return AlternateCanonicalChecker.isCanonicalByVisitor(
+//                graph.getAtomContainer());
+        return CanonicalChecker.isCanonicalWithColorPartition(
+              graph.getAtomContainer());
 //        return CanonicalChecker.isCanonicalWithSignaturePartition(
 //                graph.getAtomContainer());
 //        return CanonicalChecker.isCanonicalByReconstruction(

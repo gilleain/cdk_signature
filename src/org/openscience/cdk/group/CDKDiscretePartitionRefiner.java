@@ -137,6 +137,7 @@ public class CDKDiscretePartitionRefiner extends
     
     public void refine(Partition p, IAtomContainer container) {
         setup(container);
+//        System.out.println("refining " + p);
         refine(p);
     }
 
