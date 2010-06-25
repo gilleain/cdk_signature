@@ -3,6 +3,7 @@ package org.openscience.cdk.structgen.deterministic;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 
 /**
@@ -34,7 +35,8 @@ public class SignatureFragment extends AbstractFragment {
         super(count);
         this.signatureString = signatureString;
         this.fragmentAtomContainer = 
-            MoleculeSignature.fromSignatureString(signatureString);
+            MoleculeSignature.fromSignatureString(signatureString, 
+                    NoNotificationChemObjectBuilder.getInstance());
     }
     
     public SignatureFragment(int count, IAtomContainer fragmentAtomContainer) {

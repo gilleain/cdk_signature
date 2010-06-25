@@ -4,12 +4,10 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.structgen.deterministic.TargetMolecularSignature;
 
-import test_signature.AbstractSignatureTest;
 
-public class TargetMolecularSignatureTest extends AbstractSignatureTest {
+public class TargetMolecularSignatureTest {
     
     /**
      * Make a simple signature compatible with hexane.
@@ -191,21 +189,5 @@ public class TargetMolecularSignatureTest extends AbstractSignatureTest {
         Assert.assertEquals(1, tms.compatibleTargetBonds(2, 2)); // C->C
     }
     
-    @Test
-    public void matchingC7H16IsomersTest() {
-        IMolecule c7H16A = AbstractSignatureTest.makeC7H16A();
-        IMolecule c7H16B = AbstractSignatureTest.makeC7H16B();
-        IMolecule c7H16C = AbstractSignatureTest.makeC7H16C();
-        
-        TargetMolecularSignature tms = new TargetMolecularSignature(2);
-        tms.add("[C]([C][H][H][H])", 3, "CH3");
-        tms.add("[C]([C][C][H][H])", 3, "CH2");
-        tms.add("[C]([C][C][C][H])", 1, "CH");
-        tms.add("[H]([C])", 16, "H");
-        
-        System.out.println(tms.matches(c7H16A));
-        System.out.println(tms.matches(c7H16B));
-        System.out.println(tms.matches(c7H16C));
-    }
     
 }

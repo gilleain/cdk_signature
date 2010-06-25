@@ -19,9 +19,7 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.signature.AtomSignature;
 import org.openscience.cdk.signature.MoleculeSignature;
 
-import test_signature.AbstractSignatureTest;
-
-public class TargetAtomicSignatureTest extends AbstractSignatureTest {
+public class TargetAtomicSignatureTest  {
     
     public static IChemObjectBuilder builder =
         NoNotificationChemObjectBuilder.getInstance();
@@ -81,7 +79,6 @@ public class TargetAtomicSignatureTest extends AbstractSignatureTest {
         String signature = "[C]([C](=[C][C,1])=[C,1]([H])[H])";
         TargetAtomicSignature tas = new TargetAtomicSignature(signature);
         IMolecule mol = tas.toMolecule();
-        print(mol);
     }
     
     @Test
@@ -137,17 +134,6 @@ public class TargetAtomicSignatureTest extends AbstractSignatureTest {
             Assert.assertTrue(subsignatureList.contains(subsignature));
         }
         
-    }
-    
-    @Test
-    public void testCageMolecule() {
-        IMolecule molecule = AbstractSignatureTest.makeCage();
-        String sigString = "[C]([C]([C,2]([C]([C,3][C,4]))[C]([C,5]" +
-                           "[C,3]([C,6]([C,1]))))[C]([C]([C,7][C]" +
-                           "([C,1][C,8]))[C,5]([C,8]([C,6])))[C]([C,2]" +
-                           "[C,7]([C,4]([C,1]))))";
-        TargetAtomicSignatureTest.testRoundtrip(sigString);
-        TargetAtomicSignatureTest.checkMolecule(sigString, molecule);
     }
     
     @Test

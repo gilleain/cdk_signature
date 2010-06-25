@@ -17,6 +17,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.AWTFontManager;
@@ -114,7 +115,9 @@ public class MoleculePanel extends JPanel {
     }
     
     public void setMoleculeFromSignature(String signature) {
-        MoleculeFromSignatureBuilder builder = new MoleculeFromSignatureBuilder();
+        MoleculeFromSignatureBuilder builder = 
+            new MoleculeFromSignatureBuilder(
+                    NoNotificationChemObjectBuilder.getInstance());
         builder.makeFromColoredTree(AbstractVertexSignature.parse(signature));
         IAtomContainer container = builder.getAtomContainer();
         setMolecule(

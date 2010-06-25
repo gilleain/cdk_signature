@@ -17,6 +17,8 @@ import org.openscience.cdk.group.SSPermutationGroup;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilderTest;
 import org.openscience.cdk.signature.MoleculeFromSignatureBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
@@ -33,7 +35,7 @@ public class CanonicalChecker {
         MoleculeSignature signature = new MoleculeSignature(graph);
         AbstractVertexSignature canonicalSignature = null;
         String canonicalString = null;
-        for (int i = 0; i < signature.getVertexCount(); i++) {
+        for (int i = 0; i < graph.getAtomCount(); i++) {
             if (graph.getConnectedAtomsCount(graph.getAtom(i)) == 0) continue;
             AbstractVertexSignature avs = signature.signatureForVertex(i);
             String sigString = avs.toCanonicalString();
@@ -85,7 +87,9 @@ public class CanonicalChecker {
     
     public static boolean isCanonicalByReconstruction(IAtomContainer atomContainer) {
         MoleculeSignature moleculeSignature = new MoleculeSignature(atomContainer);
-        MoleculeFromSignatureBuilder builder = new MoleculeFromSignatureBuilder();
+        MoleculeFromSignatureBuilder builder = 
+            new MoleculeFromSignatureBuilder(
+                    NoNotificationChemObjectBuilder.getInstance());
         moleculeSignature.reconstructCanonicalGraph(
                 moleculeSignature.signatureForVertex(0), builder);
         IAtomContainer reconstruction = builder.getAtomContainer();
