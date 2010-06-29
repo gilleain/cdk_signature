@@ -1,5 +1,7 @@
 package org.openscience.cdk.structgen.deterministic;
 
+import java.util.List;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
@@ -29,5 +31,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public interface IEnumeratorResultHandler {
     
     public void handle(IAtomContainer result);
+    
+    public List<IAtomContainer> getResults();
 
 }

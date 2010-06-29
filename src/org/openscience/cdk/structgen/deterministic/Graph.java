@@ -138,11 +138,7 @@ public class Graph {
             return false;
         }
         
-//        boolean isCanonical = CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
-        boolean isCanonical = 
-//            true;
-//            CanonicalChecker.isCanonicalWithSignaturePartition(atomContainer);
-            CanonicalChecker.isCanonicalByVisitor(atomContainer);
+        boolean isCanonical = isCanonical();
         
         boolean isCompatible = true;
         if (hTau != null) {
@@ -395,6 +391,8 @@ public class Graph {
         MoleculeSignature signature = 
             new MoleculeSignature(this.atomContainer);
         List<Orbit> orbits = signature.calculateOrbits();
+//        String signatureOfSaturatingAtom = 
+//            signature.signatureStringForVertex(indexOfSaturatingAtom);
 
         // XXX : fix this
 //        Collections.reverse(orbits);
@@ -403,22 +401,30 @@ public class Graph {
 //        System.out.println("Orbits : " + orbits);
         List<Integer> unsaturated = new ArrayList<Integer>();
         for (Orbit o : orbits) {
-            if (o.isEmpty() || isSaturated(o)) continue;
-            List<Integer> atomIndices = o.getAtomIndices();
-            int indexIndex = 0;
-            int atomIndex = 0;
-            while (indexIndex < atomIndices.size()) {
-                atomIndex = atomIndices.get(indexIndex); 
-                if (atomIndex == indexOfSaturatingAtom ||
-                        maximumAttachment(indexOfSaturatingAtom, atomIndex)) {
-                    indexIndex++;
-                } else {
-                    unsaturated.add(atomIndex);
-                    break;
-                }
+            if (o.isEmpty()
+                    || isSaturated(o)
+//                    || signatureOfSaturatingAtom.compareTo(o.getLabel()) > 0
+            ) {
+                continue;
+            }
+            int firstUsable = getFirstUsableIndexInOrbit(o, indexOfSaturatingAtom);
+            if (firstUsable != -1) {
+                unsaturated.add(firstUsable);
             }
         }
         return unsaturated;
+    }
+    
+    private int getFirstUsableIndexInOrbit(Orbit o, int indexOfSaturatingAtom) {
+        for (int atomIndex : o) {
+            if (atomIndex == indexOfSaturatingAtom ||
+                    maximumAttachment(indexOfSaturatingAtom, atomIndex)) {
+                continue;
+            } else {
+                return atomIndex;
+            }
+        }
+        return -1;
     }
     
     public List<Integer> targetUnsaturatedAtoms(int indexOfSaturatingAtom) {
@@ -506,9 +512,9 @@ public class Graph {
     public void bond(int x, int y) {
         IAtom a = atomContainer.getAtom(x);
         IAtom b = atomContainer.getAtom(y);
-        System.out.println(
-                String.format("bonding %d and %d (%s-%s)",
-                        x, y, a.getSymbol(),b.getSymbol()));
+//        System.out.println(
+//                String.format("bonding %d and %d (%s-%s)",
+//                        x, y, a.getSymbol(),b.getSymbol()));
         IBond existingBond = this.atomContainer.getBond(a, b);
         if (existingBond != null) {
             IBond.Order o = existingBond.getOrder(); 
@@ -525,9 +531,9 @@ public class Graph {
     public boolean removeBond(int x, int y) {
         IAtom a = atomContainer.getAtom(x);
         IAtom b = atomContainer.getAtom(y);
-        System.out.println(
-                String.format("debonding %d and %d (%s-%s)",
-                        x, y, a.getSymbol(),b.getSymbol()));
+//        System.out.println(
+//                String.format("debonding %d and %d (%s-%s)",
+//                        x, y, a.getSymbol(),b.getSymbol()));
         IBond existingBond = this.atomContainer.getBond(a, b);
         if (existingBond != null) {
             IBond.Order o = existingBond.getOrder(); 
@@ -629,7 +635,8 @@ public class Graph {
     }
 
     public boolean isCanonical() {
-        return CanonicalChecker.isCanonical(atomContainer);
+//        return CanonicalChecker.isCanonicalWithCompactSignaturePartition(atomContainer);
+        return CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
     }
     
     public String toString() {

@@ -22,7 +22,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * @cdk.keyword canonicalization
  */
 // @TestClass("org.openscience.cdk.graph.invariant.CanonicalLabelerTest")
-public class CanonicalLabeler {
+public class CanonicalLabeller {
     
     public static final Comparator<InvPair> currentComparator = 
         new Comparator<InvPair>() {
@@ -221,7 +221,7 @@ public class CanonicalLabeler {
     private static void sortInvariants(ArrayList<InvPair> invariants) {
 //        Collections.sort(invariants, CanonicalLabeler.currentComparator);
 //        Collections.sort(invariants, CanonicalLabeler.lastComparator);
-        Collections.sort(invariants, CanonicalLabeler.currentLastComparator);
+        Collections.sort(invariants, CanonicalLabeller.currentLastComparator);
     }
 
     /**

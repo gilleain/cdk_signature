@@ -1,6 +1,7 @@
 package app;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -24,17 +26,20 @@ import org.openscience.cdk.structgen.deterministic.DeterministicEnumerator;
 import org.openscience.cdk.structgen.deterministic.Graph;
 import org.openscience.cdk.structgen.deterministic.OrbitSaturationEvent;
 import org.openscience.cdk.structgen.deterministic.OrbitSaturationListener;
-import org.openscience.cdk.structgen.deterministic.TargetMolecularSignature;
 
-import app.ControlPanel.ListenerType;
+import app.FormulaControlPanel.ListenerType;
 
 import signature.AbstractVertexSignature;
 import signature.display.ColoredTreePanel;
 
-public class Debugger extends JFrame 
+public class FormulaDebugger extends JFrame 
     implements ActionListener, AtomSaturationListener, 
                BondCreationListener, ListSelectionListener, MouseListener,
                OrbitSaturationListener, BondRejectionListener {
+    
+    private SearchTreePanel searchTreePanel;
+    
+    private JScrollPane searchTreeScrollPane;
     
     private DeterministicEnumerator enumerator;
     
@@ -42,17 +47,19 @@ public class Debugger extends JFrame
     
     private GraphPanel mainGraphPanel;
     
-    private ColoredTreePanel targetTreePanel;
-    
     private ColoredTreePanel actualTreePanel;
     
     private MoleculePanel molPanel;
     
-    private ControlPanel controlPanel;
+    private FormulaControlPanel controlPanel;
     
-    public static final int THUMB_PANEL_WIDTH = 300;
+    public static final int SEARCH_TREE_PANEL_WIDTH = 300;
     
-    public static final int THUMB_PANEL_HEIGHT = 600;
+    public static final int SEARCH_TREE_PANEL_HEIGHT = 900;
+    
+    public static final int THUMB_PANEL_WIDTH = 400;
+    
+    public static final int THUMB_PANEL_HEIGHT = 900;
     
     public static final int GRAPH_PANEL_WIDTH = 500;
     
@@ -66,35 +73,45 @@ public class Debugger extends JFrame
     
     public static final int MOL_PANEL_HEIGHT = 300;
     
-    public Debugger() {
+    public FormulaDebugger() {
         setLayout(new BorderLayout());
+        
+        JPanel westPanel = new JPanel(new GridLayout(1, 2));
+        searchTreePanel = new SearchTreePanel(
+                SEARCH_TREE_PANEL_WIDTH, SEARCH_TREE_PANEL_HEIGHT);
+        searchTreeScrollPane = new JScrollPane(searchTreePanel);
+        searchTreeScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        searchTreeScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        searchTreeScrollPane.setPreferredSize(
+              new Dimension(SEARCH_TREE_PANEL_WIDTH, SEARCH_TREE_PANEL_HEIGHT));
+        searchTreePanel.addMouseListener(this);
+        westPanel.add(searchTreeScrollPane);
+        
         thumbViewer = new GraphThumbViewer(
                 THUMB_PANEL_WIDTH, THUMB_PANEL_HEIGHT);
         thumbViewer.setBorder(BorderFactory.createEtchedBorder());
         thumbViewer.addSelectionListener(this);
-        add(thumbViewer, BorderLayout.WEST);
+        westPanel.add(thumbViewer);
+        add(westPanel, BorderLayout.WEST);
         
-        JPanel centralPanel = new JPanel(new GridLayout(2, 1));
+        controlPanel = new FormulaControlPanel();
+        controlPanel.addButtonListener(this);
+        add(controlPanel, BorderLayout.NORTH);
+        
+        JPanel rightPanel = new JPanel(new GridLayout(3, 1));
+        
         mainGraphPanel = new GraphPanel(
                 GRAPH_PANEL_WIDTH, GRAPH_PANEL_HEIGHT, false);
         mainGraphPanel.setBorder(BorderFactory.createEtchedBorder());
         mainGraphPanel.addMouseListener(this);
-        centralPanel.add(mainGraphPanel);
+        rightPanel.add(mainGraphPanel);
         
-        targetTreePanel = new ColoredTreePanel(TREE_PANEL_WIDTH, TREE_PANEL_HEIGHT);
-        targetTreePanel.setBorder(BorderFactory.createEtchedBorder());
-        centralPanel.add(targetTreePanel);
-        add(centralPanel, BorderLayout.CENTER);
-        
-        controlPanel = new ControlPanel();
-        controlPanel.addButtonListener(this);
-        add(controlPanel, BorderLayout.NORTH);
-        
-        JPanel rightPanel = new JPanel(new GridLayout(2, 1));
-        molPanel = new MoleculePanel(MOL_PANEL_WIDTH, MOL_PANEL_HEIGHT);
+        molPanel = new MoleculePanel(
+                MOL_PANEL_WIDTH, MOL_PANEL_HEIGHT);
         rightPanel.add(molPanel);
         
-        actualTreePanel = new ColoredTreePanel(TREE_PANEL_WIDTH, TREE_PANEL_HEIGHT);
+        actualTreePanel = new ColoredTreePanel(
+                TREE_PANEL_WIDTH, TREE_PANEL_HEIGHT);
         rightPanel.add(actualTreePanel);
         add(rightPanel, BorderLayout.EAST);
 //        setPreferredSize(new Dimension(1200, 600));
@@ -105,37 +122,22 @@ public class Debugger extends JFrame
     
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("RUN")) {
-            List<String> signatures = controlPanel.getSignatures();
-            List<Integer> counts = controlPanel.getCounts();
             String formula = controlPanel.getCurrentFormula();
-            if (signatures.size() != counts.size()) {
-                System.err.println("SIGS != COUNTS");
-                return;
-            }
             System.out.println("formula = " + formula);
-            for (int i = 0; i < signatures.size(); i++) {
-                System.out.println(signatures.get(i) + " x" + counts.get(i));
-            }
-            
-            run(formula, signatures, counts);
+            run(formula);
         } else if (e.getActionCommand().equals("CLEAR")) {
             thumbViewer.clear();
             mainGraphPanel.clear();
-            targetTreePanel.clear();
             actualTreePanel.clear();
             molPanel.clear();
+            searchTreePanel.clear();
             repaint();
         }
     }
 
-    private void run(
-            String formula, List<String> signatures, List<Integer> counts) {
-        // XXX height!
-        TargetMolecularSignature tms = new TargetMolecularSignature(1);
-        for (int i = 0; i < signatures.size(); i++) {
-            tms.add(signatures.get(i), counts.get(i));
-        }
-        enumerator = new DeterministicEnumerator(formula, tms);
+    private void run(String formula) {
+        
+        enumerator = new DeterministicEnumerator(formula);
         ListenerType listenerType = controlPanel.getSelectedListenerType();
         if (listenerType == ListenerType.ATOM_SATURATION) {
             enumerator.setAtomSaturationListener(this);
@@ -147,6 +149,7 @@ public class Debugger extends JFrame
             enumerator.setOrbitSaturationListener(this);
         }
         enumerator.generate();
+        searchTreePanel.repaint();
     }
 
     public void atomSaturated(AtomSaturationEvent atomSaturationEvent) {
@@ -155,6 +158,8 @@ public class Debugger extends JFrame
     }
 
     public void bondAdded(BondCreationEvent bondCreationEvent) {
+        searchTreePanel.addRelation(
+                bondCreationEvent.parent, bondCreationEvent.child);
         thumbViewer.addGraph(bondCreationEvent.child);
         thumbViewer.repaint();
     }
@@ -192,13 +197,6 @@ public class Debugger extends JFrame
 //        repaint();
     }
     
-    public void displayTargetSignature(int atomIndex) {
-        List<String> signatures = controlPanel.getSignatures();
-        String selectedSignature = signatures.get(atomIndex);
-        targetTreePanel.setTree(
-                AbstractVertexSignature.parse(selectedSignature));
-    }
-    
     public void displayActualSignature(int atomIndex) {
         String sig = mainGraphPanel.getSignature(atomIndex);
         actualTreePanel.setTree(AbstractVertexSignature.parse(sig));
@@ -211,12 +209,16 @@ public class Debugger extends JFrame
     public void mousePressed(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        int selected = mainGraphPanel.select(x, y);
-        int target = mainGraphPanel.getTarget();
-        if (target != -1) {
-            displayTargetSignature(target);
-            molPanel.selectAtom(selected);
-            displayActualSignature(selected);
+        if (e.getSource() == searchTreePanel) {
+            searchTreePanel.select(x, y);
+            List<Graph> selected = searchTreePanel.getSelectedBranch();
+            thumbViewer.setGraphs(selected);
+        } else {
+            int selected = mainGraphPanel.select(x, y);
+            if (selected != -1) {
+                molPanel.selectAtom(selected);
+                displayActualSignature(selected);
+            }
         }
         repaint();
     }
@@ -225,7 +227,7 @@ public class Debugger extends JFrame
 
 
     public static void main(String[] args) {
-        new Debugger();
+        new FormulaDebugger();
     }
 
 }

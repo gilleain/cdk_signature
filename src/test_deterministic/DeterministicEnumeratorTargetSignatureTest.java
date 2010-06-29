@@ -23,6 +23,34 @@ public class DeterministicEnumeratorTargetSignatureTest extends
     }
     
     @Test
+    public void adenine() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(1);
+        String a = "[N](=[C][C])";
+        String b = "[N]([C][C][H])";
+        String c = "[N](=[C][C])";
+        String d = "[N]([C][H][H]";
+        String e = "[C]([C]=[N][N]";
+        String f = "[C](=[N][N][H])";
+        String g = "[C](=[C][C][N])";
+        String h = "[C](=[C][N][N]";
+        String i = "[H]([N])";
+        String j = "[H]([C])";
+        tms.add(a, 2);
+        tms.add(b, 1);
+        tms.add(c, 1);
+        tms.add(d, 1);
+        tms.add(e, 1);
+        tms.add(f, 2);
+        tms.add(g, 1);
+        tms.add(h, 1);
+        tms.add(i, 3);
+        tms.add(j, 2);
+        
+        String formulaString = "C5H5N5";
+        run(tms, formulaString);
+    }
+    
+    @Test
     public void multipleBondedRingHeight2Test() {
         TargetMolecularSignature tms = new TargetMolecularSignature(2);
         String a = "[C](=[C]([C][H])[C](=[C][H])[H])"; 
@@ -278,6 +306,19 @@ public class DeterministicEnumeratorTargetSignatureTest extends
         tms.add("[C]([C][C][C][H])", 2);
         tms.add("[C]([C][C][H][H])", 2);
         tms.add("[C]([C][H][H][H])", 2);
+        tms.add("[H]([C])", 12);
+        String formulaString = "C6H12";
+        DeterministicEnumerator enumerator = 
+            new DeterministicEnumerator(formulaString, tms);
+        List<IAtomContainer> results = enumerator.generate();
+        AbstractDeterministicTest.printResults(results);
+    }
+    
+    @Test
+    public void trimethylCyclopropane() {
+        TargetMolecularSignature tms = new TargetMolecularSignature(1);
+        tms.add("[C]([C][C][C][H])", 3);
+        tms.add("[C]([C][H][H][H])", 3);
         tms.add("[H]([C])", 12);
         String formulaString = "C6H12";
         DeterministicEnumerator enumerator = 

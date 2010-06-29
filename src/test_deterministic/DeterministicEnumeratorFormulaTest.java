@@ -2,8 +2,6 @@ package test_deterministic;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -86,6 +84,11 @@ public class DeterministicEnumeratorFormulaTest extends
     }
     
     @Test
+    public void testC3H4() {
+        DeterministicEnumeratorFormulaTest.testFormula("C3H4", 1);
+    }
+    
+    @Test
     public void testC3H4O() {
         DeterministicEnumeratorFormulaTest.testFormula("C3H4O", 1);
     }
@@ -102,57 +105,57 @@ public class DeterministicEnumeratorFormulaTest extends
     
     @Test
     public void testC3H6O() {
-        DeterministicEnumeratorFormulaTest.testFormula("C3H6O", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C3H6O", 8);
     }
     
     @Test
     public void testC3H6N() {
-        DeterministicEnumeratorFormulaTest.testFormula("C3H5N", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C3H5N", 16);
     }
     
     @Test
     public void testC4H4() {
-        DeterministicEnumeratorFormulaTest.testFormula("C4H4", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H4", 11);
     }
     
     @Test
     public void testC4H4O() {
-        DeterministicEnumeratorFormulaTest.testFormula("C4H4O", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H4O", 37);
     }
     
     @Test
     public void testC4H6() {
-        DeterministicEnumeratorFormulaTest.testFormula("C4H6", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H6", 9);
     }
     
     @Test
     public void testC4H8() {
-        DeterministicEnumeratorFormulaTest.testFormula("C4H8", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H8", 5);
     }
     
     @Test
     public void testC4H10() {
-        DeterministicEnumeratorFormulaTest.testFormula("C4H10", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H10", 2);
     }
     
     @Test
     public void testC5H8() {
-        DeterministicEnumeratorFormulaTest.testFormula("C5H8", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C5H8", 25);
     }
     
     @Test
     public void testC5H10() {
-        DeterministicEnumeratorFormulaTest.testFormula("C5H10", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C5H10", 8);
     }
     
     @Test
     public void testC5H12() {
-        DeterministicEnumeratorFormulaTest.testFormula("C5H12", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C5H12", 3);
     }
     
     @Test
     public void testC6H12() {
-        DeterministicEnumeratorFormulaTest.testFormula("C6H12", 1);
+        DeterministicEnumeratorFormulaTest.testFormula("C6H12", 25);
     }
     
     @Test

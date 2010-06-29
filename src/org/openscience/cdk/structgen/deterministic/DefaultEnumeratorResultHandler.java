@@ -1,5 +1,7 @@
 package org.openscience.cdk.structgen.deterministic;
 
+import java.util.List;
+
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -34,6 +36,10 @@ public class DefaultEnumeratorResultHandler implements IEnumeratorResultHandler 
             System.out.println("Result " + count + " not connected!");
         }
         count++;
+    }
+    
+    public List<IAtomContainer> getResults() {
+        return null;    // XXX
     }
 
 }

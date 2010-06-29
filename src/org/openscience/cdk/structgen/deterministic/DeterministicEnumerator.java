@@ -1,19 +1,12 @@
 package org.openscience.cdk.structgen.deterministic;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.signature.AtomSignature;
-import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
@@ -150,29 +143,17 @@ public class DeterministicEnumerator {
      * @return a list of atom containers
      */
     public List<IAtomContainer> generate() {
-//        final List<IAtomContainer> results = new ArrayList<IAtomContainer>();
-        final HashMap<String, IAtomContainer> results = 
-            new HashMap<String, IAtomContainer>();
-        this.handler = new IEnumeratorResultHandler() {
-            public void handle(IAtomContainer result) {
-                String signatureString = 
-                    new MoleculeSignature(result).toCanonicalString();
-//                if (results.containsKey(signatureString)) {
-//                    return;
-//                } else {
-                    results.put(signatureString, result);
-//                }
-            }
-        };
+        this.handler = new DuplicateEliminatingHandler();
+//        this.handler = new SimpleHandler();
         this.generateToHandler();
-        return new ArrayList<IAtomContainer>(results.values());
+        return handler.getResults();
     }
     
     private void enumerate(Graph g) {
         if (g.isConnected() 
-                && g.isFullySaturated()) 
-//                    && g.isCanonical()
-                {
+                && g.isFullySaturated() 
+//                    && g.isCanonical()    // Probably not necessary
+                ){
 //            if (hTau == null || hTau.matches(g.getAtomContainer())) {
                 System.out.println("SOLUTION " + g);
                 this.handler.handle(g.getAtomContainer());
@@ -220,60 +201,22 @@ public class DeterministicEnumerator {
     }
     
     private List<Graph> saturateAtom(int x, Graph g) {
-        Map<String, Graph> atomSolutions = new HashMap<String, Graph>();
+        List<Graph> atomSolutions = new ArrayList<Graph>();
         saturateAtom(x, g, atomSolutions);
-        return new ArrayList<Graph>(atomSolutions.values());
+        return atomSolutions;
     }
     
-    private String key(Graph g, int x) {
-        IAtomContainer container = g.getAtomContainer();
-        String k = "";
-        List<String> edgeStrings = new ArrayList<String>();
-        IAtom atomX = container.getAtom(x);
-        for (IBond bond : container.getConnectedBondsList(atomX)) {
-            IAtom connected;
-            if (bond.getAtom(0).equals(atomX)) {
-                connected = bond.getAtom(1);
-            } else {
-                connected = bond.getAtom(0);
-            }
-            int y = container.getAtomNumber(connected);
-            int o = bond.getOrder().ordinal();
-            if (x < y) {
-                edgeStrings.add(x + "-" + y + "(" + o + ")");
-            } else {
-                edgeStrings.add(y + "-" + x + "(" + o + ")");
-            }
-        }
-        Collections.sort(edgeStrings);
-        for (String edgeString : edgeStrings) {
-            k += edgeString + " ";
-        }
-        return k;
-    }
-    
-    private void saturateAtom(int x, Graph g, Map<String, Graph> s) {
-        System.out.println("saturating atom " + x + " in " + g);
+    private void saturateAtom(int x, Graph g, List<Graph> s) {
+//        System.out.println("saturating atom " + x + " in " + g);
         if (g.isSaturated(x)) {
 //            System.out.println(x + " is already saturated");
             if (atomSaturationListener != null) {
                 atomSaturationListener.atomSaturated(
                         new AtomSaturationEvent(g, x));
             }
-//            String sig = 
-//                new AtomSignature(x, g.getAtomContainer()).toCanonicalString();
-//            String sig = key(g, x);
-//            if (s.containsKey(sig)) {
-////                System.out.println("DUP " + sig + " " + g);
-//            } else {
-//                s.put(sig, g);
-//            }
-//            return;
-            s.put(g.toString(), g);
+            s.add(g);
         } else {
             List<Integer> unsaturatedAtoms = g.unsaturatedAtoms(x);
-//            List<Integer> unsaturatedAtoms = g.targetUnsaturatedAtoms(x);
-//            List<Integer> unsaturatedAtoms = g.allUnsaturatedAtoms(x);
 //            System.out.println("trying all of " + unsaturatedAtoms);
             for (int y : unsaturatedAtoms) {
                 if (x == y) continue;
@@ -281,7 +224,9 @@ public class DeterministicEnumerator {
                 copy.bond(x, y);
                 
                 if (copy.check(x, y, hTau)
-                        && CanonicalChecker.edgesInOrder(g.getAtomContainer())) {
+                        && CanonicalChecker.edgesInOrder(g.getAtomContainer())
+//                        && CanonicalChecker.degreeOrdered(g.getAtomContainer())
+                        ) {
 //                    System.out.println("passed all tests");
                     if (bondCreationListener != null) {
                         bondCreationListener.bondAdded(

@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
-public class ControlPanel extends JPanel implements ActionListener {
+public class SignatureControlPanel extends JPanel implements ActionListener {
     
     private JButton testValues; // XXX TMP
     
@@ -49,7 +49,7 @@ public class ControlPanel extends JPanel implements ActionListener {
     
     private ListenerType selectedListenerType;
     
-    public ControlPanel() {
+    public SignatureControlPanel() {
         setLayout(new GridLayout(2, 6));
         
         testValues = new JButton("Test");

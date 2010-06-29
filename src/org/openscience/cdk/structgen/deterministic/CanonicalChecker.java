@@ -18,10 +18,10 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilderTest;
 import org.openscience.cdk.signature.MoleculeFromSignatureBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import signature.AbstractVertexSignature;
 
@@ -295,6 +295,26 @@ public class CanonicalChecker {
         return true;
     }
     
+    public static boolean degreeOrdered(IAtomContainer atomContainer) {
+        if (atomContainer.getAtomCount() < 2) return true;
+        IAtom first = atomContainer.getAtom(0);
+        double previousDegree = 
+            AtomContainerManipulator.getBondOrderSum(atomContainer, first);
+//            atomContainer.getConnectedAtomsCount(atomContainer.getAtom(0));
+        for (int i = 1; i < atomContainer.getAtomCount(); i++) {
+            IAtom atom = atomContainer.getAtom(0);
+            double degree = 
+                AtomContainerManipulator.getBondOrderSum(atomContainer, atom);
+//                atomContainer.getConnectedAtomsCount(atomContainer.getAtom(i));
+            if (degree <= previousDegree) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     public static boolean isCanonical(IAtomContainer atomContainer) {
         return new CDKDiscretePartitionRefiner(false, true).isCanonical(atomContainer);
     }
@@ -361,7 +381,7 @@ public class CanonicalChecker {
           }
       }
 //      System.out.println("signature partition " + partition + " " + signatureBlockMap.keySet());
-      System.out.println("signature partition " + partition);
+//      System.out.println("signature partition " + partition);
       return partition;
     }
     
@@ -383,8 +403,11 @@ public class CanonicalChecker {
         
         CDKDiscretePartitionRefiner refiner = 
             new CDKDiscretePartitionRefiner(true);
+        Partition initialClone = new Partition(initial);
         refiner.refine(initial, atomContainer);
-        return refiner.firstIsIdentity();
+        boolean canon = refiner.firstIsIdentity();
+        System.out.println(canon + " " + initialClone);
+        return canon;
     }
 
     public static boolean isCanonicalWithColorPartition(
@@ -419,8 +442,8 @@ public class CanonicalChecker {
         
         CDKDiscretePartitionRefiner refiner = 
 //            new CDKDiscretePartitionRefiner(true, false);   // XXX turning off bond orders!
-            new CDKDiscretePartitionRefiner(false, true);
-//            new CDKDiscretePartitionRefiner(true, true);   
+//            new CDKDiscretePartitionRefiner(false, true);
+            new CDKDiscretePartitionRefiner(true, true);
         refiner.refine(initial, atomContainer);
         return refiner.firstIsIdentity();
     }

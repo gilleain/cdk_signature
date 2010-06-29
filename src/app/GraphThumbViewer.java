@@ -1,6 +1,7 @@
 package app;
 
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -60,6 +61,15 @@ public class GraphThumbViewer extends JPanel {
 
     public void clear() {
         ((DefaultListModel)list.getModel()).clear();
+        repaint();
+    }
+
+    public void setGraphs(List<Graph> selected) {
+        clear();
+        DefaultListModel model = (DefaultListModel) list.getModel();
+        for (Graph g : selected) {
+            model.addElement(g);
+        }
         repaint();
     }
 

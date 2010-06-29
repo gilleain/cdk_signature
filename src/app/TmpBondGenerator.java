@@ -43,6 +43,8 @@ public class TmpBondGenerator implements IAtomContainerGenerator {
             double w;
             if (bond.getOrder() == IBond.Order.DOUBLE) {
                 w =  (mw / model.getScale()) * 3;
+            } else if (bond.getOrder() == IBond.Order.TRIPLE) {
+                w =  (mw / model.getScale()) * 5;
             } else {
                 w =  mw / model.getScale();
             }
