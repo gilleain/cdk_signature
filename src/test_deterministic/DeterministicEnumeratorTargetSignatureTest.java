@@ -1,6 +1,10 @@
 package test_deterministic;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
@@ -8,6 +12,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.signature.MoleculeSignature;
+import org.openscience.cdk.signature.Orbit;
 import org.openscience.cdk.structgen.deterministic.DeterministicEnumerator;
 import org.openscience.cdk.structgen.deterministic.FragmentConverter;
 import org.openscience.cdk.structgen.deterministic.TargetMolecularSignature;
@@ -24,27 +29,67 @@ public class DeterministicEnumeratorTargetSignatureTest extends
     
     @Test
     public void adenine() {
-        TargetMolecularSignature tms = new TargetMolecularSignature(1);
-        String a = "[N](=[C][C])";
-        String b = "[N]([C][C][H])";
-        String c = "[N](=[C][C])";
-        String d = "[N]([C][H][H]";
-        String e = "[C]([C]=[N][N]";
-        String f = "[C](=[N][N][H])";
-        String g = "[C](=[C][C][N])";
-        String h = "[C](=[C][N][N]";
-        String i = "[H]([N])";
-        String j = "[H]([C])";
-        tms.add(a, 2);
-        tms.add(b, 1);
-        tms.add(c, 1);
-        tms.add(d, 1);
-        tms.add(e, 1);
-        tms.add(f, 2);
-        tms.add(g, 1);
-        tms.add(h, 1);
-        tms.add(i, 3);
-        tms.add(j, 2);
+        TargetMolecularSignature tms = new TargetMolecularSignature(2);
+       
+        tms.add("[C](=[C][N][N]", 1);
+        tms.add("[C]([C]=[C][N])", 1);
+        tms.add("[C]([C][N]=[N]", 1);
+        tms.add("[C]([H][N]=[N])", 2);
+        tms.add("[H]([C])", 2);
+        tms.add("[H]([N])", 3);
+        tms.add("[N]([C]=[C])", 3);
+        tms.add("[N]([C][C][H])", 1);
+        tms.add("[N]([C][H][H]", 1);
+        
+        IMolecule mol = builder.newInstance(IMolecule.class);
+        mol.addAtom(builder.newInstance(IAtom.class, "C"));
+        mol.addAtom(builder.newInstance(IAtom.class, "N"));
+        mol.addAtom(builder.newInstance(IAtom.class, "C"));
+        mol.addAtom(builder.newInstance(IAtom.class, "C"));
+        mol.addAtom(builder.newInstance(IAtom.class, "N"));
+        mol.addAtom(builder.newInstance(IAtom.class, "N"));
+        mol.addAtom(builder.newInstance(IAtom.class, "C"));
+        mol.addAtom(builder.newInstance(IAtom.class, "N"));
+        mol.addAtom(builder.newInstance(IAtom.class, "C"));
+        mol.addAtom(builder.newInstance(IAtom.class, "N"));
+        mol.addAtom(builder.newInstance(IAtom.class, "H"));
+        mol.addAtom(builder.newInstance(IAtom.class, "H"));
+        mol.addAtom(builder.newInstance(IAtom.class, "H"));
+        mol.addAtom(builder.newInstance(IAtom.class, "H"));
+        mol.addAtom(builder.newInstance(IAtom.class, "H"));
+        
+        mol.addBond(0, 1, IBond.Order.DOUBLE);
+        mol.addBond(0, 9, IBond.Order.SINGLE);
+        mol.addBond(0, 10, IBond.Order.SINGLE);
+        mol.addBond(1, 2, IBond.Order.SINGLE);
+        mol.addBond(2, 3, IBond.Order.SINGLE);
+        mol.addBond(2, 8, IBond.Order.DOUBLE);
+        mol.addBond(3, 4, IBond.Order.SINGLE);
+        mol.addBond(3, 5, IBond.Order.DOUBLE);
+        mol.addBond(4, 11, IBond.Order.SINGLE);
+        mol.addBond(4, 12, IBond.Order.SINGLE);
+        mol.addBond(5, 6, IBond.Order.SINGLE);
+        mol.addBond(6, 7, IBond.Order.DOUBLE);
+        mol.addBond(6, 13, IBond.Order.SINGLE);
+        mol.addBond(7, 8, IBond.Order.SINGLE);
+        mol.addBond(8, 9, IBond.Order.SINGLE);
+        mol.addBond(9, 14, IBond.Order.SINGLE);
+        
+        MoleculeSignature sig = new MoleculeSignature(mol);
+        Map<String, Integer> orbs = new HashMap<String, Integer>();
+        for (int x = 0; x < mol.getAtomCount(); x++) {
+            String ss = sig.signatureStringForVertex(x, 1);
+            if (orbs.containsKey(ss)) {
+                orbs.put(ss, orbs.get(ss) + 1);
+            } else {
+                orbs.put(ss, 1);
+            }
+        }
+        List<String> keys = new ArrayList<String>(orbs.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
+            System.out.println(key + " " + orbs.get(key));
+        }
         
         String formulaString = "C5H5N5";
         run(tms, formulaString);

@@ -143,8 +143,8 @@ public class DeterministicEnumerator {
      * @return a list of atom containers
      */
     public List<IAtomContainer> generate() {
-        this.handler = new DuplicateEliminatingHandler();
-//        this.handler = new SimpleHandler();
+//        this.handler = new DuplicateEliminatingHandler();
+        this.handler = new SimpleHandler();
         this.generateToHandler();
         return handler.getResults();
     }
@@ -152,6 +152,7 @@ public class DeterministicEnumerator {
     private void enumerate(Graph g) {
         if (g.isConnected() 
                 && g.isFullySaturated() 
+                    && CanonicalChecker.edgesInOrder(g.getAtomContainer())
 //                    && g.isCanonical()    // Probably not necessary
                 ){
 //            if (hTau == null || hTau.matches(g.getAtomContainer())) {
@@ -224,7 +225,8 @@ public class DeterministicEnumerator {
                 copy.bond(x, y);
                 
                 if (copy.check(x, y, hTau)
-                        && CanonicalChecker.edgesInOrder(g.getAtomContainer())
+//                        && CanonicalChecker.edgesInOrder(g.getAtomContainer())
+                        && g.bondsIncreasing(x, y)
 //                        && CanonicalChecker.degreeOrdered(g.getAtomContainer())
                         ) {
 //                    System.out.println("passed all tests");

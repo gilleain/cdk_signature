@@ -55,11 +55,11 @@ public class FormulaDebugger extends JFrame
     
     public static final int SEARCH_TREE_PANEL_WIDTH = 300;
     
-    public static final int SEARCH_TREE_PANEL_HEIGHT = 900;
+    public static final int SEARCH_TREE_PANEL_HEIGHT = 750;
     
     public static final int THUMB_PANEL_WIDTH = 400;
     
-    public static final int THUMB_PANEL_HEIGHT = 900;
+    public static final int THUMB_PANEL_HEIGHT = 750;
     
     public static final int GRAPH_PANEL_WIDTH = 500;
     

@@ -48,6 +48,10 @@ public class Graph {
     
     private ArrayList<Boolean> orbitUnsaturatedFlags;
     
+    private int lastAddedBondLeftEnd;
+    
+    private int lastAddedBondRightEnd;
+    
     /**
      * Wrap an atom container in a graph, to manage the fragments
      * 
@@ -61,6 +65,8 @@ public class Graph {
         this.orbitUnsaturatedFlags = new ArrayList<Boolean>();
         this.determineUnsaturated();
         this.determineOrbitUnsaturated();
+        this.lastAddedBondLeftEnd = 0;
+        this.lastAddedBondRightEnd = 0;
     }
     
     /**
@@ -82,9 +88,21 @@ public class Graph {
             this.unsaturatedAtoms = (ArrayList<Integer>) g.unsaturatedAtoms.clone();
             this.orbitUnsaturatedFlags = 
                 (ArrayList<Boolean>) g.orbitUnsaturatedFlags.clone();
+            this.lastAddedBondLeftEnd = g.lastAddedBondLeftEnd;
+            this.lastAddedBondRightEnd = g.lastAddedBondRightEnd;
         } catch (CloneNotSupportedException c) {
             
         }
+    }
+    
+    public boolean bondsIncreasing(int l, int r) {
+        boolean incr = lastAddedBondLeftEnd < l 
+            || (lastAddedBondLeftEnd == l && lastAddedBondRightEnd <= r);
+//        System.out.println("incr " + incr + " " 
+//                + lastAddedBondLeftEnd + " " 
+//                + lastAddedBondRightEnd + " "
+//                + " " + l + " " + r);
+        return incr;
     }
     
     public TargetAtomicSignature getTasForAtom(
@@ -526,6 +544,8 @@ public class Graph {
         } else {
             atomContainer.addBond(x, y, IBond.Order.SINGLE);
         }
+        lastAddedBondLeftEnd = x;
+        lastAddedBondRightEnd = y;
     }
     
     public boolean removeBond(int x, int y) {
