@@ -15,6 +15,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.structgen.deterministic.AlternateCanonicalChecker;
 import org.openscience.cdk.structgen.deterministic.CanonicalChecker;
+import org.openscience.cdk.structgen.deterministic.Graph;
 import org.openscience.cdk.tools.manipulator.BondManipulator;
 
 public class CanonicalCheckerTest {
@@ -133,16 +134,17 @@ public class CanonicalCheckerTest {
         for (int i = 0; i < 4; i++) {
             ac.addAtom(builder.newInstance(IAtom.class,"H"));
         }
-        ac.addBond(0, 1, IBond.Order.SINGLE);
+        ac.addBond(0, 1, IBond.Order.DOUBLE);
         ac.addBond(0, 2, IBond.Order.SINGLE);
-        ac.addBond(0, 3, IBond.Order.DOUBLE);
-        ac.addBond(1, 2, IBond.Order.DOUBLE);
+        ac.addBond(0, 3, IBond.Order.SINGLE);
         ac.addBond(1, 4, IBond.Order.SINGLE);
-        ac.addBond(2, 5, IBond.Order.SINGLE);
-        ac.addBond(3, 6, IBond.Order.SINGLE);
-        ac.addBond(3, 7, IBond.Order.SINGLE);
+        ac.addBond(1, 5, IBond.Order.SINGLE);
+        ac.addBond(2, 3, IBond.Order.DOUBLE);
+//        ac.addBond(2, 3, IBond.Order.SINGLE);
+//        ac.addBond(2, 6, IBond.Order.SINGLE);
+//        ac.addBond(3, 7, IBond.Order.SINGLE);
 //        findCanonical(ac);
-        chompTest(ac);
+//        chompTest(ac);
         Assert.assertEquals(true, 
                 CanonicalChecker.isCanonicalWithColorPartition(ac));
 //                canonical(ac));
@@ -304,9 +306,9 @@ public class CanonicalCheckerTest {
         boolean s = CanonicalChecker.isCanonicalWithColorPartition(ac);
         boolean d = CanonicalChecker.degreeOrdered(ac);
         boolean e = CanonicalChecker.edgesInOrder(ac);
-        if (!s) { System.out.println("NOT SIG-PARTIION CANON"); }
-        if (!d) { System.out.println("NOT DEGR-ORDERED CANON"); }
-        if (!e) { System.out.println("NOT EDGE-ORDERED CANON"); }
+        if (!s) { System.out.println("NOT SIG-PARTIION CANON " + new Graph(ac)); }
+        if (!d) { System.out.println("NOT DEGR-ORDERED CANON " + new Graph(ac)); }
+        if (!e) { System.out.println("NOT EDGE-ORDERED CANON " + new Graph(ac)); }
         return s && d && e;
             
     }
