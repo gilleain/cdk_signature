@@ -18,7 +18,7 @@ public class SearchTreePanel extends JPanel implements Scrollable {
         
         public int totalLeafCount = 0;
         
-        public int xSep = 10;
+        public int xSep = 15;
         
         public int ySep = 15;
         
@@ -86,7 +86,7 @@ public class SearchTreePanel extends JPanel implements Scrollable {
             this.parent = parent;
             this.children = new ArrayList<Node>();
             if (parent == null) {
-                depth = 0;
+                depth = 1;
             } else {
                 depth = parent.depth + 1;
             }
@@ -165,7 +165,7 @@ public class SearchTreePanel extends JPanel implements Scrollable {
         if (root == null) {
             root = new Node(null, child);
             nodes.add(root);
-            depth = 0;
+            depth = 1;
         } else {
             Node parentNode = findParentNode(parent);
             if (parentNode != null) {

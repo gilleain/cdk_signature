@@ -63,15 +63,15 @@ public class FormulaDebugger extends JFrame
     
     public static final int GRAPH_PANEL_WIDTH = 500;
     
-    public static final int GRAPH_PANEL_HEIGHT = 300;
+    public static final int GRAPH_PANEL_HEIGHT = 250;
     
     public static final int TREE_PANEL_WIDTH = 500;
     
-    public static final int TREE_PANEL_HEIGHT = 300;
+    public static final int TREE_PANEL_HEIGHT = 250;
     
     public static final int MOL_PANEL_WIDTH = 500;
     
-    public static final int MOL_PANEL_HEIGHT = 300;
+    public static final int MOL_PANEL_HEIGHT = 250;
     
     public FormulaDebugger() {
         setLayout(new BorderLayout());
