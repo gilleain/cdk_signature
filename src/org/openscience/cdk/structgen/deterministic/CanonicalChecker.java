@@ -44,9 +44,11 @@ public class CanonicalChecker {
                     sigPart.addToCell(block, i);
                 } else {
                     sigPart.addSingletonCell(i);
+                    sigBlockMap.put(sig, sigPart.size() - 1);
                 }
             }
         }
+//        System.out.println(sigPart);
         
         // make the initial edge string, and permute
         int atomCount = ac.getAtomCount();
@@ -72,6 +74,7 @@ public class CanonicalChecker {
                 
                 // check to see if this permutation makes a more minimal string
                 String permutedString = edgeString(ac, fullPermutation);
+                System.out.println(permutedString);
                 if (permutedString.compareTo(initialEdgeString) < 0) {
                     return false;
                 }

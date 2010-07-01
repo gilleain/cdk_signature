@@ -29,6 +29,26 @@ public class CanonicalCheckerTest {
         return CanonicalChecker.isCanonicalWithSignaturePartition(ac);
     }
     
+    @Test
+    public void butyl_1_ene_3_yne() {
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        for (int i = 0; i < 4; i++) {
+            ac.addAtom(builder.newInstance(IAtom.class,"C"));
+        }
+        for (int i = 0; i < 4; i++) {
+            ac.addAtom(builder.newInstance(IAtom.class,"H"));
+        }
+        ac.addBond(0, 1, IBond.Order.TRIPLE);
+        ac.addBond(0, 2, IBond.Order.SINGLE);
+        ac.addBond(1, 4, IBond.Order.SINGLE);
+        ac.addBond(2, 3, IBond.Order.DOUBLE);
+        ac.addBond(2, 5, IBond.Order.SINGLE);
+        ac.addBond(3, 6, IBond.Order.SINGLE);
+        ac.addBond(3, 7, IBond.Order.SINGLE);
+        
+        CanonicalChecker.isCanonicalByMagic(ac);
+    }
+    
     public void checkSigOrder(IAtomContainer ac) {
         if (CanonicalChecker.signaturesOrdered(ac)) {
             System.out.println("ORD " + new Graph(ac));

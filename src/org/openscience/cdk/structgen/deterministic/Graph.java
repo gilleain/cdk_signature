@@ -221,7 +221,11 @@ public class Graph {
 //                System.out.println("REJECTED " + this);
             }
         } else {
-            System.out.println("canonical " + isCanonical + "\t" + this);
+            if (isCanonical) {
+//                System.out.println("canonical " + isCanonical + "\t" + this);
+            } else {
+                System.out.println("canonical " + isCanonical + "\t" + this);
+            }
         }
         return isCanonical && isCompatible;
     }
