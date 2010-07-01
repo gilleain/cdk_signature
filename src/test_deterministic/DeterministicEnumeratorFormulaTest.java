@@ -120,7 +120,7 @@ public class DeterministicEnumeratorFormulaTest extends
     
     @Test
     public void testC4H4O() {
-        DeterministicEnumeratorFormulaTest.testFormula("C4H4O", 37);
+        DeterministicEnumeratorFormulaTest.testFormula("C4H4O", 47);
     }
     
     @Test
@@ -140,12 +140,12 @@ public class DeterministicEnumeratorFormulaTest extends
     
     @Test
     public void testC5H8() {
-        DeterministicEnumeratorFormulaTest.testFormula("C5H8", 25);
+        DeterministicEnumeratorFormulaTest.testFormula("C5H8", 26);
     }
     
     @Test
     public void testC5H10() {
-        DeterministicEnumeratorFormulaTest.testFormula("C5H10", 8);
+        DeterministicEnumeratorFormulaTest.testFormula("C5H10", 10);
     }
     
     @Test

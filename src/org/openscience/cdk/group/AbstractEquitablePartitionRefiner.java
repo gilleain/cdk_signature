@@ -26,6 +26,19 @@ import java.util.TreeSet;
 public abstract class AbstractEquitablePartitionRefiner {
     
     /**
+     * A forward split order tends to favor partitions where the cells are
+     * refined from lowest to highest. A reverse split order is, of course, the
+     * opposite.
+     * 
+     */
+    public enum SplitOrder { FORWARD, REVERSE };
+    
+    /**
+     * The bias in splitting cells when refining
+     */
+    private SplitOrder splitOrder = SplitOrder.FORWARD;
+    
+    /**
      * The block of the partition that is being refined
      */
     private int currentBlockIndex;
@@ -53,6 +66,15 @@ public abstract class AbstractEquitablePartitionRefiner {
     public abstract int neighboursInBlock(Set<Integer> block, int vertexIndex);
 
     /**
+     * Set the preference for splitting cells.
+     * 
+     * @param splitOrder either FORWARD or REVERSE
+     */
+    public void setSplitOrder(SplitOrder splitOrder) {
+        this.splitOrder = splitOrder;
+    }
+    
+    /**
      * Refines the coarse partition <code>a</code> into a finer one.
      *  
      * @param a the partition to refine
@@ -62,9 +84,9 @@ public abstract class AbstractEquitablePartitionRefiner {
         Partition b = new Partition(a);
         
         // start the queue with the blocks of a in reverse order
-        this.blocksToRefine = new LinkedList<Set<Integer>>();
+        blocksToRefine = new LinkedList<Set<Integer>>();
         for (int i = 0; i < b.size(); i++) {
-            this.blocksToRefine.add(b.copyBlock(i));
+            blocksToRefine.add(b.copyBlock(i));
         }
         
         int numberOfVertices = getNumberOfVertices();
@@ -114,7 +136,7 @@ public abstract class AbstractEquitablePartitionRefiner {
                 setList.put(h, set);
             }
         }
-//        System.out.println("target block " + targetBlock + " inv " + setList);
+//        System.out.println("current block " + partition.getCell(currentBlockIndex) + " target block " + targetBlock + " inv " + setList);
         return setList;
     }
     
@@ -131,8 +153,11 @@ public abstract class AbstractEquitablePartitionRefiner {
             invariantKeys.addAll(invariants.keySet());
             partition.removeCell(currentBlockIndex);
             int k = currentBlockIndex;
-            // TODO : allow both increasing and decreasing
-            Collections.sort(invariantKeys, Collections.reverseOrder());
+            if (splitOrder == SplitOrder.REVERSE) {
+                Collections.sort(invariantKeys);
+            } else {
+                Collections.sort(invariantKeys, Collections.reverseOrder());
+            }
             for (int h : invariantKeys) {
                 SortedSet setH = invariants.get(h);
 //                System.out.println("adding block " + setH + " at " + k + " h=" + h);

@@ -11,6 +11,9 @@ import org.openscience.cdk.graph.PathTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IIsotope;
+import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.signature.AtomSignature;
@@ -52,21 +55,51 @@ public class Graph {
     
     private int lastAddedBondRightEnd;
     
+    private final static Comparator<IAtom> lexComparator = 
+        new Comparator<IAtom>() {
+
+        public int compare(IAtom o1, IAtom o2) {
+            return -o1.getSymbol().compareTo(o2.getSymbol());
+        }
+        
+    };
+    
+    private final static Comparator<IAtom> reverseLexComparator = 
+        new Comparator<IAtom>() {
+
+        public int compare(IAtom o1, IAtom o2) {
+            return -o1.getSymbol().compareTo(o2.getSymbol());
+        }
+        
+    };
+    
+    public Graph() {
+        this.targets = new ArrayList<Integer>();
+        this.orbits = new ArrayList<Orbit>();
+        this.unsaturatedAtoms = new ArrayList<Integer>();
+        this.orbitUnsaturatedFlags = new ArrayList<Boolean>();
+        this.lastAddedBondLeftEnd = 0;
+        this.lastAddedBondRightEnd = 0;
+    }
+    
+    public Graph(IMolecularFormula formula, IChemObjectBuilder builder) {
+        this();
+        this.atomContainer = makeAtomContainerFromFormula(formula, builder);
+        this.determineUnsaturated();
+        this.determineOrbitUnsaturated();
+    }
+    
     /**
      * Wrap an atom container in a graph, to manage the fragments
      * 
      * @param atomContainer the underlying atom container
      */
     public Graph(IAtomContainer atomContainer) {
+        this();
         this.atomContainer = atomContainer;
-        this.targets = new ArrayList<Integer>();
-        this.orbits = new ArrayList<Orbit>();
-        this.unsaturatedAtoms = new ArrayList<Integer>();
-        this.orbitUnsaturatedFlags = new ArrayList<Boolean>();
+     
         this.determineUnsaturated();
         this.determineOrbitUnsaturated();
-        this.lastAddedBondLeftEnd = 0;
-        this.lastAddedBondRightEnd = 0;
     }
     
     /**
@@ -93,6 +126,24 @@ public class Graph {
         } catch (CloneNotSupportedException c) {
             
         }
+    }
+    
+    private IAtomContainer makeAtomContainerFromFormula(
+            IMolecularFormula formula,  IChemObjectBuilder builder) {
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        
+        ArrayList<IAtom> atoms = new ArrayList<IAtom>();
+        for (IIsotope isotope : formula.isotopes()) {
+            for (int i = 0; i < formula.getIsotopeCount(isotope); i++) {
+                atoms.add(builder.newInstance(IAtom.class, isotope));
+            }
+        }
+        
+        // sort by symbol lexicographic order
+        Collections.sort(atoms, Graph.lexComparator);
+//        Collections.sort(atoms, Graph.reverseLexComparator);
+        atomContainer.setAtoms(atoms.toArray(new IAtom[]{}));
+        return atomContainer;
     }
     
     public boolean bondsIncreasing(int l, int r) {
@@ -656,7 +707,9 @@ public class Graph {
 
     public boolean isCanonical() {
 //        return CanonicalChecker.isCanonicalWithCompactSignaturePartition(atomContainer);
-        return CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+//        return CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
+//        return CanonicalChecker.isCanonicalWithGaps(atomContainer);
+        return CanonicalChecker.isCanonicalByMagic(atomContainer);
     }
     
     public String toString() {

@@ -30,6 +30,56 @@ public class CanonicalChecker {
     private static CDKDiscretePartitionRefiner discreteRefiner = 
         new CDKDiscretePartitionRefiner(true);
     
+    public static boolean isCanonicalByMagic(IAtomContainer ac) {
+        // make a partition of connected atoms, but not compact
+        Partition sigPart = new Partition();
+        Map<String, Integer> sigBlockMap = new HashMap<String, Integer>();
+        MoleculeSignature molSig = new MoleculeSignature(ac);
+        for (int i = 0; i < ac.getAtomCount(); i++) {
+            IAtom atom = ac.getAtom(i);
+            if (ac.getConnectedAtomsCount(atom) > 0) {
+                String sig = molSig.signatureStringForVertex(i);
+                if (sigBlockMap.containsKey(sig)) {
+                    int block = sigBlockMap.get(sig);
+                    sigPart.addToCell(block, i);
+                } else {
+                    sigPart.addSingletonCell(i);
+                }
+            }
+        }
+        
+        // make the initial edge string, and permute
+        int atomCount = ac.getAtomCount();
+        Permutation identity = new Permutation(atomCount);
+        String initialEdgeString = edgeString(ac, identity);
+        for (int i = 0; i < sigPart.size(); i++) {
+            SortedSet<Integer> cell = sigPart.getCell(i);
+            int cellSize = cell.size();
+            if (cellSize == 1) continue;
+            
+            // could cache these
+            SSPermutationGroup symN = SSPermutationGroup.makeSymN(cellSize);
+            
+            for (Permutation permutation : symN.all()) {
+                
+                // could have a better name, and be more efficiently made
+                Permutation fullPermutation = new Permutation(atomCount);
+                int cellIndex = 0;
+                for (int j : cell) {
+                    fullPermutation.set(j, permutation.get(cellIndex));
+                    cellIndex++;
+                }
+                
+                // check to see if this permutation makes a more minimal string
+                String permutedString = edgeString(ac, fullPermutation);
+                if (permutedString.compareTo(initialEdgeString) < 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     public static AbstractVertexSignature getCanonicalSignature(
             IAtomContainer graph) {
         MoleculeSignature signature = new MoleculeSignature(graph);
@@ -320,7 +370,7 @@ public class CanonicalChecker {
     }
     
     public static boolean isCanonicalWithGaps(IAtomContainer atomContainer) {
-        return new CDKDiscretePartitionRefiner(true).isCanonical(atomContainer);
+        return new CDKDiscretePartitionRefiner(true, true).isCanonical(atomContainer);
     }
     
     public static void searchForSignaturePartition(IAtomContainer atomContainer) {
@@ -407,7 +457,37 @@ public class CanonicalChecker {
         refiner.refine(initial, atomContainer);
         boolean canon = refiner.firstIsIdentity();
         System.out.println(canon + " " + initialClone);
+        
+//        return canon && signaturesOrdered(atomContainer);
         return canon;
+//        return true;
+    }
+    
+    public static boolean signaturesOrdered(IAtomContainer atomContainer) {
+        String prev = null;
+        MoleculeSignature molSig = new MoleculeSignature(atomContainer);
+        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+            int c = atomContainer.getConnectedAtomsCount(atomContainer.getAtom(i)); 
+            if (c > 0) {
+                String sig = molSig.signatureStringForVertex(i);
+                if (prev == null) {
+                    System.out.println("prev " + prev + " curr " + sig);
+                } else {
+                    boolean ordered = ordered(prev, sig);
+                    System.out.println("prev " + prev + " curr " + sig + " " + ordered);
+                }
+                if (prev == null || ordered(prev, sig)) {
+                    prev = sig;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    private static boolean ordered(String a, String b) {
+        return a.compareTo(b) >= 0;
     }
 
     public static boolean isCanonicalWithColorPartition(

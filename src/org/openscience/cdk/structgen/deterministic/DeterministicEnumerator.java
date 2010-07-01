@@ -143,8 +143,8 @@ public class DeterministicEnumerator {
      * @return a list of atom containers
      */
     public List<IAtomContainer> generate() {
-//        this.handler = new DuplicateEliminatingHandler();
-        this.handler = new SimpleHandler();
+        this.handler = new DuplicateEliminatingHandler();
+//        this.handler = new SimpleHandler();
         this.generateToHandler();
         return handler.getResults();
     }

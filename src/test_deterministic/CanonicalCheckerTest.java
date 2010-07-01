@@ -29,6 +29,40 @@ public class CanonicalCheckerTest {
         return CanonicalChecker.isCanonicalWithSignaturePartition(ac);
     }
     
+    public void checkSigOrder(IAtomContainer ac) {
+        if (CanonicalChecker.signaturesOrdered(ac)) {
+            System.out.println("ORD " + new Graph(ac));
+        } else {
+            System.out.println("DIS " + new Graph(ac));
+        }
+    }
+    
+    @Test
+    public void H4C3Test() {
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        for (int i = 0; i < 4; i++) {
+            ac.addAtom(builder.newInstance(IAtom.class,"H"));
+        }
+        for (int i = 0; i < 3; i++) {
+            ac.addAtom(builder.newInstance(IAtom.class,"C"));
+        }
+        
+        ac.addBond(0, 5, IBond.Order.SINGLE);
+        checkSigOrder(ac);
+        
+        ac.addBond(1, 6, IBond.Order.SINGLE);
+        checkSigOrder(ac);
+        
+        ac.addBond(2, 4, IBond.Order.SINGLE);
+        checkSigOrder(ac);
+        
+        ac.addBond(3, 4, IBond.Order.SINGLE);
+        checkSigOrder(ac);
+        
+        ac.addBond(5, 6, IBond.Order.SINGLE);
+        checkSigOrder(ac);
+    }
+    
     public IAtomContainer makeDisconnectedSeparateBonds() {
         IAtomContainer ac = builder.newInstance(IAtomContainer.class);
         ac.addAtom(builder.newInstance(IAtom.class,"C"));
@@ -141,12 +175,12 @@ public class CanonicalCheckerTest {
         ac.addBond(1, 5, IBond.Order.SINGLE);
         ac.addBond(2, 3, IBond.Order.DOUBLE);
 //        ac.addBond(2, 3, IBond.Order.SINGLE);
-//        ac.addBond(2, 6, IBond.Order.SINGLE);
-//        ac.addBond(3, 7, IBond.Order.SINGLE);
-//        findCanonical(ac);
+        ac.addBond(2, 6, IBond.Order.SINGLE);
+        ac.addBond(3, 7, IBond.Order.SINGLE);
+        findCanonical(ac);
 //        chompTest(ac);
-        Assert.assertEquals(true, 
-                CanonicalChecker.isCanonicalWithColorPartition(ac));
+//        Assert.assertEquals(true, 
+//                CanonicalChecker.isCanonicalWithColorPartition(ac));
 //                canonical(ac));
     }
     
@@ -302,8 +336,8 @@ public class CanonicalCheckerTest {
     }
     
     public boolean totallyCanonical(IAtomContainer ac) {
-//        boolean s = CanonicalChecker.isCanonicalWithCompactSignaturePartition(ac);
-        boolean s = CanonicalChecker.isCanonicalWithColorPartition(ac);
+        boolean s = CanonicalChecker.isCanonicalWithCompactSignaturePartition(ac);
+//        boolean s = CanonicalChecker.isCanonicalWithColorPartition(ac);
         boolean d = CanonicalChecker.degreeOrdered(ac);
         boolean e = CanonicalChecker.edgesInOrder(ac);
         if (!s) { System.out.println("NOT SIG-PARTIION CANON " + new Graph(ac)); }
