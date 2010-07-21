@@ -2,6 +2,7 @@ package degree;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,16 @@ public class DegreeSequenceGenerator {
     
     public class DegreeSequence {
         
+        private class DegreeComparator implements Comparator<Integer> {
+
+            public int compare(Integer o1, Integer o2) {
+                return -degreeMap.get(o1).compareTo(degreeMap.get(o2));
+            }
+            
+        }
+        
+        private DegreeComparator degreeComparator = new DegreeComparator();
+        
         private Map<Integer, Integer> degreeMap;
         
         private List<Integer> vertexIndicesByDegree;
@@ -107,7 +118,7 @@ public class DegreeSequenceGenerator {
                 vertexIndicesByDegree.add(other.vertexIndicesByDegree.get(i));
                 i++;
             }
-            Collections.sort(vertexIndicesByDegree, Collections.reverseOrder());
+            Collections.sort(vertexIndicesByDegree, degreeComparator);
         }
 
         /**
@@ -228,8 +239,7 @@ public class DegreeSequenceGenerator {
             for (int v : vertexIndicesByDegree) {
                 reduced.vertexIndicesByDegree.add(v);
             }
-            Collections.sort(
-                    reduced.vertexIndicesByDegree, Collections.reverseOrder());
+            Collections.sort(reduced.vertexIndicesByDegree, degreeComparator);
             return reduced;
         }
         
