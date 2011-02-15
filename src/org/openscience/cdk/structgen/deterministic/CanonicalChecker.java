@@ -17,6 +17,7 @@ import org.openscience.cdk.group.SSPermutationGroup;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.signature.MoleculeFromSignatureBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
@@ -29,6 +30,131 @@ public class CanonicalChecker {
     
     private static CDKDiscretePartitionRefiner discreteRefiner = 
         new CDKDiscretePartitionRefiner(true);
+    
+    public static Partition compactPartition(IAtomContainer atomContainer) {
+        int compactIndex = 0;
+    
+        Map<String, Integer> labelBlockMap = new HashMap<String, Integer>();
+        int maxBlock = 0;
+        Partition partition = new Partition();
+        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+            IAtom atom = atomContainer.getAtom(i);
+            List<IBond> bonds = atomContainer.getConnectedBondsList(atom);
+            if (bonds.size() > 0) {
+                Order highestBondOrder = Order.SINGLE;
+                int degreeSum = 0;
+                for (IBond b : bonds) {
+                    IBond.Order o = b.getOrder();
+                    if (o.ordinal() > highestBondOrder.ordinal()) {
+                        highestBondOrder = o;
+                    }
+                    degreeSum += o.ordinal();
+                }
+                String label = atom.getSymbol() + highestBondOrder.ordinal();
+//              String label = atom.getSymbol() + degreeSum;
+                if (labelBlockMap.containsKey(label)) {
+                    int blockIndex = labelBlockMap.get(label);
+                    partition.addToCell(blockIndex, compactIndex);
+                } else {
+                    SortedSet<Integer> block = new TreeSet<Integer>();
+                    block.add(compactIndex);
+                    partition.addCell(block);
+                    labelBlockMap.put(label, maxBlock);
+                    maxBlock++;
+                }
+                compactIndex++;
+            }
+        }
+        return partition;
+    }
+    
+    public static boolean isCanonicalByCombinedVertexSymbol(IAtomContainer ac) {
+       
+        Partition p = compactPartition(ac);
+        System.out.println(p);
+        
+        CDKDiscretePartitionRefiner r = 
+            new CDKDiscretePartitionRefiner(true, false);
+        r.refine(p, ac);
+        System.out.println(r.getFirst() + " " + r.getBest());
+        return r.firstIsIdentity();
+    }
+    
+    public static boolean isCanonicalByProperMagic(IAtomContainer ac) {
+//        Partition sigPart = new Partition();
+//        Map<String, Integer> sigBlockMap = new HashMap<String, Integer>();
+//        MoleculeSignature molSig = new MoleculeSignature(ac);
+//        for (int i = 0; i < ac.getAtomCount(); i++) {
+//            IAtom atom = ac.getAtom(i);
+//            if (ac.getConnectedAtomsCount(atom) > 0) {
+//                String sig = molSig.signatureStringForVertex(i);
+////                System.out.println("sig(" + i + ") = " + sig);
+//                if (sigBlockMap.containsKey(sig)) {
+//                    int block = sigBlockMap.get(sig);
+//                    sigPart.addToCell(block, i);
+//                } else {
+//                    sigPart.addSingletonCell(i);
+//                    sigBlockMap.put(sig, sigPart.size() - 1);
+//                }
+//            }
+//        }
+////        System.out.println(sigPart + " " + sigBlockMap);
+//        
+        int atomCount = ac.getAtomCount();
+        Permutation identity = new Permutation(atomCount);
+        String initialEdgeString = edgeString(ac, identity);
+        List<Permutation> generators = new ArrayList<Permutation>();
+//        for (int i = 0; i < sigPart.size(); i++) {
+//            SortedSet<Integer> cell = sigPart.getCell(i);
+//            Integer[] cellArr = cell.toArray(new Integer[]{});
+////            System.out.println("i " + cell + " " + Arrays.toString(cellArr));
+//            int cellSize = cell.size();
+//            if (cellSize == 1) continue;
+//            int[] pArr = new int[atomCount];
+//            Arrays.fill(pArr, -1);
+//            int cellIndex = 0;
+//            for (int member : cell) {
+//                if (cellIndex < cell.size() - 1) {
+//                    pArr[member] = cellArr[cellIndex+1];
+//                } else {
+//                    pArr[member] = cellArr[0];
+//                }
+//                cellIndex++;
+//            }
+//            for (int j = 0; j < atomCount; j++) {
+//                if (pArr[j] == -1) {
+//                    pArr[j] = j;
+//                } 
+//            }
+//            generators.add(new Permutation(pArr));
+//        }
+//        System.out.println("Gen=" + generators);
+//        SSPermutationGroup autG = new SSPermutationGroup(atomCount, generators);
+        CDKDiscretePartitionRefiner refiner = new CDKDiscretePartitionRefiner(true,true); 
+        SSPermutationGroup autG = refiner.getAutomorphismGroup(ac);
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        int mapIndex = 0;
+        for (int atomIndex = 0; atomIndex < atomCount; atomIndex++) {
+            if (ac.getConnectedAtomsCount(ac.getAtom(atomIndex)) != 0) {
+                map.put(mapIndex, atomIndex);
+                mapIndex++;
+            }
+        }
+        
+        for (Permutation permutation : autG.all()) {
+            Permutation full = new Permutation(atomCount);
+            for (int pIndex = 0; pIndex < map.size(); pIndex++) {
+                full.set(map.get(pIndex), map.get(permutation.get(pIndex)));
+            }
+            String permutedString = edgeString(ac, full);
+//            System.out.println(permutedString);
+            if (permutedString.compareTo(initialEdgeString) < 0) {
+                System.out.println("FALSE " + generators + " " + initialEdgeString);
+                return false;
+            }
+        }
+        return true;
+    }
     
     public static boolean isCanonicalByMagic(IAtomContainer ac) {
         // make a partition of connected atoms, but not compact

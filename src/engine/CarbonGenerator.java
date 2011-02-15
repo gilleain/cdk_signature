@@ -12,7 +12,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.MDLWriter;
+//import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
@@ -124,8 +124,8 @@ public class CarbonGenerator {
      * @param atomNum
      */
     public static void toSDF(String filename, int valence, int atomNum) {
-        try {
-            MDLWriter writer = new MDLWriter(new FileWriter(filename));
+//        try {
+//            MDLWriter writer = new MDLWriter(new FileWriter(filename)); FIXME!
             StructureDiagramGenerator sdg = new StructureDiagramGenerator();
             IntegerPartition[] partitions = PartitionCalculator.partition(valence, atomNum);
             for (IntegerPartition partition : partitions) {
@@ -136,7 +136,7 @@ public class CarbonGenerator {
                         if (ConnectivityChecker.isConnected(container)) {
                             sdg.setMolecule(container);
                             sdg.generateCoordinates();
-                            writer.write(sdg.getMolecule());
+//                            writer.write(sdg.getMolecule());
                         }
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
@@ -144,9 +144,9 @@ public class CarbonGenerator {
                     }
                 }
             }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        }
     }
 
     public static void main(String[] args) {

@@ -12,6 +12,8 @@ public class DuplicateEliminatingHandler implements IEnumeratorResultHandler {
     
     private Map<String, IAtomContainer> results;
     
+    private boolean hasDuplicates = false;
+    
     public DuplicateEliminatingHandler() {
         results = new HashMap<String, IAtomContainer>();
     }
@@ -19,10 +21,14 @@ public class DuplicateEliminatingHandler implements IEnumeratorResultHandler {
     public void handle(IAtomContainer result) {
         String signatureString = 
             new MoleculeSignature(result).toCanonicalString();
+        if (results.containsKey(signatureString)) {
+            hasDuplicates = true;
+        }
         results.put(signatureString, result);
     }
 
     public List<IAtomContainer> getResults() {
+        if (hasDuplicates) { System.out.println("DUPS"); }
         return new ArrayList<IAtomContainer>(results.values());
     }
 

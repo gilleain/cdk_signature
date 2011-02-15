@@ -24,8 +24,8 @@ public class SaturationCalculator {
         double bondOrderSum = container.getBondOrderSum(atom);
         IBond.Order maxBondOrder = container.getMaximumBondOrder(atom);
         Integer hcount = 
-            atom.getHydrogenCount() == CDKConstants.UNSET? 
-                    0 : atom.getHydrogenCount();
+            atom.getImplicitHydrogenCount() == CDKConstants.UNSET? 
+                    0 : atom.getImplicitHydrogenCount();
         Integer charge = 
             atom.getFormalCharge() == CDKConstants.UNSET? 
                     0 : atom.getFormalCharge();

@@ -224,7 +224,7 @@ public class Graph {
             if (isCanonical) {
 //                System.out.println("canonical " + isCanonical + "\t" + this);
             } else {
-                System.out.println("canonical " + isCanonical + "\t" + this);
+//                System.out.println("canonical " + isCanonical + "\t" + this);
             }
         }
         return isCanonical && isCompatible;
@@ -713,7 +713,9 @@ public class Graph {
 //        return CanonicalChecker.isCanonicalWithCompactSignaturePartition(atomContainer);
 //        return CanonicalChecker.isCanonicalWithColorPartition(atomContainer);
 //        return CanonicalChecker.isCanonicalWithGaps(atomContainer);
-        return CanonicalChecker.isCanonicalByMagic(atomContainer);
+//        return CanonicalChecker.isCanonicalByMagic(atomContainer);
+        return CanonicalChecker.isCanonicalByProperMagic(atomContainer);
+//        return CanonicalChecker.isCanonicalByCombinedVertexSymbol(atomContainer);
     }
     
     public String toString() {

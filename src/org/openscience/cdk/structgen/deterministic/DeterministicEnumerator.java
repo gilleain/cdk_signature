@@ -152,8 +152,8 @@ public class DeterministicEnumerator {
     private void enumerate(Graph g) {
         if (g.isConnected() 
                 && g.isFullySaturated() 
-                    && CanonicalChecker.edgesInOrder(g.getAtomContainer())
-//                    && g.isCanonical()    // Probably not necessary
+//                    && CanonicalChecker.edgesInOrder(g.getAtomContainer())
+                    && g.isCanonical()    // Probably not necessary
                 ){
 //            if (hTau == null || hTau.matches(g.getAtomContainer())) {
                 System.out.println("SOLUTION " + g);

@@ -26,7 +26,9 @@ public class CanonicalCheckerTest {
     public boolean canonical(IAtomContainer ac) {
 //        return CanonicalChecker.isCanonical(ac);
 //        return AlternateCanonicalChecker.isCanonicalByVisitor(ac);
-        return CanonicalChecker.isCanonicalWithSignaturePartition(ac);
+//        return CanonicalChecker.isCanonicalWithSignaturePartition(ac);
+//        return CanonicalChecker.isCanonicalByMagic(ac);
+        return CanonicalChecker.isCanonicalByProperMagic(ac);
     }
     
     @Test
@@ -46,7 +48,9 @@ public class CanonicalCheckerTest {
         ac.addBond(3, 6, IBond.Order.SINGLE);
         ac.addBond(3, 7, IBond.Order.SINGLE);
         
-        CanonicalChecker.isCanonicalByMagic(ac);
+        canonical(ac);
+//        boolean canon = CanonicalChecker.isCanonicalByCombinedVertexSymbol(ac);
+//        System.out.println(canon);
     }
     
     public void checkSigOrder(IAtomContainer ac) {
@@ -170,7 +174,7 @@ public class CanonicalCheckerTest {
         ac.addAtom(builder.newInstance(IAtom.class,"C"));
         ac.addAtom(builder.newInstance(IAtom.class,"C"));
         ac.addAtom(builder.newInstance(IAtom.class,"C"));
-        ac.addAtom(builder.newInstance(IAtom.class,"C"));
+        ac.addAtom(builder.newInstance(IAtom.class,"O"));
         ac.addBond(0, 1, IBond.Order.SINGLE);
         ac.addBond(0, 2, IBond.Order.SINGLE);
         ac.addBond(1, 3, IBond.Order.SINGLE);
@@ -188,17 +192,19 @@ public class CanonicalCheckerTest {
         for (int i = 0; i < 4; i++) {
             ac.addAtom(builder.newInstance(IAtom.class,"H"));
         }
-        ac.addBond(0, 1, IBond.Order.DOUBLE);
+        ac.addBond(0, 1, IBond.Order.SINGLE);
         ac.addBond(0, 2, IBond.Order.SINGLE);
-        ac.addBond(0, 3, IBond.Order.SINGLE);
+        ac.addBond(0, 3, IBond.Order.DOUBLE);
         ac.addBond(1, 4, IBond.Order.SINGLE);
-        ac.addBond(1, 5, IBond.Order.SINGLE);
-        ac.addBond(2, 3, IBond.Order.DOUBLE);
-//        ac.addBond(2, 3, IBond.Order.SINGLE);
-        ac.addBond(2, 6, IBond.Order.SINGLE);
+        ac.addBond(2, 5, IBond.Order.SINGLE);
+        
+        ac.addBond(1, 2, IBond.Order.DOUBLE);
+//        ac.addBond(1, 2, IBond.Order.SINGLE);
+        
+        ac.addBond(3, 6, IBond.Order.SINGLE);
         ac.addBond(3, 7, IBond.Order.SINGLE);
-        findCanonical(ac);
-//        chompTest(ac);
+//        findCanonical(ac);
+        chompTest(ac);
 //        Assert.assertEquals(true, 
 //                CanonicalChecker.isCanonicalWithColorPartition(ac));
 //                canonical(ac));
@@ -371,7 +377,8 @@ public class CanonicalCheckerTest {
         int c = ac.getBondCount();
         while (c >= 1) {
             removeFinalBond(ac);
-            if (totallyCanonical(ac)) {
+//            if (totallyCanonical(ac)) {
+            if (CanonicalChecker.isCanonicalByCombinedVertexSymbol(ac)) {
                 System.out.println("chomped " + c + " now " + ac.getBondCount());
             } else {
                 System.out.println("failed at bond " + c);

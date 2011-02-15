@@ -141,8 +141,8 @@ public class CanonicalLabeller {
             // total number of bonds
             int size = atomContainer.getConnectedAtomsList(a).size();
             int numberOfHydrogens = 
-                a.getHydrogenCount() == CDKConstants.UNSET ?
-                        0 : a.getHydrogenCount();
+                a.getImplicitHydrogenCount() == CDKConstants.UNSET ?
+                        0 : a.getImplicitHydrogenCount();
             inv.append(size + numberOfHydrogens);
 
             // number of non H bonds

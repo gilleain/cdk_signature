@@ -302,7 +302,7 @@ public class DegreeSequenceGenerator {
         // if the sequence is [0,0,...,0] then we finish
         boolean isEmpty = degSeq.isEmpty(); 
         if (isEmpty) {
-            System.out.println(graph);
+            System.out.println(graph + " " + degSeq);
             return;
         }
         
@@ -352,6 +352,7 @@ public class DegreeSequenceGenerator {
                 adjacentIndices.add(degSeq.getVertexIndexForDegreeIndex(d));
             }
             DegreeSequence degSeqReduced = degSeq.reduceBy(first, adjacentIndices);
+            System.out.println(degSeqReduced + " " + adjacentIndices);
             gen(degSeqReduced, graph.connectAll(first, adjacentIndices));
         }
     }

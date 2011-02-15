@@ -32,6 +32,12 @@ public class DegreeGenTest {
     }
     
     @Test
+    public void simpleTestC() {
+        DegreeSequenceGenerator gen = new DegreeSequenceGenerator();
+        gen.gen(2,2,1,1);
+    }
+    
+    @Test
     public void largeTest() {
         DegreeSequenceGenerator gen = new DegreeSequenceGenerator();
         gen.gen(4, 3, 3, 3, 2, 2, 1);
