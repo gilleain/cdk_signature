@@ -9,8 +9,9 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.openscience.cdk.group.Graph;
 import org.openscience.cdk.group.Partition;
+
+import engine.Graph;
 
 
 public class OriginalRefiner {

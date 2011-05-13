@@ -3,7 +3,6 @@ package engine;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.openscience.cdk.group.Graph;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;

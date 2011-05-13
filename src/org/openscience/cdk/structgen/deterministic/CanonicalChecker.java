@@ -140,7 +140,7 @@ public class CanonicalChecker {
                 mapIndex++;
             }
         }
-        
+//        SSPermutationGroup autG = SSPermutationGroup.makeSymN(mapIndex);
         for (Permutation permutation : autG.all()) {
             Permutation full = new Permutation(atomCount);
             for (int pIndex = 0; pIndex < map.size(); pIndex++) {

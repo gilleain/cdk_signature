@@ -183,6 +183,20 @@ public class CDKDiscretePartitionRefiner extends
         refine(Partition.unit(getVertexCount()));
         return getGroup();
     }
+    
+    /**
+     * Get the automorphism group of the molecule given an initial partition.
+     * 
+     * @param atomContainer
+     * @param initialPartiton
+     * @return
+     */
+    public SSPermutationGroup getAutomorphismGroup(
+            IAtomContainer atomContainer, Partition initialPartiton) {
+        setup(atomContainer);
+        refine(initialPartiton);
+        return getGroup();
+    }
 
     /* (non-Javadoc)
      * @see org.openscience.cdk.group.AbstractDiscretePartitionRefiner#getVertexCount()

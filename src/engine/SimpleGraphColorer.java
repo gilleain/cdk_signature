@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.openscience.cdk.group.Graph;
 
 /**
  * Colors simple graphs (not a simple colorer of graphs). Well, when I say it 

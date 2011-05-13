@@ -3,10 +3,11 @@ package cages;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.openscience.cdk.group.Graph;
 import org.openscience.cdk.group.IEquitablePartitionRefiner;
 import org.openscience.cdk.group.Partition;
 import org.openscience.cdk.group.Permutation;
+
+import engine.Graph;
 
 import test_group.TestEquitablePartitionRefiner;
 

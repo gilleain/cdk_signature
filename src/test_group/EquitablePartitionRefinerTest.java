@@ -1,8 +1,9 @@
 package test_group;
 
 import org.junit.Test;
-import org.openscience.cdk.group.Graph;
 import org.openscience.cdk.group.Partition;
+
+import engine.Graph;
 
 
 

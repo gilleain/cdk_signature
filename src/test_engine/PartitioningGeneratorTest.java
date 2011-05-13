@@ -1,8 +1,8 @@
 package test_engine;
 
 import org.junit.Test;
-import org.openscience.cdk.group.Graph;
 
+import engine.Graph;
 import engine.PartitioningGenerator;
 
 public class PartitioningGeneratorTest {

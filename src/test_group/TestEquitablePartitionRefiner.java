@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.openscience.cdk.group.AbstractEquitablePartitionRefiner;
-import org.openscience.cdk.group.Graph;
 import org.openscience.cdk.group.IEquitablePartitionRefiner;
+
+import engine.Graph;
 
 
 /**

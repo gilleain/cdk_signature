@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.openscience.cdk.group.Graph;
 
 import engine.ColoredEdgewiseGenerator;
+import engine.Graph;
 
 public class ColoredEdgewiseGeneratorTest {
     

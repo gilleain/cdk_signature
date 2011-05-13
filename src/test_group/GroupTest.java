@@ -9,7 +9,6 @@ import java.util.TreeSet;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.group.Graph;
 import org.openscience.cdk.group.Permutation;
 import org.openscience.cdk.group.SSPermutationGroup;
 
@@ -18,6 +17,7 @@ import org.openscience.cdk.group.SSPermutationGroup;
 import cages.OrbitCounter;
 import cages.PermutationGenerator;
 import cages.TrivialAutomorphismGenerator;
+import engine.Graph;
 
 public class GroupTest {
     

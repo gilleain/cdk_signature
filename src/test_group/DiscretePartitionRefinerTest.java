@@ -8,8 +8,6 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.group.Graph;
-import org.openscience.cdk.group.GraphPermutor;
 import org.openscience.cdk.group.Partition;
 import org.openscience.cdk.group.Permutation;
 import org.openscience.cdk.group.SSPermutationGroup;
@@ -17,6 +15,8 @@ import org.openscience.cdk.group.SSPermutationGroup;
 
 
 import cages.PermutationGenerator;
+import engine.Graph;
+import engine.GraphPermutor;
 
 public class DiscretePartitionRefinerTest {
     

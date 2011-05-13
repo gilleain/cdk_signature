@@ -3,7 +3,6 @@ package engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.group.Graph;
 
 /**
  * Extremely simple graph generator that checks for canonical graphs at each 

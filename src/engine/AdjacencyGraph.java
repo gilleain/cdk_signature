@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.openscience.cdk.group.Graph;
 
 /**
  * Simplistic, temporary wrapper around a graph

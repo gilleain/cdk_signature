@@ -1,11 +1,12 @@
 package test_group;
 
 import org.openscience.cdk.group.AbstractDiscretePartitionRefiner;
-import org.openscience.cdk.group.Graph;
 import org.openscience.cdk.group.IEquitablePartitionRefiner;
 import org.openscience.cdk.group.Partition;
 import org.openscience.cdk.group.Permutation;
 import org.openscience.cdk.group.SSPermutationGroup;
+
+import engine.Graph;
 
 
 /**

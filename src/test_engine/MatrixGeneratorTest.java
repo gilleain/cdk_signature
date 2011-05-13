@@ -10,7 +10,6 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.group.Graph;
 import org.openscience.cdk.group.Partition;
 import org.openscience.cdk.group.Permutation;
 import org.openscience.cdk.group.SSPermutationGroup;
@@ -19,6 +18,7 @@ import test_group.TestDiscretePartitionRefiner;
 
 
 
+import engine.Graph;
 import engine.MatrixGenerator;
 
 public class MatrixGeneratorTest {

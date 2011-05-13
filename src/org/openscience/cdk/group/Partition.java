@@ -61,6 +61,14 @@ public class Partition {
         return this.cells.size();
     }
     
+    public int numberOfElements() {
+        int n = 0;
+        for (SortedSet cell : cells) {
+            n += cell.size();
+        }
+        return n;
+    }
+    
     /**
      * Checks that all the cells are singletons - that is, they only have one
      * element. A discrete partition is equivalent to a permutation.

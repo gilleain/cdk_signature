@@ -1,6 +1,5 @@
 package engine;
 
-import org.openscience.cdk.group.Graph;
 import org.openscience.cdk.group.SSPermutationGroup;
 
 import test_group.TestDiscretePartitionRefiner;

@@ -10,9 +10,9 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.group.Graph;
 
 import engine.EdgewiseGenerator;
+import engine.Graph;
 
 public class EdgewiseGeneratorTest {
     
