@@ -9,7 +9,9 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.group.CDKDiscretePartitionRefiner;
 import org.openscience.cdk.group.Partition;
@@ -28,12 +30,20 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 public class AutomorphismTest {
     
-    public int getAutGroupOrder(IAtomContainer atomContainer) {
+    public int getAutGroupOrder(
+            IAtomContainer atomContainer, boolean useSignaturePartition) {
         MoleculeSignature molSig = new MoleculeSignature(atomContainer);
-        Partition signaturePartition = getSignaturePartition(molSig);
-        CDKDiscretePartitionRefiner refiner = new CDKDiscretePartitionRefiner();
-        SSPermutationGroup perm = 
-            refiner.getAutomorphismGroup(atomContainer, signaturePartition);
+        boolean checkForDisconnected = false;
+        boolean useBondOrders = true;
+        CDKDiscretePartitionRefiner refiner = 
+            new CDKDiscretePartitionRefiner(checkForDisconnected, useBondOrders);
+        SSPermutationGroup perm;
+        if (useSignaturePartition) {
+            Partition signaturePartition = getSignaturePartition(molSig);
+            perm = refiner.getAutomorphismGroup(atomContainer, signaturePartition);
+        } else {
+            perm = refiner.getAutomorphismGroup(atomContainer);
+        }
         return perm.order();
     }
     
@@ -75,30 +85,36 @@ public class AutomorphismTest {
     
     @Test
     public void testBenzene() {
-        IAtomContainer benzene = MoleculeFactory.makeBenzene();
+        IAtomContainer benzeneKekule = MoleculeFactory.makeBenzene();
       //gives 6, is 12.
-        Assert.assertEquals(6, getAutGroupOrder(benzene));
+        Assert.assertEquals(6, getAutGroupOrder(benzeneKekule, true));
+        IAtomContainer benzeneArom = MoleculeFactory.makeBenzene();
+        for (IBond bond : benzeneArom.bonds()) {
+            bond.setOrder(IBond.Order.SINGLE);
+            bond.setFlag(CDKConstants.ISAROMATIC, true);
+        }
+        Assert.assertEquals(12, getAutGroupOrder(benzeneArom, true));
     }
     
     @Test
     public void testCyclohexane() {
         IAtomContainer cyclohexane = MoleculeFactory.makeCyclohexane();
       //gives 12, should be 3 (in chair conformation)
-        Assert.assertEquals(12, getAutGroupOrder(cyclohexane));
+        Assert.assertEquals(12, getAutGroupOrder(cyclohexane, true));
     }
     
     @Test
     public void testCyclobutane() {
         IAtomContainer cyclobutane = MoleculeFactory.makeCyclobutane();
         //gives 8, is 8
-        Assert.assertEquals(8, getAutGroupOrder(cyclobutane));
+        Assert.assertEquals(8, getAutGroupOrder(cyclobutane, true));
     }
     
     @Test
     public void testMethane() throws CDKException {
         IAtomContainer methane = makeMethane();
         //gives 24, should be 12 (chiral carbon)
-        Assert.assertEquals(12, getAutGroupOrder(methane));
+        Assert.assertEquals(12, getAutGroupOrder(methane, true));
     }
 
 }
