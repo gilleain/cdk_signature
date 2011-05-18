@@ -24,6 +24,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 import org.openscience.cdk.templates.MoleculeFactory;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 
@@ -102,19 +103,197 @@ public class AutomorphismTest {
       //gives 12, should be 3 (in chair conformation)
         Assert.assertEquals(12, getAutGroupOrder(cyclohexane, true));
     }
-    
+    @Test
+    public void testCyclohexene() {
+        IAtomContainer cyclohexene = makeCyclohexene();
+      
+        Assert.assertEquals(2, getAutGroupOrder(cyclohexene, true));
+    }
     @Test
     public void testCyclobutane() {
         IAtomContainer cyclobutane = MoleculeFactory.makeCyclobutane();
         //gives 8, is 8
         Assert.assertEquals(8, getAutGroupOrder(cyclobutane, true));
     }
-    
+    @Test
+    public void testCyclopentane() {
+        IAtomContainer cyclopentane = makeCycloPentane();
+        Assert.assertEquals(10, getAutGroupOrder(cyclopentane, true));
+    }
+    @Test
+    public void testCyclopentene() {
+        IAtomContainer cyclopentene = makeCycloPentene();
+        Assert.assertEquals(2, getAutGroupOrder(cyclopentene, true));
+    }
+    @Test
+    public void testCyclopropane() {
+        IAtomContainer cyclopropane = makeCycloPropane();
+        Assert.assertEquals(6, getAutGroupOrder(cyclopropane, true));
+    }
     @Test
     public void testMethane() throws CDKException {
         IAtomContainer methane = makeMethane();
         //gives 24, should be 12 (chiral carbon)
         Assert.assertEquals(12, getAutGroupOrder(methane, true));
     }
+	@Test
+	public void testIndole() {
+		IAtomContainer indole = MoleculeFactory.makeIndole();
+	
+		Assert.assertEquals(1, getAutGroupOrder(indole, true));
 
+	}
+	@Test
+	public void testMethanol() {
+		IAtomContainer methanol = makeMethanol();
+	
+		Assert.assertEquals(3, getAutGroupOrder(methanol, true));
+
+	}
+	public static IAtomContainer makeCycloPentene() {
+		IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//0
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//1
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//2
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//3
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//4
+
+
+		mol.addBond(0, 1, IBond.Order.SINGLE);
+		mol.addBond(1, 2, IBond.Order.SINGLE);
+		mol.addBond(2, 3, IBond.Order.SINGLE);
+		mol.addBond(3, 4, IBond.Order.SINGLE);
+		mol.addBond(0, 4, IBond.Order.DOUBLE);
+
+		
+		try {
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			addImplicitHydrogens(mol);
+		} catch (CDKException e) {
+			e.printStackTrace();
+		}
+		
+		AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		
+		return mol;
+	}
+	public static IAtomContainer makeCycloPropane() {
+		IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//0
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//1
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//2
+
+
+		mol.addBond(0, 1, IBond.Order.SINGLE);
+		mol.addBond(1, 2, IBond.Order.SINGLE);
+		mol.addBond(2, 0, IBond.Order.SINGLE);
+
+		try {
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			addImplicitHydrogens(mol);
+		} catch (CDKException e1) {
+			//
+			e1.printStackTrace();
+		}
+		
+		AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		
+		return mol;
+	}
+	public static IAtomContainer makeMethanol(){
+		IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
+		mol.addAtom(builder.newInstance(IAtom.class, "C"));//0
+		mol.addAtom(builder.newInstance(IAtom.class, "H"));//1
+		mol.addAtom(builder.newInstance(IAtom.class, "H"));//2
+		mol.addAtom(builder.newInstance(IAtom.class, "H"));//3
+		mol.addAtom(builder.newInstance(IAtom.class, "O"));//4
+		mol.addAtom(builder.newInstance(IAtom.class, "H"));//5
+
+		mol.addBond(0, 1, IBond.Order.SINGLE);
+		mol.addBond(0, 2, IBond.Order.SINGLE);
+		mol.addBond(0, 3, IBond.Order.SINGLE);
+		mol.addBond(0, 4, IBond.Order.SINGLE);
+		mol.addBond(4, 5, IBond.Order.SINGLE);
+
+		try {
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		} catch (CDKException e) {
+			
+			e.printStackTrace();
+		}
+
+		return mol;
+
+	}
+	public static IAtomContainer makeCycloPentane() {
+		IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//0
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//1
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//2
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//3
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//4
+
+
+		mol.addBond(0, 1, IBond.Order.SINGLE);
+		mol.addBond(1, 2, IBond.Order.SINGLE);
+		mol.addBond(2, 3, IBond.Order.SINGLE);
+		mol.addBond(3, 4, IBond.Order.SINGLE);
+		mol.addBond(0, 4, IBond.Order.SINGLE);
+
+		
+		try {
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			addImplicitHydrogens(mol);
+		} catch (CDKException e) {
+			e.printStackTrace();
+		}
+		
+		AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		
+		return mol;
+	}
+	public static IAtomContainer makeCyclohexene() {
+		IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//0
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//1
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//2
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//3
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//4
+		mol.addAtom(builder.newInstance(IAtom.class,"C"));//5
+
+		mol.addBond(0, 1, IBond.Order.DOUBLE);
+		mol.addBond(1, 2, IBond.Order.SINGLE);
+		mol.addBond(2, 3, IBond.Order.SINGLE);
+		mol.addBond(3, 4, IBond.Order.SINGLE);
+		mol.addBond(4, 5, IBond.Order.SINGLE);
+		mol.addBond(0, 5, IBond.Order.SINGLE);
+		
+		try {
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			addImplicitHydrogens(mol);
+		} catch (CDKException e1) {
+			//
+			e1.printStackTrace();
+		}
+		
+		AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		
+		
+		return mol;
+	}
+	public static IAtomContainer addImplicitHydrogens(IAtomContainer atomContainer) throws CDKException{
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(atomContainer);
+		//add implicit hydrogens:
+	    CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(atomContainer.getBuilder());
+	    adder.addImplicitHydrogens(atomContainer);
+	    //convert implicit to explicit hydrogens:
+		AtomContainerManipulator.convertImplicitToExplicitHydrogens(atomContainer);
+		
+		return atomContainer;
+	}
 }
