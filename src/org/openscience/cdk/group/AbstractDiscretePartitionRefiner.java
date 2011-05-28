@@ -26,22 +26,32 @@ public abstract class AbstractDiscretePartitionRefiner {
     
     private boolean checkVertexColors;
     
+    private boolean checkEdgeColors;
+    
     public AbstractDiscretePartitionRefiner() {
         this(false);
     }
     
     public AbstractDiscretePartitionRefiner(boolean checkVetexColors) {
+      this(checkVetexColors, false);
+    }
+    
+    public AbstractDiscretePartitionRefiner(
+            boolean checkVetexColors, boolean checkEdgeColors) {
         this.bestExist = false;
         this.best = null;
         this.refiner = null;
         this.checkVertexColors = checkVetexColors;
+        this.checkEdgeColors = checkEdgeColors;
     }
     
     public abstract int getVertexCount();
     
     public abstract boolean isConnected(int i, int j);
     
-    public abstract boolean sameColor(int i, int j);
+    public abstract boolean sameVertexColor(int i, int j);
+    
+    public abstract boolean sameEdgeColor(int iOld, int jOld, int iNew, int jNew);
     
     public void setup(SSPermutationGroup group, IEquitablePartitionRefiner refiner) {
         this.bestExist = false;
@@ -168,7 +178,8 @@ public abstract class AbstractDiscretePartitionRefiner {
                     best = new Permutation(pi1);
                 } else if (result == Result.EQUAL) {
                     pi2 = pi1.multiply(best.invert());
-                    if (!checkVertexColors || colorsAutomorphic(pi2)) {
+                    if ((!checkVertexColors || vertexColorsAutomorphic(pi2))
+                        && (!checkEdgeColors || edgeColorsAutomorphic(pi2))) {
                         group.enter(pi2);
                     }
                 }
@@ -205,9 +216,20 @@ public abstract class AbstractDiscretePartitionRefiner {
         }
     }
     
-    private boolean colorsAutomorphic(Permutation p) {
+    private boolean vertexColorsAutomorphic(Permutation p) {
         for (int i = 0; i < p.size(); i++) {
-            if (sameColor(i, p.get(i))) {
+            if (sameVertexColor(i, p.get(i))) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private boolean edgeColorsAutomorphic(Permutation p) {
+        for (int i = 0; i < p.size(); i++) {
+            if (sameVertexColor(i, p.get(i))) {
                 continue;
             } else {
                 return false;

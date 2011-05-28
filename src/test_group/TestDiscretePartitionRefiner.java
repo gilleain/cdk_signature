@@ -89,7 +89,13 @@ public class TestDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     }
 
     @Override
-    public boolean sameColor(int i, int j) {
+    public boolean sameVertexColor(int i, int j) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean sameEdgeColor(int iOld, int jOld, int iNew, int jNew) {
         // TODO Auto-generated method stub
         return false;
     }

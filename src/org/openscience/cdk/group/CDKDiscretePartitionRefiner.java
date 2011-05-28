@@ -21,6 +21,7 @@ public class CDKDiscretePartitionRefiner extends
     
     /**
      * A convenience lookup table for atom-atom connections
+     * TODO : less expensive to use Map<Integer, List<Integer>>?
      */
     private List<Map<Integer, Integer>> connectionTable;
     
@@ -33,29 +34,38 @@ public class CDKDiscretePartitionRefiner extends
     
     private boolean useElementColors;
     
+    private boolean useBondColors;
+    
     private String[] elementColors;
+    
+    /**
+     * 
+     */
+    private Map<Integer, List<Integer>> bondColorTable;
     
     public CDKDiscretePartitionRefiner() {
         this(false, true);
     }
     
     public CDKDiscretePartitionRefiner(boolean checkForDisconnectedAtoms) {
-        this(checkForDisconnectedAtoms, false, false);
+        this(checkForDisconnectedAtoms, false, false, false);
     }
     
     public CDKDiscretePartitionRefiner(
             boolean checkForDisconnectedAtoms, boolean useBondOrders) {
-        this(checkForDisconnectedAtoms, useBondOrders, false);
+        this(checkForDisconnectedAtoms, useBondOrders, false, false);
     }
     
     public CDKDiscretePartitionRefiner(
             boolean checkForDisconnectedAtoms, 
             boolean useBondOrders,
-            boolean useElementColors) {
-        super(useElementColors);
+            boolean useElementColors,
+            boolean useBondColors) {
+        super(useElementColors, useBondColors);
         this.checkForDisconnectedAtoms = checkForDisconnectedAtoms;
         this.useBondOrders = useBondOrders;
         this.useElementColors = useElementColors;
+        this.useBondColors = useBondColors;
     }
     
     /**
@@ -128,6 +138,25 @@ public class CDKDiscretePartitionRefiner extends
         return shortTable;
     }
     
+    // TODO : compact bond color table?
+    private Map<Integer, List<Integer>> makeBondColorTable(IAtomContainer atomContainer) {
+        Map<Integer, List<Integer>> table = new HashMap<Integer, List<Integer>>();
+        for (int index = 0; index < atomContainer.getAtomCount(); index++) {
+            IAtom atom = atomContainer.getAtom(index);
+            List<Integer> bondColors = new ArrayList<Integer>();
+            for (IBond bond : atomContainer.getConnectedBondsList(atom)) {
+                bondColors.add(convertBondOrder(bond.getOrder()));
+            }
+            table.put(index, bondColors);
+        }
+        
+        return table;
+    }
+    
+    private int convertBondOrder(IBond.Order o) {
+        return o.ordinal();
+    }
+    
     private void setup(IAtomContainer atomContainer) {
         if (checkForDisconnectedAtoms) {
             this.connectionTable = makeCompactConnectionTable(atomContainer);
@@ -135,10 +164,15 @@ public class CDKDiscretePartitionRefiner extends
             this.connectionTable = makeConnectionTable(atomContainer);
         }
         if (useElementColors) {
+            // TODO : do this at the same time as creating adj matrix..
             elementColors = new String[atomContainer.getAtomCount()];
             for (int i = 0; i < atomContainer.getAtomCount(); i++) {
                 elementColors[i] = atomContainer.getAtom(i).getSymbol();
             }
+        }
+        if (useBondColors) {
+            // TODO : do this at the same time as creating adj matrix..
+            bondColorTable = makeBondColorTable(atomContainer);
         }
         int n = getVertexCount();
         SSPermutationGroup group = new SSPermutationGroup(new Permutation(n));
@@ -234,8 +268,15 @@ public class CDKDiscretePartitionRefiner extends
     }
 
     @Override
-    public boolean sameColor(int i, int j) {
+    public boolean sameVertexColor(int i, int j) {
         return elementColors[i] == elementColors[j];
+    }
+
+    @Override
+    public boolean sameEdgeColor(int iOld, int jOld, int iNew, int jNew) {
+        int oldBondColor = bondColorTable.get(iOld).get(jOld);
+        int newBondColor = bondColorTable.get(iNew).get(jNew);
+        return oldBondColor == newBondColor;
     }
 
 }
