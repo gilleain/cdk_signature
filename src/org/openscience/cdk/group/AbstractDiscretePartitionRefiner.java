@@ -24,17 +24,24 @@ public abstract class AbstractDiscretePartitionRefiner {
     
     private SSPermutationGroup group;
     
+    private boolean checkVertexColors;
+    
     public AbstractDiscretePartitionRefiner() {
+        this(false);
+    }
+    
+    public AbstractDiscretePartitionRefiner(boolean checkVetexColors) {
         this.bestExist = false;
         this.best = null;
         this.refiner = null;
+        this.checkVertexColors = checkVetexColors;
     }
     
     public abstract int getVertexCount();
     
     public abstract boolean isConnected(int i, int j);
     
-//    public abstract boolean sameColor(int i, int j);
+    public abstract boolean sameColor(int i, int j);
     
     public void setup(SSPermutationGroup group, IEquitablePartitionRefiner refiner) {
         this.bestExist = false;
@@ -136,7 +143,6 @@ public abstract class AbstractDiscretePartitionRefiner {
         int n = getVertexCount();
         
         Partition q = this.refiner.refine(p);
-//        System.out.println("refined " + p  + " to " + q);
         
         int l = q.getIndexOfFirstNonDiscreteCell();
         if (l == -1) {
@@ -149,33 +155,22 @@ public abstract class AbstractDiscretePartitionRefiner {
         Result result = Result.BETTER;
         if (bestExist) {
             q.setAsPermutation(pi1, l);
-//            result = compareColumnwise(pi1);
             result = compareRowwise(pi1);
-//            System.out.println("Compared pi1 = " + pi1 + " to best = " + best + " result " + result);
-//            System.out.println("current\t" + getHalfMatrixString());
-//            System.out.println("pi1\t" + getHalfMatrixString(pi1));
-//            System.out.println("best\t" + getBestHalfMatrixString());
         }
         
         if (q.size() == n) {    // partition is discrete
-//            System.out.println("Discrete " + q.toPermutation());
             if (!bestExist) {
                 best = q.toPermutation();
                 first = q.toPermutation();
                 bestExist = true;
             } else {
                 if (result == Result.BETTER) {
-//                    System.out.println("BETTER " 
-//                            + pi1 + " vs " 
-//                            + best + " " + getHalfMatrixString(pi1) + " "
-//                            + getBestHalfMatrixString());
                     best = new Permutation(pi1);
                 } else if (result == Result.EQUAL) {
-                    // { pi2[pi1[i]] = best[i] for i in n }
-//                    pi2.set(pi1, best);   // XXX remove
                     pi2 = pi1.multiply(best.invert());
-//                    System.out.println("Entering " + pi2 + " " + pi2.toCycleString());
-                    group.enter(pi2);
+                    if (!checkVertexColors || colorsAutomorphic(pi2)) {
+                        group.enter(pi2);
+                    }
                 }
             }
         } else {
@@ -208,6 +203,17 @@ public abstract class AbstractDiscretePartitionRefiner {
                 }
             }
         }
+    }
+    
+    private boolean colorsAutomorphic(Permutation p) {
+        for (int i = 0; i < p.size(); i++) {
+            if (sameColor(i, p.get(i))) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

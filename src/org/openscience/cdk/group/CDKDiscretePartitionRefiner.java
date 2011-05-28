@@ -31,18 +31,31 @@ public class CDKDiscretePartitionRefiner extends
     
     private boolean useBondOrders;
     
+    private boolean useElementColors;
+    
+    private String[] elementColors;
+    
     public CDKDiscretePartitionRefiner() {
         this(false, true);
     }
     
     public CDKDiscretePartitionRefiner(boolean checkForDisconnectedAtoms) {
-        this.checkForDisconnectedAtoms = checkForDisconnectedAtoms;
+        this(checkForDisconnectedAtoms, false, false);
     }
     
     public CDKDiscretePartitionRefiner(
             boolean checkForDisconnectedAtoms, boolean useBondOrders) {
+        this(checkForDisconnectedAtoms, useBondOrders, false);
+    }
+    
+    public CDKDiscretePartitionRefiner(
+            boolean checkForDisconnectedAtoms, 
+            boolean useBondOrders,
+            boolean useElementColors) {
+        super(useElementColors);
         this.checkForDisconnectedAtoms = checkForDisconnectedAtoms;
         this.useBondOrders = useBondOrders;
+        this.useElementColors = useElementColors;
     }
     
     /**
@@ -120,6 +133,12 @@ public class CDKDiscretePartitionRefiner extends
             this.connectionTable = makeCompactConnectionTable(atomContainer);
         } else {
             this.connectionTable = makeConnectionTable(atomContainer);
+        }
+        if (useElementColors) {
+            elementColors = new String[atomContainer.getAtomCount()];
+            for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+                elementColors[i] = atomContainer.getAtom(i).getSymbol();
+            }
         }
         int n = getVertexCount();
         SSPermutationGroup group = new SSPermutationGroup(new Permutation(n));
@@ -212,6 +231,11 @@ public class CDKDiscretePartitionRefiner extends
     @Override
     public boolean isConnected(int i, int j) {
         return connectionTable.get(i).containsKey(j);
+    }
+
+    @Override
+    public boolean sameColor(int i, int j) {
+        return elementColors[i] == elementColors[j];
     }
 
 }

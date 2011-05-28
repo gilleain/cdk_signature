@@ -88,4 +88,10 @@ public class TestDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         return graph.isConnected(i, j);
     }
 
+    @Override
+    public boolean sameColor(int i, int j) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }
