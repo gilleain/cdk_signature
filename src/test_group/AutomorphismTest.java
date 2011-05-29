@@ -9,10 +9,8 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.group.CDKDiscretePartitionRefiner;
 import org.openscience.cdk.group.Partition;
@@ -94,6 +92,24 @@ public class AutomorphismTest {
     }
     
     @Test
+    public void testSpiroRings() {
+        Assert.assertEquals(2, getAutGroupOrder(
+                MoleculeFactory.makeSpiroRings(), false));
+    }
+    
+    @Test
+    public void testBiphenyl() {
+        Assert.assertEquals(2, getAutGroupOrder(
+                MoleculeFactory.makeBiphenyl(), false));
+    }
+    
+    @Test
+    public void testPyrrole() {
+        Assert.assertEquals(2, getAutGroupOrder(
+                MoleculeFactory.makePyrrole(), false));
+    }
+    
+    @Test
     public void testBenzene() {
         IAtomContainer benzeneKekule = MoleculeFactory.makeBenzene();
       //gives 6, is 12.
@@ -120,25 +136,17 @@ public class AutomorphismTest {
     }
     
     @Test
-    public void testCyclobutane() {
+    public void testCyclobutane() throws CDKException {
         IAtomContainer cyclobutane = MoleculeFactory.makeCyclobutane();
+//        addHydrogens(cyclobutane);
         //gives 8, is 8
         Assert.assertEquals(8, getAutGroupOrder(cyclobutane, true));
     }
     
     @Test
     public void testDiCyclobutene() {
-        Molecule dicyclobutene = new Molecule();
-        dicyclobutene.addAtom(new Atom("C")); // 1
-        dicyclobutene.addAtom(new Atom("C")); // 2
-        dicyclobutene.addAtom(new Atom("C")); // 3
-        dicyclobutene.addAtom(new Atom("C")); // 4
-
-        dicyclobutene.addBond(0, 1, IBond.Order.SINGLE); // 1
-        dicyclobutene.addBond(1, 2, IBond.Order.DOUBLE); // 2
-        dicyclobutene.addBond(2, 3, IBond.Order.SINGLE); // 3
-        dicyclobutene.addBond(3, 0, IBond.Order.DOUBLE); // 4
-        Assert.assertEquals(4, getAutGroupOrder(dicyclobutene, true));
+        IAtomContainer cyclobutadiene = MoleculeFactory.makeCyclobutadiene();
+        Assert.assertEquals(4, getAutGroupOrder(cyclobutadiene, true));
     }
     
     @Test
@@ -194,9 +202,32 @@ public class AutomorphismTest {
 	}
 	
 	@Test
-	public void testMethanol() {
+	public void testMethanol() throws CDKException {
 		IAtomContainer methanol = makeMethanol();
 		Assert.assertEquals(3, getAutGroupOrder(methanol, true));
+	}
+	
+	@Test
+    public void testFluoroChloroBromoIodoMethane() throws CDKException {
+        IAtomContainer mol = makeFluoroChloroBromoIodoMethane();
+        Assert.assertEquals(1, getAutGroupOrder(mol, false));
+    }
+	
+	public static IAtomContainer makeFluoroChloroBromoIodoMethane() {
+	    IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+        IAtomContainer mol = builder.newInstance(IAtomContainer.class);
+        mol.addAtom(builder.newInstance(IAtom.class,"C"));
+        mol.addAtom(builder.newInstance(IAtom.class,"F"));
+        mol.addAtom(builder.newInstance(IAtom.class,"Cl"));
+        mol.addAtom(builder.newInstance(IAtom.class,"Br"));
+        mol.addAtom(builder.newInstance(IAtom.class,"I"));
+
+        mol.addBond(0, 1, IBond.Order.SINGLE);
+        mol.addBond(0, 2, IBond.Order.SINGLE);
+        mol.addBond(0, 3, IBond.Order.SINGLE);
+        mol.addBond(0, 4, IBond.Order.SINGLE);
+        
+        return mol;
 	}
 	
 	public static IAtomContainer makeCycloPentene() throws CDKException {
@@ -217,6 +248,7 @@ public class AutomorphismTest {
 
 		return addHydrogens(mol);
 	}
+	
 	public static IAtomContainer makeCycloPropane() throws CDKException {
 		IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
 		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
@@ -230,7 +262,8 @@ public class AutomorphismTest {
 		
 		return addHydrogens(mol);
 	}
-	public static IAtomContainer makeMethanol(){
+	
+	public static IAtomContainer makeMethanol() throws CDKException{
 		IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
 		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
 		mol.addAtom(builder.newInstance(IAtom.class, "C"));//0
@@ -246,15 +279,8 @@ public class AutomorphismTest {
 		mol.addBond(0, 4, IBond.Order.SINGLE);
 		mol.addBond(4, 5, IBond.Order.SINGLE);
 
-		try {
-			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-		} catch (CDKException e) {
-			
-			e.printStackTrace();
-		}
-
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 		return mol;
-
 	}
 	
 	public static IAtomContainer makeCycloPentane() throws CDKException {
@@ -296,13 +322,13 @@ public class AutomorphismTest {
 	}
 	
 	public static IAtomContainer addHydrogens(IAtomContainer atomContainer) throws CDKException {
-//	    AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(atomContainer);
-//        //add implicit hydrogens:
-//        CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(atomContainer.getBuilder());
-//        adder.addImplicitHydrogens(atomContainer);
-//        //convert implicit to explicit hydrogens:
-//        AtomContainerManipulator.convertImplicitToExplicitHydrogens(atomContainer);
-//        
+	    AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(atomContainer);
+        //add implicit hydrogens:
+        CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(atomContainer.getBuilder());
+        adder.addImplicitHydrogens(atomContainer);
+        //convert implicit to explicit hydrogens:
+        AtomContainerManipulator.convertImplicitToExplicitHydrogens(atomContainer);
+        
         return atomContainer;
 	}
 
